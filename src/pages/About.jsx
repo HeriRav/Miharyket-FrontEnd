@@ -58,7 +58,7 @@ function About () {
                       </div>
                       <div class="service-1-content">
                         <h3 class="service-heading">Raccourcissement du trajet de distribution</h3>
-                        <p>Le raccourcissement du trajet de distribution peut aider à soutenir l'économie locale en favorisant les agriculteurs locaux. Cela peut également aider à promouvoir la diversité des produits locaux et à encourager les consommateurs à acheter des produits de saison. Cela reste une stratégie intéressante pour promouvoir une agriculture durable et soutenir les producteurs locaux.</p>
+                        <p>Le raccourcissement du trajet de distribution peut aider à soutenir l'économie locale en favorisant les agriculteurs locaux. Cela aide également à promouvoir la diversité des produits locaux et à encourager les consommateurs à acheter des produits de saison. Cela reste une stratégie intéressante pour promouvoir une agriculture durable et soutenir les producteurs locaux.</p>
                       </div>
                     </div>
                   </div>

@@ -17,18 +17,18 @@ function Register_client() {
     const [typeUtilisateur] = useState('CLIENT')
     const navigate = useNavigate()
 
-    const handleClick = (e) => {
+    const handleClick = async (e) => {
         e.preventDefault()
         if (validate()) {
             const user = {nomUtilisateur, login : email, prenomUtilisateur, adresseUtilisateur, email, telephoneUtilisateur, mdpUtilisateur, typeUtilisateur}
             fetch("http://localhost:8085/api/utilisateurs/ajout", {
                 method:"POST", headers:{"Content-Type" : "application/json"}, body:JSON.stringify(user)
             }).then(() => {
+                toast.success('Votre compte a été enregistré avec succès')
                 setTimeout(() => {
-                    toast.success('Votre compte a été enregistré avec succès')
-                }, 5000)
-                navigate('/')
-                window.location.reload(true)
+                    navigate('/')
+                    window.location.reload(true)
+                }, 3000)
             }).catch((err) => {
                 toast.error('Inscription échouée : ' +err.message)
             })
@@ -58,6 +58,10 @@ function Register_client() {
             result = false
             toast.warning('Veuillez entrer votre numéro de téléphone')
         }
+        if (telephoneUtilisateur.length < '10') {
+            result = false
+            toast.warning('Veuillez entrer un numéro de téléphone valide')
+        }
         if (mdpUtilisateur === '' || mdpUtilisateur === null) {
             result = false
             toast.warning('Veuillez entrer votre mot de passe')
@@ -77,6 +81,15 @@ function Register_client() {
         navigate('/inscription')
         window.location.reload(true)
     }
+
+    const handleKeyPress = (event) => {
+        const keyCode = event.keyCode || event.which;
+        const keyValue = String.fromCharCode(keyCode);
+        const regex = /[0-9]|\./;
+        if (!regex.test(keyValue)) {
+          event.preventDefault();
+        }
+    };
     return (
         <div>
             <title>Mihary'ket - Inscription client</title>
@@ -123,8 +136,8 @@ function Register_client() {
                                                 <div className="col-md-6 pb-2">
                                                     <div className="form-outline">
                                                     <label style={{marginRight : "auto", fontSize : "16px", color : "black"}}>Contact</label>
-                                                    <input type="tel" id="registerContact" className="form-control" required="required"
-                                                    value={telephoneUtilisateur} onChange={(e) => setPhone(e.target.value)} placeholder="Votre contact"/>
+                                                    <input type="tel" id="registerContact" className="form-control" required="required" onKeyPress={handleKeyPress}
+                                                    value={telephoneUtilisateur} onChange={(e) => setPhone(e.target.value)} placeholder="Votre contact" maxLength={10}/>
                                                     </div>
                                                 </div>
                                             </div>
