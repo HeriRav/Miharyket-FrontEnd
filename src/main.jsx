@@ -4,7 +4,9 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import App from './App'
 import './index.css'
 import About from './pages/About'
-import Dashboard from './pages/Dashboard'
+import DashboardAdmin from './pages/Administrateur/DashboardAdmin'
+import DashboardCooperative from './pages/Cooperative/DashboardCooperative'
+import DashboardAgriculteur from './pages/Agriculteur/DashboardAgriculteur'
 import Home from './pages/Home'
 import Login from './pages/Login'
 import Register from './pages/Register'
@@ -22,7 +24,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       <Route path='/inscription/*' element={<Register />}/>
       <Route path='/inscription-coop/*' element={<Register_coop />}/>
       <Route path='/inscription-client/*' element={<Register_client />}/>
-      <Route path='/dashboard' element={<Dashboard />}/>
+      <Route path='/dashboard' element={<DashboardAdmin />}/>
+      <Route path='/dashboard-coop' element={<DashboardCooperative />}/>
+      <Route path='/dashboard-aggro' element={<DashboardAgriculteur />}/>
       {/* <Route path='*' element={<Error404/>}/> */}
     </Routes>
   </BrowserRouter>,

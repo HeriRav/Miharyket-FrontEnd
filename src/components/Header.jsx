@@ -95,13 +95,13 @@ const Header = () => {
                         <NavLink to="/a-propos" className={({isActive}) => isActive ? activeLink : normalLink}>À propos</NavLink>
                       </li>
                       <li>
-                        <a href="services.html" className="nav-link text-left">Nos services</a>
+                        <Link to="/dashboard-coop" className="nav-link text-left">Coop</Link>
                       </li>
                       <li>
-                        <a href="testimonials.html" className="nav-link text-left">Avis</a>
+                        <Link to="/dashboard-aggro" className="nav-link text-left">Aggro</Link>
                       </li>
                       <li>
-                        <Link to='/dashboard' className="nav-link text-left">Blog</Link>
+                        <Link to='/dashboard' className="nav-link text-left">Admin</Link>
                       </li>
                       <li>
                         <a href="contact.html" className="nav-link text-left">Contact</a>
