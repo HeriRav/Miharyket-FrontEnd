@@ -42,7 +42,7 @@ function Register() {
                                             className="fw-bold text-primary">Se connecter</Link></p>
                                         
                                         <div className="text-center text-black mt-4 mb-0" data-aos="fade-up" style={{marginLeft : '2%', marginTop : '2%'}}>
-                                            <Link className="text-black fw-bold" onClick={refresh}>Retourner à l'accueil</Link>
+                                            <p className='mb-3'>Retourner à l'<Link className="text-primary fw-bold" onClick={refresh}>accueil</Link></p>
                                         </div>
 
                                     </form>

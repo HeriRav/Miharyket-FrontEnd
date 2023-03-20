@@ -1,7 +1,7 @@
 import { Link, Route, Routes, useNavigate } from 'react-router-dom';
 import Login from './Login';
 import Home from './Home'
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
 
@@ -17,7 +17,8 @@ function Register_client() {
     const [typeUtilisateur] = useState('CLIENT')
     const navigate = useNavigate()
 
-    const handleClick = async (e) => {
+    const handleClick = (e) => {
+        const url = 'http://localhost:8085/api/utilisateurs/email/' + encodeURIComponent(email)
         e.preventDefault()
         if (validate()) {
             const user = {nomUtilisateur, login : email, prenomUtilisateur, adresseUtilisateur, email, telephoneUtilisateur, mdpUtilisateur, typeUtilisateur}
@@ -37,6 +38,7 @@ function Register_client() {
     }
 
     const validate = () => {
+        var validRegex = /^(?=.{1,64}@.{1,255}$)(?=.{1,64}@.{1,255}\..{2,63}$)(?=.{1,254}$)(?=.{1,320}$)[a-zA-Z0-9!#$%&'*+\-/=?^_`{|}~]+(?:\.[a-zA-Z0-9!#$%&'*+\-/=?^_`{|}~]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z]{2,63}$/;
         let result = true
         if (nomUtilisateur === '' || nomUtilisateur === null) {
             result = false
@@ -73,6 +75,10 @@ function Register_client() {
         if (mdpUtilisateur !== confirmMdp){
             result = false
             toast.warning('Les mots de passe ne correspondent pas')
+        }
+        if (!email.match(validRegex)) {
+            result = false
+            toast.warning('Veuillez entrer un email valide')
         }
         return result
     }
