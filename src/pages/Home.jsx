@@ -16,8 +16,8 @@ function Home() {
                     </video>
                     <div className="carousel-caption d-none d-md-block centered" data-aos="fade-up">
                         <div className="col-lg-12 justify-content-center mx-auto text-center">
-                            <h1 className='for-mobile'>Plateforme de coopératives agricoles pour un commerce équitable afin de soutenir nos agriculteurs.</h1>
-                            <h5>Une plateforme coopérative agricole pour le commerce équitable peut aider à soutenir les agriculteurs en permettant la vente directe de leurs produits, 
+                            <h1 className='for-mobile'>Plateforme de coopératives agricoles pour un commerce équitable afin de soutenir nos agriculteurs.</h1><br/>
+                            <h5 className='text-success'>Une plateforme coopérative agricole pour le commerce équitable peut aider à soutenir les agriculteurs en permettant la vente directe de leurs produits, 
                                 en réduisant les intermédiaires et en offrant des prix équitables pour leur travail.</h5><br/>
                             <button className='btn btn-success'>Plus de détails</button>
                         </div>
@@ -25,7 +25,7 @@ function Home() {
                 </div>
             </div>
 
-            <div className='container-fluid'>
+            <div className='container-fluid' data-aos="fade-up">
                 <h1 className='text-center text-success' style={{marginTop : "20px", marginBottom : "20px"}}>Nos Produits actuels</h1>
                 <CardGroup>
                 <Card>
