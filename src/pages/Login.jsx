@@ -76,7 +76,7 @@ function Login () {
                       </div>
 
                       <div>
-                        <p className="mb-3">Retourner à l'<Link className="text-success fw-bold" onClick={refresh}>Accueil</Link></p>
+                        <p className="mb-3">Retourner à l'<Link className="text-success fw-bold" onClick={refresh}>accueil</Link></p>
                       </div>
                     </MDBCardBody>
                   </MDBCard>

@@ -32,58 +32,60 @@ function Dashboard() {
     navigate(path);
   };
 
+  const refresh = () => {
+    navigate('/')
+    window.location.reload(true)
+}
+
   return (
     <div id="wrapper">
       <ul
         className="navbar-nav bg-gradient-dark sidebar sidebar-dark accordion"
         id="accordionSidebar"
       >
-        <a
+        <Link
           className="sidebar-brand d-flex align-items-center justify-content-center"
-          href="index.html"
+          onClick={refresh}
         >
           <div className="sidebar-brand-icon">
             <img src={miharyImage} alt="Mihary" className="img-fluid" />
           </div>
-        </a>
+        </Link>
         <hr className="sidebar-divider my-0" />
         <li className="nav-item">
-        <a className="nav-link" href="#" onClick={handleMenu1Click}>
+        <Link className="nav-link" to="/dashboard" onClick={handleMenu1Click}>
             <i className="fas fa-fw fa-tachometer-alt" style={{fontSize: '1.05em'}}></i>
             <span className="img-fluid d-md-none" style={{fontSize: '0.8em'}}>Administrateur</span>
             <span className="img-fluid d-none d-md-inline d-lg-none" style={{fontSize: '0.9em'}}>Administrateur</span>
             <span className="img-fluid d-none d-lg-inline" style={{fontSize: '1.05em'}}>Administrateur</span>
-        </a>
+        </Link>
       </li>
         <hr className="sidebar-divider" />
         <hr className="sidebar-divider" />
         
         <li className="nav-item">
-          <a className="nav-link" href="#" onClick={handleMenu1Click}>
+          <Link className="nav-link" to="/dashboard" onClick={handleMenu1Click}>
             <i className="fas fa-fw fa-chart-area"></i>
             <span>Statistique</span>
-          </a>
+          </Link>
         </li>
         <hr className="sidebar-divider" />
         <li className="nav-item">
-          <a className="nav-link" href="#" onClick={handleMenu2Click}>
+          <Link className="nav-link" to="/dashboard" onClick={handleMenu2Click}>
             <i className="fas fa-store"></i>
             <span>Vitrine</span>
-          </a>
+          </Link>
         </li>
 
         <hr className="sidebar-divider" />
         <div className="sidebar-heading"></div>
 
         <li className="nav-item">
-          <a className="nav-link  " href="#" onClick={handleMenu3Click}>
+          <Link className="nav-link" to="/dashboard" onClick={handleMenu3Click}>
             <i className="fas fa-fw fa-user"></i>
             <span>Utilisateurs</span>
-          </a>
-        </li>
-        
-        
-
+          </Link>
+        </li>       
         
         <hr className="sidebar-divider d-none d-md-block" />
       </ul>
@@ -377,7 +379,7 @@ function Dashboard() {
             {activeMenu === 2 && <Menu2Content />}
             {activeMenu === 3 && <Menu3Content />}
           </div>
-          <footer className="sticky-footer bg-white">
+          <footer className="bg-white">
             <div className="copyright text-center my-auto">
               <span>
                 Copyright &copy; Mihary'ket {new Date().getFullYear()}
