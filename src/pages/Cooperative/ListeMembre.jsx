@@ -41,14 +41,16 @@ function ListeMembre() {
   const handleAddMember = (e) => {
     e.preventDefault()
     if (validate()) {
-      const user = {nomUtilisateur, login : email, adresseUtilisateur, email, telephoneUtilisateur, mdpUtilisateur, typeUtilisateur}
+      const user = {nomUtilisateur, login : email, adresseUtilisateur, cinAgriculteur, email, telephoneUtilisateur, mdpUtilisateur, typeUtilisateur}
       fetch("http://localhost:8085/api/utilisateurs/ajout", {
           method:"POST", headers:{"Content-Type" : "application/json"}, body:JSON.stringify(user)
       }).then(() => {
-            toast.success('Le compte a été enregistré avec succès')
-            setShowModal(false)
-            //react pour rediriger 
-            window.location.reload(true);           
+            toast.success('Le compte a été enregistré avec succès')            
+            //react pour rediriger
+            setTimeout(() => {
+              setShowModal(false)
+              window.location.reload(true); 
+            }, 3000)                      
       }).catch((err) => {
           toast.error('Inscription échouée : ' +err.message)
       })
@@ -143,31 +145,31 @@ function ListeMembre() {
           <form style={{paddingLeft:"3em", paddingRight:"3em"}}>
             <div className="form-group">
               <label htmlFor="nom" style={{fontSize:"16px", color:"black"}}>Nom :</label>
-              <input type="text" className="form-control" id="nom" name="nom" value={nomUtilisateur} onChange={(e) => setLName(e.target.value)}  />
+              <input required="required" type="text" className="form-control" id="nom" name="nom" value={nomUtilisateur} onChange={(e) => setLName(e.target.value)}  />
             </div>
             <div className="form-group">
               <label htmlFor="nom" style={{fontSize:"16px", color:"black"}}>CIN :</label>
-              <input type="number" maxLength={12} className="form-control form-control-sm" id="cin" name="cin" value={cinAgriculteur} onChange={(e) => setCin(e.target.value)} />
+              <input required="required" type="number" className="form-control form-control-sm" id="cin" name="cin" value={cinAgriculteur} onChange={(e) => setCin(e.target.value)} />
             </div>
             <div className="form-group">
               <label htmlFor="adresse" style={{fontSize:"16px", color:"black"}}>Adresse :</label>
-              <input type="text" className="form-control form-control-sm" id="adresse" name="adresse" value={adresseUtilisateur} onChange={(e) => setAdress(e.target.value)} />
+              <input required="required" type="text" className="form-control form-control-sm" id="adresse" name="adresse" value={adresseUtilisateur} onChange={(e) => setAdress(e.target.value)} />
             </div>
             <div className="form-group">
               <label htmlFor="adresse" style={{fontSize:"16px", color:"black"}}>Contact :</label>
-              <input type="text" className="form-control form-control-sm" id="contact" name="contact" value={telephoneUtilisateur} onChange={(e) => setPhone(e.target.value)} />
+              <input required="required" type="text" className="form-control form-control-sm" id="contact" name="contact" value={telephoneUtilisateur} onChange={(e) => setPhone(e.target.value)} />
             </div>
             <div className="form-group">
               <label htmlFor="email" style={{fontSize:"16px", color:"black"}}>Email :</label>
-              <input type="email" className="form-control form-control-sm" id="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+              <input required="required" type="email" className="form-control form-control-sm" id="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} />
             </div>
             <div className="form-group">
               <label htmlFor="password" style={{fontSize:"16px", color:"black"}}>Mot de passe :</label>
-              <input type="password" className="form-control form-control-sm" id="password" name="password" value={mdpUtilisateur} onChange={(e) => setPass(e.target.value)} />
+              <input required="required" type="password" className="form-control form-control-sm" id="password" name="password" value={mdpUtilisateur} onChange={(e) => setPass(e.target.value)} />
             </div>
             <div className="form-group">
               <label htmlFor="confirmpassword" style={{fontSize:"16px", color:"black"}}>Confirmer mot de passe :</label>
-              <input type="password" className="form-control form-control-sm" id="confirmPassword" name="confirmPassword" value={confirmMdp} onChange={(e) => setConfirm(e.target.value)}   />
+              <input required="required" type="password" className="form-control form-control-sm" id="confirmPassword" name="confirmPassword" value={confirmMdp} onChange={(e) => setConfirm(e.target.value)}   />
             </div>
           </form>
         </Modal.Body>
