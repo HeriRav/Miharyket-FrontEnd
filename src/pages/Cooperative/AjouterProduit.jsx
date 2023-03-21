@@ -4,9 +4,9 @@ import iconProduct from "../../../farm-products.png";
 
 function AjouterProduit() {
  
-  const [produit, setProduit] = useState("");
-  const [description, setDescription] = useState("");
-  const [categorie, setCategorie] = useState("");
+  const [nomProduit, setProduit] = useState("");
+  const [descriptionCategorie, setDescription] = useState("");
+  const [nomCategorie, setCategorie] = useState("");
   const [resultats, setResultats] = useState([]);
   const [recherche, setRecherche] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -15,9 +15,9 @@ function AjouterProduit() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const nouveauProduit = {
-      produit: produit,
-      categorie: categorie,
-      description: description
+      nomProduit: nomProduit,
+      nomCategorie: nomCategorie,
+      descriptionCategorie: descriptionCategorie
     };
     setResultats([...resultats, nouveauProduit]);
     setProduit("");
@@ -28,9 +28,9 @@ function AjouterProduit() {
   // Filtrer les résultats en fonction de la recherche
   const filteredResults = resultats.filter(
     (resultat) =>
-      resultat.produit.toLowerCase().includes(recherche.toLowerCase()) ||
-      resultat.categorie.toLowerCase().includes(recherche.toLowerCase()) ||
-      resultat.description.toLowerCase().includes(recherche.toLowerCase())
+      resultat.nomProduit.toLowerCase().includes(recherche.toLowerCase()) ||
+      resultat.nomCategorie.toLowerCase().includes(recherche.toLowerCase()) ||
+      resultat.descriptionCategorie.toLowerCase().includes(recherche.toLowerCase())
   );
 
   // Obtenir le nombre total de pages
@@ -47,12 +47,28 @@ function AjouterProduit() {
   // Fonction pour changer de page
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-
+// const addProduct =(e) => {
+//   e.preventDefault()
+//   if (validate()){
+//     const categorie = {nomCategorie, descriptionCatégorie}
+//       fetch("http://localhost:8085/categories/ajout", {
+//       method:"POST", headers:{"Content-Type" : "application/json"}, body:JSON.stringify(categorie)
+//       }).then(() => {
+//             toast.success('Le produit a été enregistré avec succès')
+//       }).catch((err) => {
+//           toast.error('L\'ajout du produit a échoué : ' +err.message)
+//       })
+//     const product = {nomProduit}
+//     fetch("http://localhost:8085/produits/ajout", {
+//       method:"POST", headers:{"Content-Type" : "application/json"}, body:JSON.stringify(produit)
+//     })
+//   }
+// }
 
   return (
     
 <Container className="mt-5 mb-5">
-      <h1 className="text-center mt-5">Liste des produits</h1>
+      <h1 className="text-center mt-5">Liste de vos produits</h1>
       <h2 className="text-center">
         <div className="sidebar-brand-icon">
           <img src={iconProduct} alt="Mihary" className="img-fluid" />
@@ -96,7 +112,7 @@ function AjouterProduit() {
             <Form.Label>Nom du produit</Form.Label>
             <Form.Control
               type="text"
-              value={produit}
+              value={nomProduit}
               onChange={(e) => setProduit(e.target.value)}
             />
           </Form.Group>
@@ -105,12 +121,17 @@ function AjouterProduit() {
             <Form.Label>Catégorie</Form.Label>
             <Form.Control
               as="select"
-              value={categorie}
+              value={nomCategorie}
               onChange={(e) => setCategorie(e.target.value)}
             >
               <option value="">Sélectionnez une catégorie</option>
               <option value="legume">Légume</option>
               <option value="fruit">Fruit</option>
+              <option value="fruit">Céréale</option>
+              <option value="fruit">Produit laitier</option>
+              <option value="fruit">Viande</option>
+              <option value="fruit">Plante aromatique</option>
+              
             </Form.Control>
           </Form.Group>
         </Row>
@@ -121,7 +142,7 @@ function AjouterProduit() {
             <Form.Control
               as="textarea"
               placeholder="Entrer la description"
-              value={description}
+              value={descriptionCategorie}
               onChange={(e) => setDescription(e.target.value)}
             />
           </Form.Group>
