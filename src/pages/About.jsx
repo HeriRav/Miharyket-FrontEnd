@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom"
+
 function About () {
     return(
         <>
@@ -8,7 +10,7 @@ function About () {
                         <div className="col-lg-12 mt-5" data-aos="fade-up">
                             <h1>À propos de Nous</h1>
                             <p className="text-white text-center">
-                                <a href="index.html">Accueil</a>
+                                <Link to="/">Accueil</Link>
                                 <span className="mx-2">/</span>
                                 <span>À propos</span>
                             </p>

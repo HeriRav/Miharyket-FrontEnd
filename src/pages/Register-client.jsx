@@ -25,6 +25,9 @@ function Register_client() {
             fetch("http://localhost:8085/api/utilisateurs/ajout", {
                 method:"POST", headers:{"Content-Type" : "application/json"}, body:JSON.stringify(user)
             }).then(() => {
+                localStorage.setItem("token", data.token)
+                sessionStorage.setItem("email", email)
+                sessionStorage.setItem("token", data.token)
                 toast.success('Votre compte a été enregistré avec succès')
                 setTimeout(() => {
                     navigate('/')

@@ -2,6 +2,8 @@ import { Link, NavLink, Route, Routes } from 'react-router-dom'
 import Home from '../pages/Home'
 import About from '../pages/About'
 import { useState, useEffect } from 'react'
+import { Navbar } from 'react-bootstrap'
+import Product from '../pages/Product'
 
 const Header = () => {
   useEffect(() => {
@@ -86,7 +88,7 @@ const Header = () => {
               <div className="d-flex align-items-center">
   
                 <div className="ms-auto">
-                  <nav className="site-navigation position-relative text-right" role="navigation">
+                  <Navbar className="site-navigation position-relative text-right" role="navigation">
                     <ul className="site-menu main-menu js-clone-nav mr-auto d-none pl-0 d-lg-block">
                       <li>
                         <NavLink to="/" className={({isActive}) => isActive ? activeLink : normalLink}>Accueil</NavLink>
@@ -106,19 +108,29 @@ const Header = () => {
                       <li>
                         <a href="contact.html" className="nav-link text-left">Contact</a>
                       </li>
+                      <li>
+                        <NavLink to='/produits' className={({isActive}) => isActive ? activeLink : normalLink}>Produits</NavLink>
+                      </li>
                     </ul>                                                                                                                                                                                                                                                                                          
-                  </nav>
+                  </Navbar>
                 </div>
   
                 <div className="ml-auto">
                   <nav className="site-navigation position-relative text-right" role="navigation">
                     <ul className="site-menu main-menu js-clone-nav mr-auto d-none pl-0 d-lg-block">
-                      
-                      <li>
-                        <Link to='/inscription' className="nav-link text-left">S'inscrire</Link>
-                      </li>
+                        <li>
+                          <a>Profil</a>
+                        </li>
+                        <li>
+                          <Link to='/inscription' className="nav-link text-left">S'inscrire</Link>
+                        </li>
+                        <li>
+                          <Link onClick={() => userAuthentication()} className="nav-link text-left text-white">Se déconnecter</Link>
+                        </li>
                       <li className='login-style'>
-                        <Link to="/authentification" className="nav-link text-left text-white">Se connecter</Link>                      
+                        <Link to="/authentification" className="nav-link text-left text-white">
+                          Se connecter
+                        </Link>
                       </li>
                     </ul>
                   </nav>
@@ -129,10 +141,13 @@ const Header = () => {
   
           </div>
         </div>
+
+        {/* onClick={() => setUserLoggedIn(!isUserLoggedIn)} */}
   
         <Routes>
           <Route index element={<Home />}/>
           <Route path='/a-propos' element={<About />}/>
+          <Route path='/produits' element={<Product/>}/>
         </Routes>
       </>
   )

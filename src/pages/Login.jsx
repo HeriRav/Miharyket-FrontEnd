@@ -1,5 +1,5 @@
 import { Link, Route, Routes, useNavigate } from 'react-router-dom';
-import {useState} from 'react';
+import { useState } from 'react';
 import {
   MDBBtn,
   MDBContainer,
@@ -23,37 +23,58 @@ function Login () {
 
   let navigate = useNavigate()
 
-  const change = async (e) => {
-    e.preventDefault();
-    const user = { username: email, password };
-    fetch("http://localhost:8085/authenticate", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(user),
-    })
+  const Log = async (e) => {
+    e.preventDefault()
+    if (validate()) {
+      const user = { username: email, password };
+      fetch("http://localhost:8085/authenticate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(user),
+      })
       .then((res) => {
         if (res.ok) {
           return res.json();
         } else {
-          throw new Error("Authentification echoués");
+          throw new Error("Email ou mot de passe incorrect");
         }
       })
       .then((data) => {
-        localStorage.setItem("token", data.token);
-        setTimeout(() => {
-          toast.success("Vous etes connectés");
+        localStorage.setItem("token", data.token)
+        sessionStorage.setItem("username", email)
+        sessionStorage.setItem("token", data.token)
+        // saveSession()
+        toast.success("Connecté, vous allez être redirigé dans quelques secondes");
+        setTimeout(() => {          
           navigate("/dashboard");
           window.location.reload(true);
-        }, 5000);
+        }, 3000);
       })
       .catch((err) => {
-        toast.error("Authentification echoués : " + err.message);
+        toast.error("Erreur : " + err.message);
       });
-
-    console.log(user);
+      console.log(user);
+    }
   };
+
+  const validate = () => {
+    let result = true
+    if (email === '' || email === null) {
+      result = false
+      toast.warning('Veuillez entrer votre adresse mail')
+    }
+    if (password === '' || password === null) {
+      result = false
+      toast.warning('Veuillez entrer votre mot de passe')
+    }
+    return result
+  }
+
+  function saveSession(sessionData) {
+    localStorage.setItem('session', JSON.stringify(sessionData));
+  }
 
   const refresh = () => {
       navigate('/')
@@ -74,6 +95,7 @@ function Login () {
           backgroundPosition : "center"
           }}>
           <div className="mask d-flex align-items-center h-100" style={{"backgroundColor": "rgba(139, 195, 74, .6)"}}>
+          <ToastContainer />
             <MDBContainer fluid data-aos="fade-right">
 
               <MDBRow className='d-flex justify-content-center align-items-center h-100'>
@@ -104,20 +126,19 @@ function Login () {
                       </div>
 
                       <label style={{marginRight : "auto"}}>Adresse mail</label>
-                      <MDBInput className='input' wrapperClass='mb-4 mx-5 w-100' type='email' size='lg' placeholder='Entrez votre email' required
+                      <MDBInput className='input text-white' wrapperClass='mb-4 mx-5 w-100' type='email' size='lg' placeholder='Entrez votre email' required
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       />
                       <label style={{marginRight : "auto"}}>Mot de passe</label>
-                      <MDBInput className='input' wrapperClass='mb-4 mx-5 w-100' type='password' size='lg' placeholder='Entrez votre mot de passe' required
+                      <MDBInput className='input text-white' wrapperClass='mb-4 mx-5 w-100' type='password' size='lg' placeholder='Entrez votre mot de passe' required
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       />
 
                       <p className="mb-3 pb-lg-2"><a className="text-white" href="#!" data-aos="fade-right">Mot de passe oublié?</a></p>
                       <div className="text-center" data-aos="fade-right">
-                        <button className="btn btn-white btn-rounded px-5 button mb-3" type="submit" onClick={change}>se connecter</button>
-                        <ToastContainer />
+                        <button className="btn btn-white btn-rounded px-5 button mb-3" type="submit" onClick={Log}>se connecter</button>                        
                       </div>
 
                       <div>
