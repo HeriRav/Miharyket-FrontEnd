@@ -66,7 +66,6 @@ function AjouterProduit() {
 // }
 
   return (
-    
 <Container className="mt-5 mb-5">
       <h1 className="text-center mt-5">Liste de vos produits</h1>
       <h2 className="text-center">
