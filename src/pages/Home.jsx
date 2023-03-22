@@ -9,26 +9,17 @@ import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import { Link } from 'react-router-dom';
 
-function Home() {
+function Home({}) {
     const [produit, setProd] = useState([])
 
-    const [categorieProduit, setCategory] = useState(false)
-
-    const meat = '/src/images/meat.jpg'
-    const fruit = '/src/images/organic-fruit.jpg'
-    const vegetable = '/src/images/organic-vegetable.jpg'
-    const milk = '/src/images/dairy-product.jpg'
-    const cereal = '/src/images/cereal.jpg'
-    const arom = '/src/images/aromatic-product.jpg'
-
-    const images = {
-        meat : '/src/images/meat.jpg',
-        fruit : '/src/images/organic-fruit.jpg',
-        vegetable : '/src/images/organic-vegetable.jpg',
-        milk : '/src/images/dairy-product.jpg',
-        cereal : '/src/images/cereal.jpg',
-        arom : '/src/images/aromatic-product.jpg'
-    }
+    const images = [
+        { categorieProduit: "Viande", src: "/src/images/meat.jpg" },
+        { categorieProduit: "Légume", src: "/src/images/organic-vegetable.jpg" },
+        { categorieProduit: "Fruit", src: "/src/images/organic-fruit.jpg" },
+        { categorieProduit: "Produit laitier", src: "/src/images/dairy-product.jpg" },
+        { categorieProduit: "Céréale", src: "/src/images/cereal.jpg" },
+        { categorieProduit: "Produit arômatique", src: "/src/images/aromatic-product.jpg" }
+    ];
 
     useEffect(() => {
         fetch("http://localhost:8085/produits/list")
@@ -67,12 +58,15 @@ function Home() {
                 <Row lg={4}>
                 {produit &&
                     produit
-                    .slice(0, 4).map((product) => {
+                    .slice(0, 8)
+                    .filter((product) => product.stockProduit !== 0)
+                    .map((product) => {
                     return (
                         <div className='container-sm'>
                         <Col className="d-flex">
                         <Card className="flex-fill card-flyer" style={{marginTop : "20px"}}  key={product.idProduit}>
-                            <Card.Img className='image-box' variant="top" src={product.categorieProduit ? meat : fruit} />
+                            <Card.Img className='image-box' variant="top" 
+                            src={images.find(image => image.categorieProduit === product.categorieProduit)?.src} />
                             <Card.Body>
                             <Card.Title className='text-black initialism mb-4'>{product.nomProduit}</Card.Title>
                             <Card.Text>
@@ -87,7 +81,7 @@ function Home() {
                             <small className="text-lg">{product.prixProduit} Ar/{product.uniteProduit}</small>
                             </Card.Footer>
                             <Card.Footer className='text-center'>
-                            <Button variant="primary">Ajouter au panier</Button><br/>
+                            <Button className="primary">Ajouter au panier</Button><br/>
                             </Card.Footer>
                         </Card>
                         </Col>
