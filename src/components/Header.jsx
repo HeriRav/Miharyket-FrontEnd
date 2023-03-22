@@ -10,7 +10,22 @@ const Header = () => {
   const activeLink = 'nav-link text-left active'
   const normalLink = 'nav-link text-left'
 
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [idUtilisateur, setUser] = useState('')
+
+  const EndSession = () => {
+    sessionStorage.clear()
+    localStorage.clear()
+    window.location.reload(true)
+  }
+
+  const [Email, setEmail] = useState([])
+
+  useEffect(() => {
+      fetch(`http://localhost:8085/api/utilisateurs/email/${idUtilisateur}`)
+      .then(response => response.json())
+      .then(data => setProd(data))
+      .catch(err => console.log(err))
+  })
 
   return (
       <>
@@ -81,7 +96,7 @@ const Header = () => {
               <div className="d-flex align-items-center">
   
                 <div className="ms-auto">
-                  <Navbar className="site-navigation position-relative text-right" role="navigation">
+                  <div className="site-navigation position-relative text-right" role="navigation">
                     <ul className="site-menu main-menu js-clone-nav mr-auto d-none pl-0 d-lg-block">
                       <li>
                         <NavLink to="/" className={({isActive}) => isActive ? activeLink : normalLink}>Accueil</NavLink>
@@ -105,21 +120,34 @@ const Header = () => {
                         <NavLink to='/produits' className={({isActive}) => isActive ? activeLink : normalLink}>Produits</NavLink>
                       </li>
                     </ul>                                                                                                                                                                                                                                                                                          
-                  </Navbar>
+                  </div>
                 </div>
   
                 <div className="ml-auto">
                   <nav className="site-navigation position-relative text-right" role="navigation">
-                    <ul className="site-menu main-menu js-clone-nav mr-auto d-none pl-0 d-lg-block">
+                    {sessionStorage.getItem("username") !== null ? (
+                      <ul className="site-menu main-menu js-clone-nav mr-auto d-none pl-0 d-lg-block">
+                        <li>
+                          <Link>
+                            {Email}
+                          </Link>
+                          <Link onClick={EndSession} className="nav-link text-left">
+                            Se déconnecter
+                          </Link>
+                        </li>
+                      </ul>
+                    ) : (
+                      <ul className="site-menu main-menu js-clone-nav mr-auto d-none pl-0 d-lg-block">
                         <li>
                           <Link to='/inscription' className="nav-link text-left">S'inscrire</Link>
                         </li>
-                      <li className='login-style'>
-                        <Link to="/authentification" className="nav-link text-left text-white">
-                          Se connecter
-                        </Link>
-                      </li>
-                    </ul>
+                        <li className='login-style'>
+                          <Link to="/authentification" className="nav-link text-left text-white">
+                            Se connecter
+                          </Link>
+                        </li>
+                      </ul>
+                    )}
                   </nav>
                 </div>
   
