@@ -1,5 +1,5 @@
 import { Link, Route, Routes, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   MDBBtn,
   MDBContainer,
@@ -14,12 +14,12 @@ from 'mdb-react-ui-kit';
 import Register from './Register';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
 function Login () {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [email, setEmail] = useState("")
   const [error, setError] = useState("")
+  const [user, setUser] = useState(null);
 
   let navigate = useNavigate()
 
@@ -47,18 +47,38 @@ function Login () {
         sessionStorage.setItem("token", data.token)
         // saveSession()
         toast.success("Connecté, vous allez être redirigé dans quelques secondes");
-        setTimeout(() => {          
-          navigate("/dashboard");
-          window.location.reload(true);
-        }, 3000);
+  
+        // Fetch user information
+        fetch(`http://localhost:8085/api/utilisateurs/email/${email}`)
+          .then(response => response.json())
+          .then(data => {
+            setUser(data);
+            // Store user info in sessionStorage
+            sessionStorage.setItem('user', JSON.stringify(data));
+            const typeUser = user.typeUtilisateur; 
+  
+            // Redirect user based on user type
+            if (typeUser === "AGRICULTEUR") {
+              navigate("/dashboard-aggro");
+            } else if (typeUser === "COOPERATIVE") {
+              navigate("/dashboard-coop");
+            } else {
+              navigate("/");
+            }
+  
+            // Reload the page after 3 seconds
+            setTimeout(() => {
+              window.location.reload(true);
+            }, 3000);
+            });
+        
       })
       .catch((err) => {
         toast.error("Erreur : " + err.message);
       });
-      console.log(user);
     }
   };
-
+  
   const validate = () => {
     let result = true
     if (email === '' || email === null) {
@@ -70,10 +90,6 @@ function Login () {
       toast.warning('Veuillez entrer votre mot de passe')
     }
     return result
-  }
-
-  function saveSession(sessionData) {
-    localStorage.setItem('session', JSON.stringify(sessionData));
   }
 
   const refresh = () => {
