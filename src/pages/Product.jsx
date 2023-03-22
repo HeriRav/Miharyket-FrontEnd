@@ -31,6 +31,7 @@ function Product() {
 
     return(
         <div>
+            <title>Mihary'ket - Produits</title>
             <div data-aos="fade-up" style={{backgroundColor : "#ebebeb"}}>
                 <div className='text-center text-success' style={{marginTop : "20px", backgroundColor : "#dbdbdb", padding : "25px"}}>
                     <h1>Nos produits récents</h1><br/>
