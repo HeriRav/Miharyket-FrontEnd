@@ -6,18 +6,11 @@ import { Navbar } from 'react-bootstrap'
 import Product from '../pages/Product'
 
 const Header = () => {
-  useEffect(() => {
-    // window.location.reload(true)
-  })
 
   const activeLink = 'nav-link text-left active'
   const normalLink = 'nav-link text-left'
 
-  const [isUserLoggedIn, setUserLoggedIn] = useState(false)
-
-  const userAuthentication = () => {
-    setUserLoggedIn(!isUserLoggedIn)
-  }
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   return (
       <>
@@ -119,13 +112,7 @@ const Header = () => {
                   <nav className="site-navigation position-relative text-right" role="navigation">
                     <ul className="site-menu main-menu js-clone-nav mr-auto d-none pl-0 d-lg-block">
                         <li>
-                          <a>Profil</a>
-                        </li>
-                        <li>
                           <Link to='/inscription' className="nav-link text-left">S'inscrire</Link>
-                        </li>
-                        <li>
-                          <Link onClick={() => userAuthentication()} className="nav-link text-left text-white">Se déconnecter</Link>
                         </li>
                       <li className='login-style'>
                         <Link to="/authentification" className="nav-link text-left text-white">

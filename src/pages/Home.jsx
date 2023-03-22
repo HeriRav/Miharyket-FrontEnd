@@ -31,7 +31,7 @@ function Home() {
     }
 
     useEffect(() => {
-        fetch("http://localhost:8085/produits")
+        fetch("http://localhost:8085/produits/list")
         .then(response => response.json())
         .then(data => setProd(data))
         .catch(err => console.log(err))

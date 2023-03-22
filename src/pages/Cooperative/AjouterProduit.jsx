@@ -26,6 +26,7 @@ function AjouterProduit() {
   const [recherche, setRecherche] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [productsPerPage] = useState(5);
+  const [stockProduit, setStock] = useState('')
 
   const handleSave = () => {
     // e.preventDefault()
@@ -37,7 +38,7 @@ function AjouterProduit() {
       descriptionProduit: description,
       uniteProduit: unite,
       prixProduit: nouveauPrix,
-      stockProduit:"0", 
+      stockProduit: stockProduit,
     }
   
     fetch(`http://localhost:8085/produits/${idProduit}`, {
@@ -91,21 +92,22 @@ function AjouterProduit() {
       //photo: photoUrl, // <-- set the photo property to the URL
     };
 
-     fetch("http://localhost:8085/produits/ajout", {
-          method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(nouveauProduit)
-      }).then(() => {
-          toast.success('Le produit a été enregistré avec succès')
-              // window.location.reload(true);
-      }).catch((err) => {
-          toast.error('Création échouée : ' + err.message)
-      })
+    fetch("http://localhost:8085/produits/ajout", {
+      method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(nouveauProduit)
+    }).then(() => {
+      toast.success('Le produit a été enregistré avec succès')
+      // window.location.reload(true);
+    }).catch((err) => {
+      toast.error('Création échouée : ' + err.message)
+    })
     setResultats([...resultats, nouveauProduit]);
     setProduit("");
     setCategorie("");
     setDescription("");
     setUnite("");
     setPrix("");
-    setPhotoUrl(""); // <-- reset the selected photo URL
+    setPhotoUrl("");
+    setStock("")
   };
 
   const getIdProduit = (e) => {
@@ -181,6 +183,7 @@ function AjouterProduit() {
       <th>Nom du produit</th>
       <th >Catégorie</th>
       <th >Prix actuel</th>
+      <th>Stock</th>
       <th >Unité</th>
       <th >Modifier prix</th>
     </tr>
@@ -191,6 +194,7 @@ function AjouterProduit() {
         <td>{resultat.nomProduit}</td>
         <td>{resultat.categorieProduit}</td>
         <td>{resultat.prixProduit}</td>
+        <td>{resultat.stockProduit}</td>
         <td >{resultat.uniteProduit}</td>
         <td>
           <button
@@ -215,9 +219,9 @@ function AjouterProduit() {
 </Table>
 
 
-    </Col>
+  </Col>
 
-    <Col className="mb-4">
+  <Col className="mb-4">
   <h3 className="mt-4">Ajouter un nouveau produit</h3>
   <Form onSubmit={handleSubmit}>
     <Row className="mt-5">
@@ -237,13 +241,13 @@ function AjouterProduit() {
           value={categorie}
           onChange={(e) => setCategorie(e.target.value)}
         >
-                                  <option value="">Sélectionnez une catégorie</option>
-                                  <option value="Légume">Légume</option>
-                                  <option value="Fruit">Fruit</option>
-                                  <option value="Viande">Viande</option>
-                                  <option value="Produit laitier">Produit laitier</option>
-                                  <option value="Céréale">Céréale</option>
-                                  <option value="Produit arômatique">Produit aromatique</option>
+        <option value="">Sélectionnez une catégorie</option>
+        <option value="Légume">Légume</option>
+        <option value="Fruit">Fruit</option>
+        <option value="Viande">Viande</option>
+        <option value="Produit laitier">Produit laitier</option>
+        <option value="Céréale">Céréale</option>
+        <option value="Produit arômatique">Produit aromatique</option>
         </Form.Control>
       </Form.Group>
 
@@ -255,6 +259,12 @@ function AjouterProduit() {
           onChange={(e) => setPrix(e.target.value)}
         />
       </Form.Group>
+
+      <Form.Group as={Col} sm={12} controlId="stock">
+        <Form.Label className="mt-4">Stock</Form.Label>
+        <Form.Control />
+      </Form.Group>
+
       <Form.Group as={Col} sm={12} controlId="unite">
         <Form.Label className="mt-4">Unité</Form.Label>
         <Form.Control
@@ -294,7 +304,7 @@ function AjouterProduit() {
       </Col>
     </Row>
   </Form>
-</Col>
+  </Col>
 
       </Row>
 
