@@ -1,4 +1,3 @@
-import videoBG from '../assets/video_1.mp4'
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import Col from 'react-bootstrap/Col';
@@ -7,9 +6,9 @@ import CardGroup from 'react-bootstrap/CardGroup';
 import { useEffect, useState } from 'react';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
-import { Link } from 'react-router-dom';
+import { Link, Route, Routes } from 'react-router-dom';
 
-function Home() {
+function Product() {
     const [produit, setProd] = useState([])
 
     const [categorieProduit, setCategory] = useState(false)
@@ -39,35 +38,17 @@ function Home() {
 
     produit.sort((a, b) => b.idProduit - a.idProduit);
 
-    return (
-        <div>           
-            <title>Mihary'ket - Page d'accueil</title>
-            <div className="carousel-inner">
-                <div className="carousel-item active">
-                    <div className="overlay"></div>
-                    <video className="img-fluid" autoPlay loop muted >
-                        <source src={videoBG} type='video/mp4'/>
-                    </video>
-                    <div className="carousel-caption d-none d-md-block centered" data-aos="fade-up">
-                        <div className="col-lg-12 justify-content-center mx-auto text-center">
-                            <h1 className='for-mobile'>Plateforme de coopératives agricoles pour un commerce équitable afin de soutenir nos agriculteurs.</h1><br/>
-                            <h5 className='text-white'>Une plateforme coopérative agricole pour le commerce équitable peut aider à soutenir les agriculteurs en permettant la vente directe de leurs produits, 
-                                en réduisant les intermédiaires et en offrant des prix équitables pour leur travail.</h5><br/>
-                            <button className='btn btn-success'>Plus de détails</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
+    return(
+        <div>
             <div data-aos="fade-up" style={{backgroundColor : "#ebebeb"}}>
                 <div className='text-center text-success' style={{marginTop : "20px", backgroundColor : "#dbdbdb", padding : "25px"}}>
                     <h1>Nos produits récents</h1><br/>
-                    <Link className="text-body" to="/produits"><button className='btn btn-success btn-rounded btn-lg gradient-custom-4 px-5 text-white'>Voir la liste complète</button></Link>
+                    <Link className="text-body" to="/inscription"><button className='btn btn-success btn-rounded btn-lg gradient-custom-4 px-5 text-white'>Voir la liste complète</button></Link>
                 </div>
                 <Row lg={4}>
                 {produit &&
                     produit
-                    .slice(0, 4).map((product) => {
+                    .map((product) => {
                     return (
                         <div className='container-sm'>
                         <Col className="d-flex">
@@ -96,8 +77,11 @@ function Home() {
                     })}
                 </Row><br/>
             </div>
+            <Routes>
+                <Route path='/produits' element={<Product/>}/>
+            </Routes>
         </div>
     )
 }
-  
-export default Home
+
+export default Product

@@ -50,6 +50,18 @@ function Register_coop() {
             result = false
             toast.warning('Veuillez entrer votre adresse mail')
         }
+        if (nifCoop === '' || nifCoop === null) {
+            result = false
+            toast.warning('Veuillez entrer votre adresse mail')
+        }
+        if (statCoop === '' || statCoop === null) {
+            result = false
+            toast.warning('Veuillez entrer votre adresse mail')
+        }
+        if (responsableCoop === '' || responsableCoop === null) {
+            result = false
+            toast.warning('Veuillez entrer votre adresse mail')
+        }
         if (telephoneUtilisateur === '' || telephoneUtilisateur === null) {
             result = false
             toast.warning('Veuillez entrer votre numéro de téléphone')

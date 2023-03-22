@@ -12,6 +12,7 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import Register_client from './pages/Register-client'
 import Register_coop from './pages/Register-coop'
+import Product from './pages/Product'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <BrowserRouter>
@@ -19,6 +20,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       <Route path='/' element={<App/ >}>
         <Route index element={<Home />}/>
         <Route path='/a-propos' element={<About />}/>
+        <Route path='/produits' element={<Product />}/>
       </Route>
       <Route path='/authentification/*' element={<Login />}/>
       <Route path='/inscription/*' element={<Register />}/>
