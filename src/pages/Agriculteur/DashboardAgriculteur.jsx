@@ -7,9 +7,11 @@ import miharyImage from "../../../mihary_logo_dark.png";
 import DashboardFooter from '../Cooperative/DashboardFooter'
 import StatCooperative from './StatAgriculteur';
 import ApprovisionnementProduitAgriculteur from './ApprovisionnementProduitAgriculteur';
+import GetCooperativeId from '../../components/GetCooperativeId';
 
 function Dashboard() {
-   
+    //localStorage.setItem("produitCooperative", produitCooperative);
+
     const [activeMenu, setActiveMenu] = useState(0);
     
     const handleMenu0Click = () => {
@@ -44,6 +46,7 @@ function Dashboard() {
   }
     return (
       <div id="wrapper">
+        {/* <GetCooperativeId/> */}
         <ul className="navbar-nav bg-gradient-dark sidebar sidebar-dark accordion" id="accordionSidebar">
         <div className="sidebar-brand d-flex align-items-center justify-content-center">
         <Link onClick={refresh}>
