@@ -51,7 +51,7 @@ function Home({}) {
                 </div>
             </div>
 
-            <div data-aos="fade-up" style={{backgroundColor : "#ebebeb"}}>
+            <div id='products' data-aos="fade-up" style={{backgroundColor : "#ebebeb"}}>
                 <div className='text-center text-success' style={{backgroundColor : "#dbdbdb", padding : "25px"}}>
                     <h1>Nos produits récents</h1><br/>
                     <Link className="text-body" to="/produits"><button className='btn btn-success btn-rounded btn-lg gradient-custom-4 px-5 text-white'>Voir la liste complète</button></Link>
