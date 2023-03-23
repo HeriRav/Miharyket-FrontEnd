@@ -28,7 +28,7 @@ function Login () {
   const Log = async (e) => {
     e.preventDefault()
     if (validate()) {
-      const user = { username: email, password, typeUtilisateur };
+      const user = { username: email, password };
       fetch("http://localhost:8085/authenticate", {
         method: "POST",
         headers: {
@@ -55,7 +55,9 @@ function Login () {
           setUser(data);
           // Store user info in sessionStorage
           sessionStorage.setItem('user', JSON.stringify(data));
-          const typeUser = user.typeUtilisateur; 
+          sessionStorage.setItem('type', JSON.stringify(data.typeUtilisateur))
+          sessionStorage.setItem('nom', JSON.stringify(data.nomUtilisateur))
+          const typeUser = data.typeUtilisateur; 
 
           // Redirect user based on user type
           if (typeUser === "AGRICULTEUR") {

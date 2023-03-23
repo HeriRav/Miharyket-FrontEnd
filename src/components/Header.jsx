@@ -10,26 +10,17 @@ const Header = () => {
   const activeLink = 'nav-link text-left active'
   const normalLink = 'nav-link text-left'
 
+  const userEmail = sessionStorage.getItem("nom");
 
-  const userEmail = sessionStorage.getItem('username');
+  // const util = userEmail.nomUtilisateur
 
-
-  const [idUtilisateur, setUser] = useState('')
+  const [email, setEmail] = useState("")
 
   const EndSession = () => {
     sessionStorage.clear()
     localStorage.clear()
     window.location.reload(true)
   }
-
-  const [Email, setEmail] = useState([])
-
-  useEffect(() => {
-    fetch(`http://localhost:8085/api/utilisateurs/email/${idUtilisateur}`)
-    .then(response => response.json())
-    .then(data => setProd(data))
-    .catch(err => console.log(err))
-  })
 
   return (
       <>
