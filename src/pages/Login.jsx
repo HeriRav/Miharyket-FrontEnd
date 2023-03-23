@@ -14,19 +14,21 @@ from 'mdb-react-ui-kit';
 import Register from './Register';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
 function Login () {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [email, setEmail] = useState("")
   const [error, setError] = useState("")
   const [user, setUser] = useState(null);
+  const [typeUtilisateur, setType] = useState("")
 
   let navigate = useNavigate()
 
   const Log = async (e) => {
     e.preventDefault()
     if (validate()) {
-      const user = { username: email, password };
+      const user = { username: email, password, typeUtilisateur };
       fetch("http://localhost:8085/authenticate", {
         method: "POST",
         headers: {
@@ -45,33 +47,31 @@ function Login () {
         localStorage.setItem("token", data.token)
         sessionStorage.setItem("username", email)
         sessionStorage.setItem("token", data.token)
-        // saveSession()
-        toast.success("Connecté, vous allez être redirigé dans quelques secondes");
   
         // Fetch user information
         fetch(`http://localhost:8085/api/utilisateurs/email/${email}`)
-          .then(response => response.json())
-          .then(data => {
-            setUser(data);
-            // Store user info in sessionStorage
-            sessionStorage.setItem('user', JSON.stringify(data));
-            const typeUser = user.typeUtilisateur; 
-  
-            // Redirect user based on user type
-            if (typeUser === "AGRICULTEUR") {
-              navigate("/dashboard-aggro");
-            } else if (typeUser === "COOPERATIVE") {
-              navigate("/dashboard-coop");
-            } else {
-              navigate("/");
-            }
-  
+        .then(response => response.json())
+        .then(data => {
+          setUser(data);
+          // Store user info in sessionStorage
+          sessionStorage.setItem('user', JSON.stringify(data));
+          const typeUser = user.typeUtilisateur; 
+
+          // Redirect user based on user type
+          if (typeUser === "AGRICULTEUR") {
+            navigate("/dashboard-aggro");
+          } else if (typeUser === "COOPERATIVE") {
+            navigate("/dashboard-coop");
+          } else {
+            toast.success("Connecté, vous allez être redirigé dans quelques secondes");
             // Reload the page after 3 seconds
             setTimeout(() => {
-              window.location.reload(true);
-            }, 3000);
-            });
-        
+              navigate('/')
+              window.location.reload(true)
+            }, 3000)
+          }
+          console.log(typeUser)
+        });        
       })
       .catch((err) => {
         toast.error("Erreur : " + err.message);
@@ -162,7 +162,7 @@ function Login () {
                       </div>
 
                       <div>
-                        <p className="mb-3">Retourner à l'<Link className="text-success fw-bold" onClick={refresh}>accueil</Link></p>
+                        <p className="mb-3">Retourner à l'<Link className="text-success fw-bold" to="/" onClick={refresh}>accueil</Link></p>
                       </div>
                     </MDBCardBody>
                   </MDBCard>
