@@ -17,6 +17,7 @@ import ListAgriculteur from './components/ListAgriculteur'
 import Register_coop from './pages/Register-coop'
 import CooperativeList from './components/CooperativeList'
 import UserList from './components/UserList'
+import Product from './pages/Product'
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -25,6 +26,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       <Route path='/' element={<App/ >}>
         <Route index element={<Home />}/>
         <Route path='/a-propos' element={<About />}/>
+        <Route path='/produits' element={<Product />}/>
       </Route>
       <Route path='/authentification/*' element={<Login />}/>
       <Route path='/inscription/*' element={<Register />}/>

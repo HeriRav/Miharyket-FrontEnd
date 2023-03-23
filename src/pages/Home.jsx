@@ -33,22 +33,6 @@ function Home({}) {
     return (
         <div>           
             <title>Mihary'ket - Page d'accueil</title>
-            <div className="carousel-inner">
-                <div className="carousel-item active">
-                    <div className="overlay"></div>
-                    <video className="img-fluid" autoPlay loop muted >
-                        <source src={videoBG} type='video/mp4'/>
-                    </video>
-                </div>
-                <div className="carousel-caption d-none d-md-block centered info" data-aos="fade-up">
-                    <div className="col-lg-12 justify-content-center mx-auto text-center">
-                        <h1 className='for-mobile'>Plateforme de coopératives agricoles pour un commerce équitable afin de soutenir nos agriculteurs.</h1><br/>
-                        <h5 className='text-white'>Une plateforme coopérative agricole pour le commerce équitable peut aider à soutenir les agriculteurs en permettant la vente directe de leurs produits, 
-                            en réduisant les intermédiaires et en offrant des prix équitables pour leur travail.</h5><br/>
-                        <button className='btn btn-success'>Plus de détails</button>
-                    </div>
-                </div>
-            </div>
 
             {/* <div class="hero-slide owl-carousel site-blocks-cover"> */}
                 <div className="intro-section" style={{backgroundImage : "url('/src/images/hero_1.jpg')"}}>
@@ -68,7 +52,7 @@ function Home({}) {
             </div>
 
             <div data-aos="fade-up" style={{backgroundColor : "#ebebeb"}}>
-                <div className='text-center text-success' style={{marginTop : "20px", backgroundColor : "#dbdbdb", padding : "25px"}}>
+                <div className='text-center text-success' style={{backgroundColor : "#dbdbdb", padding : "25px"}}>
                     <h1>Nos produits récents</h1><br/>
                     <Link className="text-body" to="/produits"><button className='btn btn-success btn-rounded btn-lg gradient-custom-4 px-5 text-white'>Voir la liste complète</button></Link>
                 </div>
