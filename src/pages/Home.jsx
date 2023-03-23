@@ -39,12 +39,29 @@ function Home({}) {
                     <video className="img-fluid" autoPlay loop muted >
                         <source src={videoBG} type='video/mp4'/>
                     </video>
-                    <div className="carousel-caption d-none d-md-block centered" data-aos="fade-up">
-                        <div className="col-lg-12 justify-content-center mx-auto text-center">
-                            <h1 className='for-mobile'>Plateforme de coopératives agricoles pour un commerce équitable afin de soutenir nos agriculteurs.</h1><br/>
-                            <h5 className='text-white'>Une plateforme coopérative agricole pour le commerce équitable peut aider à soutenir les agriculteurs en permettant la vente directe de leurs produits, 
-                                en réduisant les intermédiaires et en offrant des prix équitables pour leur travail.</h5><br/>
-                            <button className='btn btn-success'>Plus de détails</button>
+                </div>
+                <div className="carousel-caption d-none d-md-block centered info" data-aos="fade-up">
+                    <div className="col-lg-12 justify-content-center mx-auto text-center">
+                        <h1 className='for-mobile'>Plateforme de coopératives agricoles pour un commerce équitable afin de soutenir nos agriculteurs.</h1><br/>
+                        <h5 className='text-white'>Une plateforme coopérative agricole pour le commerce équitable peut aider à soutenir les agriculteurs en permettant la vente directe de leurs produits, 
+                            en réduisant les intermédiaires et en offrant des prix équitables pour leur travail.</h5><br/>
+                        <button className='btn btn-success'>Plus de détails</button>
+                    </div>
+                </div>
+            </div>
+
+            {/* <div class="hero-slide owl-carousel site-blocks-cover"> */}
+                <div className="intro-section" style={{backgroundImage : "url('/src/images/hero_1.jpg')"}}>
+                    <div className="container">
+                    <div className="row align-items-center">
+                        <div className="justify-content-center mx-auto text-center" data-aos="fade-up">
+                        <h1>Plateforme de coopératives agricoles pour un commerce équitable afin de soutenir nos agriculteurs.</h1><br />
+                        <button className='btn btn-success btn-rounded btn-lg gradient-custom-4 px-5 text-white' onClick={() => {
+                            const element = document.querySelector('#products');
+                            const offset = -100; // ajustez cette valeur en fonction de la hauteur de votre en-tête
+                            const yCoordinate = element.getBoundingClientRect().top + window.pageYOffset + offset;
+                            window.scrollTo({ top: yCoordinate, behavior: 'smooth' });
+                            }}>En savoir plus</button>
                         </div>
                     </div>
                 </div>
