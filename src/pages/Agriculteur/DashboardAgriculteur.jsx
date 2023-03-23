@@ -7,31 +7,37 @@ import miharyImage from "../../../mihary_logo_dark.png";
 import DashboardFooter from '../Cooperative/DashboardFooter'
 import StatCooperative from './StatAgriculteur';
 import ApprovisionnementProduitAgriculteur from './ApprovisionnementProduitAgriculteur';
+import GetCooperativeId from '../../components/GetCooperativeId';
 
 function Dashboard() {
-   
-        const [activeMenu, setActiveMenu] = useState(0);
-        
-        const handleMenu0Click = () => {
-          setActiveMenu(0);
-        };
+    //localStorage.setItem("produitCooperative", produitCooperative);
 
-        const handleMenu1Click = () => {
-            setActiveMenu(1);
-          };
-      
-        const handleMenu2Click = () => {
-          setActiveMenu(2);
+    const [activeMenu, setActiveMenu] = useState(0);
+    
+    const handleMenu0Click = () => {
+        setActiveMenu(0);
+    };
+
+    const handleMenu1Click = () => {
+        setActiveMenu(1);
         };
-      
-        const handleMenu3Click = () => {
-          setActiveMenu(3);
-        };
-      
-        const handleMenu4Click = () => {
-          setActiveMenu(4);
-        };
-      
+    
+    const handleMenu2Click = () => {
+        setActiveMenu(2);
+    };
+    
+    const handleMenu3Click = () => {
+        setActiveMenu(3);
+    };
+    
+    const handleMenu4Click = () => {
+        setActiveMenu(4);
+    };
+    
+    const refresh = () => {
+        navigate('/')
+        window.location.reload(true)
+    }
        
     let navigate = useNavigate()
     const change = () => {
@@ -40,22 +46,23 @@ function Dashboard() {
   }
     return (
       <div id="wrapper">
+        {/* <GetCooperativeId/> */}
         <ul className="navbar-nav bg-gradient-dark sidebar sidebar-dark accordion" id="accordionSidebar">
         <div className="sidebar-brand d-flex align-items-center justify-content-center">
-        <a href="index.html">
+        <Link onClick={refresh}>
           <div className="sidebar-brand-icon">
             <img src={miharyImage} alt="Mihary" className="img-fluid" />
           </div>
-        </a>
+        </Link>
       </div>
             <hr className="sidebar-divider my-0"/>
             <li className="nav-item">
-                <a className="nav-link" href="#" onClick={handleMenu0Click}>
+                <Link className="nav-link" to="/dashboard-aggro" onClick={handleMenu0Click}>
                     <i className="fas fa-fw fa-tachometer-alt" style={{fontSize: '1.05em'}}></i>
                     <span className="img-fluid d-md-none" style={{fontSize: '0.8em'}}>Agriculteur</span>
                     <span className="img-fluid d-none d-md-inline d-lg-none" style={{fontSize: '0.9em'}}>Agriculteur</span>
                     <span className="img-fluid d-none d-lg-inline" style={{fontSize: '1.05em'}}>Agriculteur</span>
-                </a>
+                </Link>
             </li>
 
             <hr className="sidebar-divider"/>
@@ -66,11 +73,11 @@ function Dashboard() {
                 Produit
             </div>
             <li className="nav-item">
-                <a className="nav-link" href="#" onClick={handleMenu4Click}
+                <Link className="nav-link" to="/dashboard-aggro" onClick={handleMenu4Click}
                     aria-expanded="true" aria-controls="collapsePages">
                     <i className="fas fa-fw fa-shopping-bag"></i>
                     <span>Inventaire</span>
-                </a>
+                </Link>
                 <div id="collapsePages" className="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                     <div className="bg-white py-2 collapse-inner rounded">
                         <h6 className="collapse-header">Login Screens:</h6>

@@ -52,19 +52,18 @@ video {
 }
 
 .overlay {
-  /* margin-top: 166px; */
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 100%;
+  position: fixed;
+  min-height: 100%;
+  min-width: 100%;
   background-color: black;
   opacity: 0.5;
   z-index: 1;
+  background-size: cover;
+  background-position: center;
 }
 
 .centered {
-  top: 40%;
+  top: 30%;
 }
 
 .input {
@@ -96,4 +95,40 @@ Link {
 
 .bottom {
   margin-bottom: 32px;
+}
+
+@media (min-width: 560px) and (max-width: 750px) {
+  .for-mobile {
+    width: 50px;
+  }
+}
+
+.card-flyer {
+  -webkit-transition: all .9s ease;
+  -moz-transition: all .9s ease;
+  -o-transition: all .9s ease;
+  -ms-transition: all .9s ease;
+}
+
+.card-flyer .image-box {
+  -webkit-transition: all .9s ease;
+  -moz-transition: all .9s ease;
+  -o-transition: all .9s ease;
+  -ms-transition: all .9s ease;
+}
+
+.card-flyer:hover {
+  background: #fff;
+  box-shadow: 0px 15px 26px rgba(0, 0, 0, 0.50);
+  -webkit-transition: all 0.2s ease-in;
+  -moz-transition: all 0.2s ease-in;
+  -ms-transition: all 0.2s ease-in;
+  -o-transition: all 0.2s ease-in;
+  transition: all 0.2s ease-in;
+  margin-top: 50px;
+  -webkit-transform: scale(1.15);
+  -moz-transform: scale(1.15);
+  -ms-transform: scale(1.15);
+  -o-transform: scale(1.15);
+  transform: scale(1.02);
 }

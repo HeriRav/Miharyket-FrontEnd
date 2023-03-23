@@ -11,7 +11,13 @@ import Home from './pages/Home'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import Register_client from './pages/Register-client'
+import AjoutProduit from './pages/Agriculteur/AjoutProduit'
+import ListProduit from './components/ProduitsList'
+import ListAgriculteur from './components/ListAgriculteur'
 import Register_coop from './pages/Register-coop'
+import CooperativeList from './components/CooperativeList'
+import UserList from './components/UserList'
+
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <BrowserRouter>
@@ -25,6 +31,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       <Route path='/inscription-coop/*' element={<Register_coop />}/>
       <Route path='/inscription-client/*' element={<Register_client />}/>
       <Route path='/dashboard' element={<DashboardAdmin />}/>
+      <Route path='/listProduit' element={<ListProduit />}/>
+      <Route path='/listAgriculteurs' element={<ListAgriculteur />}/>
+      <Route path='/ajoutProduit' element={<AjoutProduit />}/>
       <Route path='/dashboard-coop' element={<DashboardCooperative />}/>
       <Route path='/dashboard-aggro' element={<DashboardAgriculteur />}/>
       {/* <Route path='*' element={<Error404/>}/> */}

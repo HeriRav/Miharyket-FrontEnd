@@ -1913,8 +1913,8 @@ pre code {
 
 .form-control:focus {
     color: #6e707e;
-    background-color: #fff;
-    border-color: #bac8f3;
+    background-color: transparent;
+    border-color: #fff;
     outline: 0;
     box-shadow: 0 0 0 .2rem rgba(78,115,223,.25)
 }

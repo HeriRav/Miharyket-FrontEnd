@@ -1,5 +1,5 @@
 import { Link, Route, Routes, useNavigate } from 'react-router-dom';
-import React from 'react';
+import { useState, useEffect } from 'react';
 import {
   MDBBtn,
   MDBContainer,
@@ -12,12 +12,84 @@ import {
 }
 from 'mdb-react-ui-kit';
 import Register from './Register';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function Login () {
+  const [username, setUsername] = useState("")
+  const [password, setPassword] = useState("")
+  const [email, setEmail] = useState("")
+  const [error, setError] = useState("")
+  const [user, setUser] = useState(null);
+  const [typeUtilisateur, setType] = useState("")
+
   let navigate = useNavigate()
-  const change = () => {
-    let path = '/'
-    navigate(path)
+
+  const Log = async (e) => {
+    e.preventDefault()
+    if (validate()) {
+      const user = { username: email, password, typeUtilisateur };
+      fetch("http://localhost:8085/authenticate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(user),
+      })
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        } else {
+          throw new Error("Email ou mot de passe incorrect");
+        }
+      })
+      .then((data) => {
+        localStorage.setItem("token", data.token)
+        sessionStorage.setItem("username", email)
+        sessionStorage.setItem("token", data.token)
+  
+        // Fetch user information
+        fetch(`http://localhost:8085/api/utilisateurs/email/${email}`)
+        .then(response => response.json())
+        .then(data => {
+          setUser(data);
+          // Store user info in sessionStorage
+          sessionStorage.setItem('user', JSON.stringify(data));
+          const typeUser = user.typeUtilisateur; 
+
+          // Redirect user based on user type
+          if (typeUser === "AGRICULTEUR") {
+            navigate("/dashboard-aggro");
+          } else if (typeUser === "COOPERATIVE") {
+            navigate("/dashboard-coop");
+          } else {
+            toast.success("Connecté, vous allez être redirigé dans quelques secondes");
+            // Reload the page after 3 seconds
+            setTimeout(() => {
+              navigate('/')
+              window.location.reload(true)
+            }, 3000)
+          }
+          console.log(typeUser)
+        });        
+      })
+      .catch((err) => {
+        toast.error("Erreur : " + err.message);
+      });
+    }
+  };
+  
+  const validate = () => {
+    let result = true
+    if (email === '' || email === null) {
+      result = false
+      toast.warning('Veuillez entrer votre adresse mail')
+    }
+    if (password === '' || password === null) {
+      result = false
+      toast.warning('Veuillez entrer votre mot de passe')
+    }
+    return result
   }
 
   const refresh = () => {
@@ -29,9 +101,17 @@ function Login () {
     <div>
     <title>Mihary'ket - Authentification</title>
       <section className="intro">
-        <div className="bg-image h-100" style={{backgroundImage: "url('/src/images/bg_login.jpg')",
-        position : "fixed", minWidth : "100%", minHeight : "100%", backgroundSize : "cover", backgroundPosition : "center"}}>
+        <div className="bg-image h-100" 
+        style={{
+          backgroundImage: "url('/src/images/bg_login.jpg')",
+          position : "fixed",
+          minWidth : "100%",
+          minHeight : "100%",
+          backgroundSize : "cover",
+          backgroundPosition : "center"
+          }}>
           <div className="mask d-flex align-items-center h-100" style={{"backgroundColor": "rgba(139, 195, 74, .6)"}}>
+          <ToastContainer />
             <MDBContainer fluid data-aos="fade-right">
 
               <MDBRow className='d-flex justify-content-center align-items-center h-100'>
@@ -62,13 +142,19 @@ function Login () {
                       </div>
 
                       <label style={{marginRight : "auto"}}>Adresse mail</label>
-                      <MDBInput className='input' wrapperClass='mb-4 mx-5 w-100' type='email' size='lg' placeholder='Entrez votre email' required/>
+                      <MDBInput className='input text-white' wrapperClass='mb-4 mx-5 w-100' type='email' size='lg' placeholder='Entrez votre email' required
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      />
                       <label style={{marginRight : "auto"}}>Mot de passe</label>
-                      <MDBInput className='input' wrapperClass='mb-4 mx-5 w-100' type='password' size='lg' placeholder='Entrez votre mot de passe' required/>
+                      <MDBInput className='input text-white' wrapperClass='mb-4 mx-5 w-100' type='password' size='lg' placeholder='Entrez votre mot de passe' required
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      />
 
                       <p className="mb-3 pb-lg-2"><a className="text-white" href="#!" data-aos="fade-right">Mot de passe oublié?</a></p>
                       <div className="text-center" data-aos="fade-right">
-                        <button className="btn btn-white btn-rounded px-5 button mb-3" type="submit" onClick={change}>se connecter</button>
+                        <button className="btn btn-white btn-rounded px-5 button mb-3" type="submit" onClick={Log}>se connecter</button>                        
                       </div>
 
                       <div>
@@ -76,7 +162,7 @@ function Login () {
                       </div>
 
                       <div>
-                        <p className="mb-3">Retourner à l'<Link className="text-success fw-bold" onClick={refresh}>Accueil</Link></p>
+                        <p className="mb-3">Retourner à l'<Link className="text-success fw-bold" to="/" onClick={refresh}>accueil</Link></p>
                       </div>
                     </MDBCardBody>
                   </MDBCard>

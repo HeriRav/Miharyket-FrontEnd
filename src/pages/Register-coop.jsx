@@ -1,19 +1,40 @@
 import { Link, Route, Routes, useNavigate } from 'react-router-dom';
 import Login from './Login';
-import React from 'react';
+import React, { useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
 
 function Register_coop() {
     const [nomUtilisateur, setLName] = useState('')
-    const [prenomUtilisateur, setFName] = useState('')
     const [adresseUtilisateur, setAdress] = useState('')
+    const [nifCoop, setCin] = useState('')
+    const [statCoop, setStat] = useState('')
+    const [responsableCoop, setResp] = useState('')
     const [email, setEmail] = useState('')
     const [telephoneUtilisateur, setPhone] = useState('')
     const [mdpUtilisateur, setPass] = useState('')
     const [confirmMdp, setConfirm] =useState('')
     const [login, setLogin] = useState('')
-    const [typeUtilisateur] = useState('COOP')
+    const [typeUtilisateur] = useState('COOPERATIVE')
+
+    const handleClick = async (e) => {
+        e.preventDefault()
+        if (validate()) {
+            const user = {nomUtilisateur, login : email, nifCoop, statCoop, responsableCoop, adresseUtilisateur, email, telephoneUtilisateur, mdpUtilisateur, typeUtilisateur}
+            fetch("http://localhost:8085/api/utilisateurs/ajout", {
+                method:"POST", headers:{"Content-Type" : "application/json"}, body:JSON.stringify(user)
+            }).then(() => {
+                toast.success('Votre compte a été enregistré avec succès')
+                setTimeout(() => {
+                    navigate('/')
+                    window.location.reload(true)
+                }, 3000)
+            }).catch((err) => {
+                toast.error('Inscription échouée : ' +err.message)
+            })
+            console.log(user)
+        }
+    }
 
     const validate = () => {
         let result = true
@@ -21,15 +42,23 @@ function Register_coop() {
             result = false
             toast.warning('Veuillez entrer votre nom')
         }
-        if (prenomUtilisateur === '' || prenomUtilisateur === null) {
-            result = false
-            toast.warning('Veuillez entrer votre prénom')
-        }
         if (adresseUtilisateur === '' || adresseUtilisateur === null) {
             result = false
             toast.warning('Veuillez entrer votre adresse')
         }
         if (email === '' || email === null) {
+            result = false
+            toast.warning('Veuillez entrer votre adresse mail')
+        }
+        if (nifCoop === '' || nifCoop === null) {
+            result = false
+            toast.warning('Veuillez entrer votre adresse mail')
+        }
+        if (statCoop === '' || statCoop === null) {
+            result = false
+            toast.warning('Veuillez entrer votre adresse mail')
+        }
+        if (responsableCoop === '' || responsableCoop === null) {
             result = false
             toast.warning('Veuillez entrer votre adresse mail')
         }
@@ -81,42 +110,48 @@ function Register_coop() {
 
                                         <div className="form-outline mb-4">
                                         <label style={{marginRight : "auto", fontSize : "16px", color : "black"}}>Adresse</label>
-                                        <input type="text" id="registerName" className="form-control" required="required" placeholder='Votre adresse'/>
+                                        <input type="text" id="registerAddress" className="form-control" required="required"
+                                        value={adresseUtilisateur} onChange={(e) => {setAdress(e.target.value)}} placeholder='Votre adresse'/>
                                         </div>
 
                                         <div className="row mb-4">
                                             <div className="col-md-6">
                                                 <div className="form-outline">
                                                 <label style={{marginRight : "auto", fontSize : "16px", color : "black"}}>Numéro d'identité fiscale</label>
-                                                <input type="text" id="registerAddress" className="form-control" required="required" maxLength={10} placeholder='Votre NIF'/>
+                                                <input type="text" id="registerCin" className="form-control" required="required" maxLength={10}
+                                                value={nifCoop} onChange={(e) => {setCin(e.target.value)}} placeholder='Votre NIF'/>
                                                 </div>
                                             </div>
 
                                             <div className="col-md-6">
                                                 <div className="form-outline">
                                                 <label style={{marginRight : "auto", fontSize : "16px", color : "black"}}>Numéro statistique</label>
-                                                <input type="text" id="registerEmail" className="form-control" required="required" maxLength={17} placeholder='Votre STAT'/>
+                                                <input type="text" id="registerStat" className="form-control" required="required" maxLength={17}
+                                                value={statCoop} onChange={(e) => {setStat(e.target.value)}} placeholder='Votre STAT'/>
                                                 </div>
                                             </div>
                                         </div>
 
                                         <div className="form-outline mb-4">
                                         <label style={{marginRight : "auto", fontSize : "16px", color : "black"}}>Nom du responsable</label>
-                                        <input type="text" id="registerContact" className="form-control" required="required" placeholder='Le nom de votre responsable'/>
+                                        <input type="text" id="registerResp" className="form-control" required="required"
+                                        value={responsableCoop} onChange={(e) => {setResp(e.target.value)}} placeholder='Le nom de votre responsable'/>
                                         </div>
 
                                         <div className="row mb-4">
                                             <div className="col-md-6">
                                                 <div className="form-outline">
                                                 <label style={{marginRight : "auto", fontSize : "16px", color : "black"}}>Contact</label>
-                                                <input type="text" id="registerPass1" className="form-control" required="required" placeholder='Votre contact'/>
+                                                <input type="text" id="registerPhone" className="form-control" required="required"
+                                                value={telephoneUtilisateur} onChange={(e) => {setPhone(e.target.value)}} placeholder='Votre contact'/>
                                                 </div>
                                             </div>
 
                                             <div className="col-md-6">
                                                 <div className="form-outline">
                                                 <label style={{marginRight : "auto", fontSize : "16px", color : "black"}}>Email</label>
-                                                <input type="email" id="registerPass2" className="form-control" required="required" placeholder='Votre adresse mail'/>
+                                                <input type="email" id="registerEmail" className="form-control" required="required"
+                                                value={email} onChange={(e) => {setEmail(e.target.value)}} placeholder='Votre adresse mail'/>
                                                 </div>
                                             </div>
                                         </div>
@@ -125,14 +160,16 @@ function Register_coop() {
                                             <div className="col-md-6">
                                                 <div className="form-outline">
                                                 <label style={{marginRight : "auto", fontSize : "16px", color : "black"}}>Mot de passe</label>
-                                                <input type="password" id="registerPass1" className="form-control" required="required" placeholder='Votre mot de passe'/>
+                                                <input type="password" id="registerPass1" className="form-control" required="required"
+                                                value={mdpUtilisateur} onChange={(e) => {setPass(e.target.value)}} placeholder='Votre mot de passe'/>
                                                 </div>
                                             </div>
 
                                             <div className="col-md-6">
                                                 <div className="form-outline">
                                                 <label style={{marginRight : "auto", fontSize : "16px", color : "black"}}>Confirmer Mot de passe</label>
-                                                <input type="password" id="registerPass2" className="form-control" required="required" placeholder='Confirmation mdp'/>
+                                                <input type="password" id="registerPass2" className="form-control" required="required"
+                                                value={confirmMdp} onChange={(e) => {setConfirm(e.target.value)}} placeholder='Confirmation mdp'/>
                                                 </div>
                                             </div>
                                         </div>
@@ -146,7 +183,10 @@ function Register_coop() {
 
                                         <div className="d-flex justify-content-center">
                                         <button type="button"
-                                            className="btn btn-success btn-rounded btn-lg gradient-custom-4 px-5 text-white">S'inscrire</button>
+                                            className="btn btn-success btn-rounded btn-lg gradient-custom-4 px-5 text-white"
+                                            onClick={handleClick}
+                                            >S'inscrire</button>
+                                            <ToastContainer />
                                         </div>
 
                                         <p className="text-center text-muted mt-5 mb-0">Déjà inscrit? <Link id="loginLink" to="/authentification"
