@@ -1,5 +1,5 @@
 import { Link, Route, Routes, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   MDBBtn,
   MDBContainer,
@@ -20,13 +20,15 @@ function Login () {
   const [password, setPassword] = useState("")
   const [email, setEmail] = useState("")
   const [error, setError] = useState("")
+  const [user, setUser] = useState(null);
+  const [typeUtilisateur, setType] = useState("")
 
   let navigate = useNavigate()
 
   const Log = async (e) => {
     e.preventDefault()
     if (validate()) {
-      const user = { username: email, password };
+      const user = { username: email, password, typeUtilisateur };
       fetch("http://localhost:8085/authenticate", {
         method: "POST",
         headers: {
@@ -45,20 +47,38 @@ function Login () {
         localStorage.setItem("token", data.token)
         sessionStorage.setItem("username", email)
         sessionStorage.setItem("token", data.token)
-        // saveSession()
-        toast.success("Connecté, vous allez être redirigé dans quelques secondes");
-        setTimeout(() => {          
-          navigate("/dashboard");
-          window.location.reload(true);
-        }, 3000);
+  
+        // Fetch user information
+        fetch(`http://localhost:8085/api/utilisateurs/email/${email}`)
+        .then(response => response.json())
+        .then(data => {
+          setUser(data);
+          // Store user info in sessionStorage
+          sessionStorage.setItem('user', JSON.stringify(data));
+          const typeUser = user.typeUtilisateur; 
+
+          // Redirect user based on user type
+          if (typeUser === "AGRICULTEUR") {
+            navigate("/dashboard-aggro");
+          } else if (typeUser === "COOPERATIVE") {
+            navigate("/dashboard-coop");
+          } else {
+            toast.success("Connecté, vous allez être redirigé dans quelques secondes");
+            // Reload the page after 3 seconds
+            setTimeout(() => {
+              navigate('/')
+              window.location.reload(true)
+            }, 3000)
+          }
+          console.log(typeUser)
+        });        
       })
       .catch((err) => {
         toast.error("Erreur : " + err.message);
       });
-      console.log(user);
     }
   };
-
+  
   const validate = () => {
     let result = true
     if (email === '' || email === null) {
@@ -70,10 +90,6 @@ function Login () {
       toast.warning('Veuillez entrer votre mot de passe')
     }
     return result
-  }
-
-  function saveSession(sessionData) {
-    localStorage.setItem('session', JSON.stringify(sessionData));
   }
 
   const refresh = () => {
@@ -146,7 +162,7 @@ function Login () {
                       </div>
 
                       <div>
-                        <p className="mb-3">Retourner à l'<Link className="text-success fw-bold" onClick={refresh}>accueil</Link></p>
+                        <p className="mb-3">Retourner à l'<Link className="text-success fw-bold" to="/" onClick={refresh}>accueil</Link></p>
                       </div>
                     </MDBCardBody>
                   </MDBCard>

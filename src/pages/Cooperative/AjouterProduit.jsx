@@ -88,7 +88,7 @@ function AjouterProduit() {
       descriptionProduit: description,
       uniteProduit: unite,
       prixProduit: prix,
-      stockProduit:"0",
+      stockProduit: 0,
       //photo: photoUrl, // <-- set the photo property to the URL
     };
 
@@ -205,6 +205,7 @@ function AjouterProduit() {
               setIdProduit(resultat.idProduit);
               setCategorie(resultat.categorieProduit);
               setProduit(resultat.nomProduit);
+              setStock(resultat.stockProduit)
               setUnite(resultat.uniteProduit);
               // getIdProduit();
             }}
@@ -247,7 +248,7 @@ function AjouterProduit() {
         <option value="Viande">Viande</option>
         <option value="Produit laitier">Produit laitier</option>
         <option value="Céréale">Céréale</option>
-        <option value="Produit arômatique">Produit aromatique</option>
+        <option value="Produit arômatique">Produit arômatique</option>
         </Form.Control>
       </Form.Group>
 
@@ -258,11 +259,6 @@ function AjouterProduit() {
           value={prix}
           onChange={(e) => setPrix(e.target.value)}
         />
-      </Form.Group>
-
-      <Form.Group as={Col} sm={12} controlId="stock">
-        <Form.Label className="mt-4">Stock</Form.Label>
-        <Form.Control />
       </Form.Group>
 
       <Form.Group as={Col} sm={12} controlId="unite">
@@ -278,6 +274,16 @@ function AjouterProduit() {
           <option value="pc">Pièce</option>
         </Form.Control>
       </Form.Group>
+
+      <Form.Group as={Col} sm={12} controlId="stockProduit">
+        <Form.Label className="mt-4">Description</Form.Label>
+        <Form.Control 
+          type="text"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+        />
+      </Form.Group>
+
       <Form.Group as={Col} sm={12} controlId="photo">
         <Form.Label className="mt-4">Photo</Form.Label>
         <div className="d-flex align-items-center">

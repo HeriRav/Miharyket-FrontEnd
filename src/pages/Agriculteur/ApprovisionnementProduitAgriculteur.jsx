@@ -1,20 +1,66 @@
 import React, { useState } from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import iconProduct from "../../../farm-products.png";
+import { Dropdown } from 'primereact/dropdown';
+import axios from "axios";
 
 function ApprovisionnementProduitAgriculteur() {
-  const [prix, setPrix] = useState('');
-  const [produit, setProduit] = useState("");
-  const [quantite, setQuantite] = useState(0);
-  const [photo, setPhoto] = useState(null);
-  const [description, setDescription] = useState("");
-  const [unite, setUnite] = useState("");
-  const [categorie, setCategorie] = useState("");
-  const produits = ["Produit 1", "Produit 2", "Produit 3"];
+  const [produit, setProduit] = useState();
+  const [produitsAjoutes, setProduitsAjoutes] = useState([]);
+  const [agriculteur, setAgriculteur] = useState("");
+  const savedAgriculteur = JSON.parse(localStorage.getItem("user"));
+
+  const [approvisionnement, setApprovisionnement] = useState({
+    // utilisateur: '',
+    utilisateur: savedAgriculteur,
+    produit: "",
+    quantiteApprovisionnement: 0,
+    //uniteApprovisionnement:'',
+    prixUnitaire: 0.0,
+    dateApprovisionnement: new Date().toISOString(),
+  });
+  const handleInputChange = event => {
+    const { name, value } = event.target;
+    setApprovisionnement({ ...approvisionnement, [name]: value });
+    };
+  // const handleSelectChange = (event) => {
+  //   const { value } = event.target;
+  //   setApprovisionnement({
+  //     ...approvisionnement,
+  //     produit: { idProduit: value },
+  //   });
+  // };
+  // Récupération de la liste de produits depuis le local storage
+  const savedProduits = JSON.parse(localStorage.getItem("produits"));
+  const initialProduits = savedProduits ? savedProduits : [];
+
+  // Définition de l'état initial en utilisant la liste de produits récupérée
+  const [produits, setProduits] = useState(initialProduits);
+
+  
+  
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    // Ajoutez ici votre logique pour envoyer les données saisies à votre backend
+    axios
+      .post("http://localhost:8085/approvisionnements/add", approvisionnement)
+      .then((response) => {
+        const produitAjoute = { ...approvisionnement, idProduitAjoute: response.data.idProduit };
+        setProduitsAjoutes([...produitsAjoutes, produitAjoute]);
+        setApprovisionnement({
+          utilisateur: savedAgriculteur,
+          produit: "",
+          quantiteApprovisionnement: 0,
+          prixUnitaire: 0.0,
+          dateApprovisionnement: new Date().toISOString(),
+        });
+        setProduit("");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
+  
 
   return (
     <Container className="mb-5">
@@ -27,44 +73,46 @@ function ApprovisionnementProduitAgriculteur() {
       <Form onSubmit={handleSubmit}>
         <Row className="mb-3">
           <Col xs={12} sm={6} md={6}>
-            <Form.Label>Nom du produit</Form.Label>
+          <Form.Label className="mt-4">Nom du produit</Form.Label>
             <Form.Control
               as="select"
               value={produit}
-              onChange={(e) => setProduit(e.target.value)}
+              onChange={handleInputChange}
             >
               <option value="">Sélectionnez un produit</option>
               {produits.map((produit) => (
-                <option key={produit} value={produit}>
-                  {produit}
+                <option
+                  key={approvisionnement.produit.idProduit}
+                  value={produit.idProduit}
+                >
+                  {produit.nomProduit}
                 </option>
               ))}
-            </Form.Control>
-          </Col>
+            </Form.Control> 
+           </Col>
 
-          <Col xs={12} sm={6} md={6}>
-            <Form.Group controlId="categorie">
-              <Form.Label>Catégorie</Form.Label>
-              <Form.Control
-                as="select"
-                value={categorie}
-                onChange={(e) => setCategorie(e.target.value)}
-              >
-                <option value="">Sélectionnez une catégorie</option>
-                <option value="legume">Légume</option>
-                <option value="fruit">Fruit</option>
-                <option value="autre">Autre</option>
-              </Form.Control>
-            </Form.Group>
-          </Col>
+          {/* <Col xs={12} sm={6} md={6}>
+            <Form.Label>Nom de l'agriculteur</Form.Label>
+            <Form.Control
+              type="text"
+              name="nomApprovisionnement"
+              readOnly
+              value={
+                approvisionnement.utilisateur.nomUtilisateur +
+                " " +
+                approvisionnement.utilisateur.prenomUtilisateur
+              }
+            />
+          </Col> */}
 
           <Col xs={12} sm={6} md={6}>
             <Form.Group controlId="quantite">
               <Form.Label className="mt-4">Quantité</Form.Label>
               <Form.Control
                 type="number"
-                value={quantite}
-                onChange={(e) => setQuantite(e.target.value)}
+                name="quantiteApprovisionnement"
+                value={approvisionnement.quantiteApprovisionnement}
+                onChange={handleInputChange}
               />
             </Form.Group>
           </Col>
@@ -74,8 +122,10 @@ function ApprovisionnementProduitAgriculteur() {
               <Form.Label className="mt-4">Unité</Form.Label>
               <Form.Control
                 as="select"
-                value={unite}
-                onChange={(e) => setUnite(e.target.value)}
+                type="text"
+                name="uniteApprovisionnement"
+                value={approvisionnement.uniteApprovisionnement}
+                onChange={handleInputChange}
               >
                 <option value="">Sélectionnez une unité</option>
                 <option value="litre">Litre</option>
@@ -87,20 +137,22 @@ function ApprovisionnementProduitAgriculteur() {
           <Form.Group as={Col} md={6} controlId="prix">
             <Form.Label className="mt-4">Prix en Ar/Unité</Form.Label>
             <Form.Control
-              type="text"
-              value={prix}
-              onChange={(e) => setPrix(e.target.value)}
+              type="number"
+              step="0.01"
+              name="prixUnitaire"
+              value={approvisionnement.prixUnitaire}
+              onChange={handleInputChange}
             />
           </Form.Group>
 
           <Col xs={12} sm={15} md={6}>
-            <Form.Group controlId="photo">
-              <Form.Label className="mt-4">Photo</Form.Label>
-              <Form.Control
-                type="file"
-                onChange={(e) => setPhoto(e.target.files[0])}
-              />
-            </Form.Group>
+          <ul>
+    {produitsAjoutes.map((produitAjoute) => (
+      <li key={produitAjoute.idProduitAjoute}>
+        {produitAjoute.produit.nomProduit} - {produitAjoute.quantiteApprovisionnement}
+      </li>
+    ))}
+  </ul>
           </Col>
         </Row>
 

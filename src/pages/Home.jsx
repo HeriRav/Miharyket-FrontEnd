@@ -9,26 +9,18 @@ import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import { Link } from 'react-router-dom';
 
-function Home() {
+function Home({}) {
     const [produit, setProd] = useState([])
 
-    const [categorieProduit, setCategory] = useState(false)
-
-    const meat = '/src/images/meat.jpg'
-    const fruit = '/src/images/organic-fruit.jpg'
-    const vegetable = '/src/images/organic-vegetable.jpg'
-    const milk = '/src/images/dairy-product.jpg'
-    const cereal = '/src/images/cereal.jpg'
-    const arom = '/src/images/aromatic-product.jpg'
-
-    const images = {
-        meat : '/src/images/meat.jpg',
-        fruit : '/src/images/organic-fruit.jpg',
-        vegetable : '/src/images/organic-vegetable.jpg',
-        milk : '/src/images/dairy-product.jpg',
-        cereal : '/src/images/cereal.jpg',
-        arom : '/src/images/aromatic-product.jpg'
-    }
+    const images = [
+        { categorieProduit: "Viande", src: "/src/images/meat.jpg" },
+        { categorieProduit: "Légume", src: "/src/images/organic-vegetable.jpg" },
+        { categorieProduit: "Fruit", src: "/src/images/organic-fruit.jpg" },
+        { categorieProduit: "Produit laitier", src: "/src/images/dairy-product.jpg" },
+        { categorieProduit: "Céréale", src: "/src/images/cereal.jpg" },
+        { categorieProduit: "Produit arômatique", src: "/src/images/aromatic-product.jpg" },
+        { categorieProduit: "", src: "/src/images/404.jpg" }
+    ];
 
     useEffect(() => {
         fetch("http://localhost:8085/produits/list")
@@ -42,37 +34,114 @@ function Home() {
     return (
         <div>           
             <title>Mihary'ket - Page d'accueil</title>
-            <div className="carousel-inner">
+            {/* <div className="carousel-inner">
                 <div className="carousel-item active">
                     <div className="overlay"></div>
-                    <video className="img-fluid" autoPlay loop muted >
+                    <video className="embed-responsive-item" autoPlay loop muted >
                         <source src={videoBG} type='video/mp4'/>
                     </video>
-                    <div className="carousel-caption d-none d-md-block centered" data-aos="fade-up">
-                        <div className="col-lg-12 justify-content-center mx-auto text-center">
-                            <h1 className='for-mobile'>Plateforme de coopératives agricoles pour un commerce équitable afin de soutenir nos agriculteurs.</h1><br/>
-                            <h5 className='text-white'>Une plateforme coopérative agricole pour le commerce équitable peut aider à soutenir les agriculteurs en permettant la vente directe de leurs produits, 
-                                en réduisant les intermédiaires et en offrant des prix équitables pour leur travail.</h5><br/>
-                            <button className='btn btn-success'>Plus de détails</button>
-                        </div>
+                </div>
+                <div className="carousel-caption d-none d-md-block centered info" data-aos="fade-up">
+                    <div className="col-lg-12 justify-content-center mx-auto text-center">
+                        <h1 className='for-mobile'>Plateforme de coopératives agricoles pour un commerce équitable afin de soutenir nos agriculteurs.</h1><br/>
+                        <h5 className='text-white'>Une plateforme coopérative agricole pour le commerce équitable peut aider à soutenir les agriculteurs en permettant la vente directe de leurs produits, 
+                            en réduisant les intermédiaires et en offrant des prix équitables pour leur travail.</h5><br/>
+                        <button className='btn btn-success'>Plus de détails</button>
                     </div>
                 </div>
-            </div>
+            </div> */}
 
-            <div data-aos="fade-up" style={{backgroundColor : "#ebebeb"}}>
-                <div className='text-center text-success' style={{marginTop : "20px", backgroundColor : "#dbdbdb", padding : "25px"}}>
+            {/* <div class="hero-slide owl-carousel site-blocks-cover"> */}
+                <div className="intro-section" style={{backgroundImage : "url('/src/images/hero_1.jpg')"}}>
+                    <div className="container">
+                    <div className="row align-items-center">
+                        <div className="justify-content-center mx-auto text-center" data-aos="fade-up">
+                        <h1>Plateforme de coopératives agricoles pour un commerce équitable afin de soutenir nos agriculteurs.</h1>
+                        <button className='btn btn-success btn-rounded btn-lg gradient-custom-4 px-5 text-white' onClick={() => {
+                            const element = document.querySelector('#products');
+                            const offset = -100; // ajustez cette valeur en fonction de la hauteur de votre en-tête
+                            const yCoordinate = element.getBoundingClientRect().top + window.pageYOffset + offset;
+                            window.scrollTo({ top: yCoordinate, behavior: 'smooth' });
+                            }}>En savoir plus</button>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
+                {/* <div class="intro-section" style={{backgroundImage : "url('/src/images/hero_2.jpg')"}}>
+                    <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-lg-7 justify-content-center mx-auto text-center" data-aos="fade-up">
+                        <span class="d-block"></span>
+                        <h1>Les légumes bio sont bons pour la santé</h1>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
+                <div class="intro-section" style={{backgroundImage : "url('/src/images/hero_3.jpg')"}}>
+                    <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-lg-7 justify-content-center mx-auto text-center" data-aos="fade-up">
+                        <span class="d-block"></span>
+                        <h1>Fournir des produits frais chaque jour</h1>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
+                <div class="intro-section" style={{backgroundImage : "url('/src/images/hero_4.jpg')"}}>
+                    <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-lg-7 justify-content-center mx-auto text-center" data-aos="fade-up">
+                        <span class="d-block"></span>
+                        <h1>L'agriculture comme passion</h1>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
+                <div class="intro-section" style={{backgroundImage : "url('/src/images/hero_5.jpg')"}}>
+                    <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-lg-7 justify-content-center mx-auto text-center" data-aos="fade-up">
+                        <span class="d-block"></span>
+                        <h1>De la bonne nourriture pour tous</h1>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
+                <div class="intro-section" style={{backgroundImage : "url('/src/images/hero_6.jpg')"}}>
+                    <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-lg-7 justify-content-center mx-auto text-center" data-aos="fade-up">
+                        <span class="d-block"></span>
+                        <h1>Les plantes rendent la vie meilleure</h1>
+                        </div>
+                    </div>
+                    </div>
+                </div> */}
+
+            {/* </div> */}
+
+            <div id="products" data-aos="fade-up" style={{backgroundColor : "#ebebeb"}}>
+                <div className='text-center text-success' style={{backgroundColor : "#dbdbdb", padding : "25px"}}>
                     <h1>Nos produits récents</h1><br/>
                     <Link className="text-body" to="/produits"><button className='btn btn-success btn-rounded btn-lg gradient-custom-4 px-5 text-white'>Voir la liste complète</button></Link>
                 </div>
                 <Row lg={4}>
                 {produit &&
                     produit
-                    .slice(0, 4).map((product) => {
+                    .slice(0, 8)
+                    .filter((product) => product.stockProduit !== 0)
+                    .map((product) => {
                     return (
                         <div className='container-sm'>
                         <Col className="d-flex">
                         <Card className="flex-fill card-flyer" style={{marginTop : "20px"}}  key={product.idProduit}>
-                            <Card.Img className='image-box' variant="top" src={product.categorieProduit ? meat : fruit} />
+                            <Card.Img className='image-box' variant="top" 
+                            src={images.find(image => image.categorieProduit === product.categorieProduit)?.src} />
                             <Card.Body>
                             <Card.Title className='text-black initialism mb-4'>{product.nomProduit}</Card.Title>
                             <Card.Text>
@@ -87,7 +156,7 @@ function Home() {
                             <small className="text-lg">{product.prixProduit} Ar/{product.uniteProduit}</small>
                             </Card.Footer>
                             <Card.Footer className='text-center'>
-                            <Button variant="primary">Ajouter au panier</Button><br/>
+                            <Button className="primary">Ajouter au panier</Button><br/>
                             </Card.Footer>
                         </Card>
                         </Col>
