@@ -18,8 +18,7 @@ function Home({}) {
         { categorieProduit: "Fruit", src: "/src/images/organic-fruit.jpg" },
         { categorieProduit: "Produit laitier", src: "/src/images/dairy-product.jpg" },
         { categorieProduit: "Céréale", src: "/src/images/cereal.jpg" },
-        { categorieProduit: "Produit arômatique", src: "/src/images/aromatic-product.jpg" },
-        { categorieProduit: "", src: "/src/images/404.jpg" }
+        { categorieProduit: "Produit arômatique", src: "/src/images/aromatic-product.jpg" }
     ];
 
     useEffect(() => {
@@ -34,10 +33,10 @@ function Home({}) {
     return (
         <div>           
             <title>Mihary'ket - Page d'accueil</title>
-            {/* <div className="carousel-inner">
+            <div className="carousel-inner">
                 <div className="carousel-item active">
                     <div className="overlay"></div>
-                    <video className="embed-responsive-item" autoPlay loop muted >
+                    <video className="img-fluid" autoPlay loop muted >
                         <source src={videoBG} type='video/mp4'/>
                     </video>
                 </div>
@@ -49,7 +48,7 @@ function Home({}) {
                         <button className='btn btn-success'>Plus de détails</button>
                     </div>
                 </div>
-            </div> */}
+            </div>
 
             {/* <div class="hero-slide owl-carousel site-blocks-cover"> */}
                 <div className="intro-section" style={{backgroundImage : "url('/src/images/hero_1.jpg')"}}>
@@ -65,68 +64,11 @@ function Home({}) {
                             }}>En savoir plus</button>
                         </div>
                     </div>
-                    </div>
                 </div>
+            </div>
 
-                {/* <div class="intro-section" style={{backgroundImage : "url('/src/images/hero_2.jpg')"}}>
-                    <div class="container">
-                    <div class="row align-items-center">
-                        <div class="col-lg-7 justify-content-center mx-auto text-center" data-aos="fade-up">
-                        <span class="d-block"></span>
-                        <h1>Les légumes bio sont bons pour la santé</h1>
-                        </div>
-                    </div>
-                    </div>
-                </div>
-
-                <div class="intro-section" style={{backgroundImage : "url('/src/images/hero_3.jpg')"}}>
-                    <div class="container">
-                    <div class="row align-items-center">
-                        <div class="col-lg-7 justify-content-center mx-auto text-center" data-aos="fade-up">
-                        <span class="d-block"></span>
-                        <h1>Fournir des produits frais chaque jour</h1>
-                        </div>
-                    </div>
-                    </div>
-                </div>
-
-                <div class="intro-section" style={{backgroundImage : "url('/src/images/hero_4.jpg')"}}>
-                    <div class="container">
-                    <div class="row align-items-center">
-                        <div class="col-lg-7 justify-content-center mx-auto text-center" data-aos="fade-up">
-                        <span class="d-block"></span>
-                        <h1>L'agriculture comme passion</h1>
-                        </div>
-                    </div>
-                    </div>
-                </div>
-
-                <div class="intro-section" style={{backgroundImage : "url('/src/images/hero_5.jpg')"}}>
-                    <div class="container">
-                    <div class="row align-items-center">
-                        <div class="col-lg-7 justify-content-center mx-auto text-center" data-aos="fade-up">
-                        <span class="d-block"></span>
-                        <h1>De la bonne nourriture pour tous</h1>
-                        </div>
-                    </div>
-                    </div>
-                </div>
-
-                <div class="intro-section" style={{backgroundImage : "url('/src/images/hero_6.jpg')"}}>
-                    <div class="container">
-                    <div class="row align-items-center">
-                        <div class="col-lg-7 justify-content-center mx-auto text-center" data-aos="fade-up">
-                        <span class="d-block"></span>
-                        <h1>Les plantes rendent la vie meilleure</h1>
-                        </div>
-                    </div>
-                    </div>
-                </div> */}
-
-            {/* </div> */}
-
-            <div id="products" data-aos="fade-up" style={{backgroundColor : "#ebebeb"}}>
-                <div className='text-center text-success' style={{backgroundColor : "#dbdbdb", padding : "25px"}}>
+            <div data-aos="fade-up" style={{backgroundColor : "#ebebeb"}}>
+                <div className='text-center text-success' style={{marginTop : "20px", backgroundColor : "#dbdbdb", padding : "25px"}}>
                     <h1>Nos produits récents</h1><br/>
                     <Link className="text-body" to="/produits"><button className='btn btn-success btn-rounded btn-lg gradient-custom-4 px-5 text-white'>Voir la liste complète</button></Link>
                 </div>

@@ -14,8 +14,10 @@ function ListeMembre() {
     }
   
   ]);
+  const user = sessionStorage.getItem("user");
+  const reference = parseInt(user.id);
   useEffect(() => {
-    fetch("http://localhost:8085/api/utilisateurs/agriculteurs")
+    fetch("http://localhost:8085/api/utilisateurs/cooperatives/${reference}/agriculteurs")
       .then(response => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
@@ -40,21 +42,22 @@ function ListeMembre() {
 
   const handleAddMember = (e) => {
     e.preventDefault()
+    const user = sessionStorage.getItem("user");
     if (validate()) {
-      const user = {nomUtilisateur, login : email, adresseUtilisateur, cinAgriculteur, email, telephoneUtilisateur, mdpUtilisateur, typeUtilisateur}
+      const agriculteur = {nomUtilisateur, login : email, adresseUtilisateur, cinAgriculteur, email, telephoneUtilisateur, mdpUtilisateur, typeUtilisateur,cooperative : {id : user.id}}
       fetch("http://localhost:8085/api/utilisateurs/ajout", {
-          method:"POST", headers:{"Content-Type" : "application/json"}, body:JSON.stringify(user)
+          method:"POST", headers:{"Content-Type" : "application/json"}, body:JSON.stringify(agriculteur)
       }).then(() => {
             toast.success('Le compte a été enregistré avec succès')            
             //react pour rediriger
             setTimeout(() => {
               setShowModal(false)
-              window.location.reload(true); 
+              // window.location.reload(true); 
             }, 3000)                      
       }).catch((err) => {
           toast.error('Inscription échouée : ' +err.message)
       })
-      console.log(user)
+      console.log(agriculteur)
 
       // window.location.replace('http://localhost:5174/dashboard-coop#');
   }
