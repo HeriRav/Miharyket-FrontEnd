@@ -52,19 +52,31 @@ function Register_coop() {
         }
         if (nifCoop === '' || nifCoop === null) {
             result = false
-            toast.warning('Veuillez entrer votre adresse mail')
+            toast.warning('Veuillez entrer votre numéro d\'identité fiscale')
+        }
+        if (nifCoop < 10) {
+            result = false
+            toast.warning('Veuillez entrer votre numéro d\'identité fiscale valide')
         }
         if (statCoop === '' || statCoop === null) {
             result = false
-            toast.warning('Veuillez entrer votre adresse mail')
+            toast.warning('Veuillez entrer votre numéro statistique')
+        }
+        if (statCoop < 17) {
+            result = false
+            toast.warning('Veuillez entrer votre numéro statistique valide')
         }
         if (responsableCoop === '' || responsableCoop === null) {
             result = false
-            toast.warning('Veuillez entrer votre adresse mail')
+            toast.warning('Veuillez entrer votre responsable')
         }
         if (telephoneUtilisateur === '' || telephoneUtilisateur === null) {
             result = false
             toast.warning('Veuillez entrer votre numéro de téléphone')
+        }
+        if (telephoneUtilisateur.length < '10') {
+            result = false
+            toast.warning('Veuillez entrer un numéro de téléphone valide')
         }
         if (mdpUtilisateur === '' || mdpUtilisateur === null) {
             result = false
@@ -86,6 +98,15 @@ function Register_coop() {
         navigate('/inscription')
         window.location.reload(true)
     }
+
+    const handleKeyPress = (event) => {
+        const keyCode = event.keyCode || event.which;
+        const keyValue = String.fromCharCode(keyCode);
+        const regex = /[0-9]|\./;
+        if (!regex.test(keyValue)) {
+          event.preventDefault();
+        }
+    };
     return (
         <div>
         <title>Mihary'ket - Inscription coopérative</title>
@@ -119,7 +140,7 @@ function Register_coop() {
                                                 <div className="form-outline">
                                                 <label style={{marginRight : "auto", fontSize : "16px", color : "black"}}>Numéro d'identité fiscale</label>
                                                 <input type="text" id="registerCin" className="form-control" required="required" maxLength={10}
-                                                value={nifCoop} onChange={(e) => {setCin(e.target.value)}} placeholder='Votre NIF'/>
+                                                value={nifCoop} onChange={(e) => {setCin(e.target.value)}} placeholder='Votre NIF' onKeyPress={handleKeyPress}/>
                                                 </div>
                                             </div>
 
@@ -127,7 +148,7 @@ function Register_coop() {
                                                 <div className="form-outline">
                                                 <label style={{marginRight : "auto", fontSize : "16px", color : "black"}}>Numéro statistique</label>
                                                 <input type="text" id="registerStat" className="form-control" required="required" maxLength={17}
-                                                value={statCoop} onChange={(e) => {setStat(e.target.value)}} placeholder='Votre STAT'/>
+                                                value={statCoop} onChange={(e) => {setStat(e.target.value)}} placeholder='Votre STAT' onKeyPress={handleKeyPress}/>
                                                 </div>
                                             </div>
                                         </div>
@@ -143,7 +164,7 @@ function Register_coop() {
                                                 <div className="form-outline">
                                                 <label style={{marginRight : "auto", fontSize : "16px", color : "black"}}>Contact</label>
                                                 <input type="text" id="registerPhone" className="form-control" required="required"
-                                                value={telephoneUtilisateur} onChange={(e) => {setPhone(e.target.value)}} placeholder='Votre contact'/>
+                                                value={telephoneUtilisateur} onChange={(e) => {setPhone(e.target.value)}} placeholder='Votre contact' onKeyPress={handleKeyPress}/>
                                                 </div>
                                             </div>
 
