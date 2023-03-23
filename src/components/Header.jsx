@@ -21,10 +21,10 @@ const Header = () => {
   const [Email, setEmail] = useState([])
 
   useEffect(() => {
-      fetch(`http://localhost:8085/api/utilisateurs/email/${idUtilisateur}`)
-      .then(response => response.json())
-      .then(data => setProd(data))
-      .catch(err => console.log(err))
+    fetch(`http://localhost:8085/api/utilisateurs/email/${idUtilisateur}`)
+    .then(response => response.json())
+    .then(data => setProd(data))
+    .catch(err => console.log(err))
   })
 
   return (
@@ -93,65 +93,97 @@ const Header = () => {
           <div className="site-navbar py-2 js-sticky-header site-navbar-target d-none pl-0 d-lg-block" role="banner">
       
             <div className="container">
-              <div className="d-flex align-items-center">
-  
-                <div className="ms-auto">
-                  <div className="site-navigation position-relative text-right" role="navigation">
-                    <ul className="site-menu main-menu js-clone-nav mr-auto d-none pl-0 d-lg-block">
-                      <li>
-                        <NavLink to="/" className={({isActive}) => isActive ? activeLink : normalLink}>Accueil</NavLink>
-                      </li>
-                      <li>
-                        <NavLink to="/a-propos" className={({isActive}) => isActive ? activeLink : normalLink}>À propos</NavLink>
-                      </li>
-                      <li>
-                        <Link to="/dashboard-coop" className="nav-link text-left">Coop</Link>
-                      </li>
-                      <li>
-                        <Link to="/dashboard-aggro" className="nav-link text-left">Aggro</Link>
-                      </li>
-                      <li>
-                        <Link to='/dashboard' className="nav-link text-left">Admin</Link>
-                      </li>
-                      <li>
-                        <a href="contact.html" className="nav-link text-left">Contact</a>
-                      </li>
-                      <li>
-                        <NavLink to='/produits' className={({isActive}) => isActive ? activeLink : normalLink}>Produits</NavLink>
-                      </li>
-                    </ul>                                                                                                                                                                                                                                                                                          
+
+              {sessionStorage.getItem("username") === null ? (
+                <div className="d-flex align-items-center">
+                
+                  <div className="ms-auto">
+                    <div className="site-navigation position-relative text-right" role="navigation">
+                      <ul className="site-menu main-menu js-clone-nav mr-auto d-none pl-0 d-lg-block">
+                        <li>
+                          <NavLink to="/" className={({isActive}) => isActive ? activeLink : normalLink}>Accueil</NavLink>
+                        </li>
+                        <li>
+                          <NavLink to="/a-propos" className={({isActive}) => isActive ? activeLink : normalLink}>À propos</NavLink>
+                        </li>
+                        <li>
+                          <a href="contact.html" className="nav-link text-left">Contact</a>
+                        </li>
+                        <li>
+                          <NavLink to='/produits' className={({isActive}) => isActive ? activeLink : normalLink}>Produits</NavLink>
+                        </li>
+                      </ul>                                                                                                                                                                                                                                                                                          
+                    </div>
                   </div>
+    
+                  <div className="ml-auto">
+                    <div className="site-navigation position-relative text-right" role="navigation">
+                        <ul className="site-menu main-menu js-clone-nav mr-auto d-none pl-0 d-lg-block">
+                          <li>
+                            <Link to='/inscription' className="nav-link text-left">S'inscrire</Link>
+                          </li>
+                          <li className='login-style'>
+                            <Link to="/authentification" className="nav-link text-left text-white">
+                              Se connecter
+                            </Link>
+                          </li>
+                        </ul>
+                    </div>
+                  </div>
+    
                 </div>
-  
-                <div className="ml-auto">
-                  <nav className="site-navigation position-relative text-right" role="navigation">
-                    {sessionStorage.getItem("username") !== null ? (
+              ) : (
+                <div className="d-flex align-items-center">               
+                
+                  <div className="ms-auto">
+                    <div className="site-navigation position-relative text-right" role="navigation">
                       <ul className="site-menu main-menu js-clone-nav mr-auto d-none pl-0 d-lg-block">
                         <li>
-                          <Link>
-                            {Email}
-                          </Link>
-                          <Link onClick={EndSession} className="nav-link text-left">
-                            Se déconnecter
-                          </Link>
+                          <NavLink to="/" className={({isActive}) => isActive ? activeLink : normalLink}>Accueil</NavLink>
                         </li>
-                      </ul>
-                    ) : (
-                      <ul className="site-menu main-menu js-clone-nav mr-auto d-none pl-0 d-lg-block">
                         <li>
-                          <Link to='/inscription' className="nav-link text-left">S'inscrire</Link>
+                          <NavLink to="/a-propos" className={({isActive}) => isActive ? activeLink : normalLink}>À propos</NavLink>
                         </li>
-                        <li className='login-style'>
-                          <Link to="/authentification" className="nav-link text-left text-white">
-                            Se connecter
-                          </Link>
+                        <li>
+                          <Link to="/dashboard-coop" className="nav-link text-left">Coop</Link>
+                        </li>
+                        <li>
+                          <Link to="/dashboard-aggro" className="nav-link text-left">Aggro</Link>
+                        </li>
+                        <li>
+                          <Link to='/dashboard' className="nav-link text-left">Admin</Link>
+                        </li>
+                        <li>
+                          <a href="contact.html" className="nav-link text-left">Contact</a>
+                        </li>
+                        <li>
+                          <NavLink to='/produits' className={({isActive}) => isActive ? activeLink : normalLink}>Produits</NavLink>
                         </li>
                       </ul>
-                    )}
-                  </nav>
+                    </div>
+                  </div>
+    
+                  <div className="ml-auto">
+                    <div className="site-navigation position-relative text-right" role="navigation">
+                      <ul className="site-menu main-menu js-clone-nav mr-auto d-none pl-0 d-lg-block">
+                          <li>
+                            <Link>
+
+                              {userEmail}
+
+                            </Link>
+                            <Link onClick={EndSession} className="nav-link text-left">
+                              Se déconnecter
+                            </Link>
+                          </li>
+                        </ul>
+                    </div>
+                  </div>
+    
                 </div>
-  
-              </div>
+              )}
+              
+
             </div>
   
           </div>
