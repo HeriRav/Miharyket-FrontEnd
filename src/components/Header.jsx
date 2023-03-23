@@ -139,16 +139,7 @@ const Header = () => {
                     <div className="site-navigation position-relative text-right" role="navigation">
                       <ul className="site-menu main-menu js-clone-nav mr-auto d-none pl-0 d-lg-block">
                         <li>
-<<<<<<< HEAD
-                          <Link>
-                            {Email}
-                          </Link>
-                          <Link onClick={EndSession} className="nav-link text-left">
-                            Se déconnecter
-                          </Link>
-=======
                           <NavLink to="/" className={({isActive}) => isActive ? activeLink : normalLink}>Accueil</NavLink>
->>>>>>> ef7b3932603d6cf60f9542f6f5130f27cf940064
                         </li>
                         <li>
                           <NavLink to="/a-propos" className={({isActive}) => isActive ? activeLink : normalLink}>À propos</NavLink>
