@@ -56,7 +56,7 @@ function Home({}) {
                     <div className="container">
                     <div className="row align-items-center">
                         <div className="justify-content-center mx-auto text-center" data-aos="fade-up">
-                        <h1>Plateforme de coopératives agricoles pour un commerce équitable afin de soutenir nos agriculteurs.</h1>
+                        <h1>Plateforme de coopératives agricoles pour un commerce équitable afin de soutenir nos agriculteurs.</h1><br />
                         <button className='btn btn-success btn-rounded btn-lg gradient-custom-4 px-5 text-white' onClick={() => {
                             const element = document.querySelector('#products');
                             const offset = -100; // ajustez cette valeur en fonction de la hauteur de votre en-tête

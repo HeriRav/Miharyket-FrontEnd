@@ -11,7 +11,7 @@ const Header = () => {
   const normalLink = 'nav-link text-left'
 
 
-  const userEmail = sessionStorage.getItem("nom");
+  const userEmail = sessionStorage.getItem("nom")
 
   // const util = userEmail.nomUtilisateur
 
