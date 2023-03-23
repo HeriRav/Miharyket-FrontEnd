@@ -18,7 +18,8 @@ function Home({}) {
         { categorieProduit: "Fruit", src: "/src/images/organic-fruit.jpg" },
         { categorieProduit: "Produit laitier", src: "/src/images/dairy-product.jpg" },
         { categorieProduit: "Céréale", src: "/src/images/cereal.jpg" },
-        { categorieProduit: "Produit arômatique", src: "/src/images/aromatic-product.jpg" }
+        { categorieProduit: "Produit arômatique", src: "/src/images/aromatic-product.jpg" },
+        { categorieProduit: "", src: "/src/images/404.jpg" }
     ];
 
     useEffect(() => {
@@ -33,25 +34,99 @@ function Home({}) {
     return (
         <div>           
             <title>Mihary'ket - Page d'accueil</title>
-            <div className="carousel-inner">
+            {/* <div className="carousel-inner">
                 <div className="carousel-item active">
                     <div className="overlay"></div>
-                    <video className="img-fluid" autoPlay loop muted >
+                    <video className="embed-responsive-item" autoPlay loop muted >
                         <source src={videoBG} type='video/mp4'/>
                     </video>
-                    <div className="carousel-caption d-none d-md-block centered" data-aos="fade-up">
-                        <div className="col-lg-12 justify-content-center mx-auto text-center">
-                            <h1 className='for-mobile'>Plateforme de coopératives agricoles pour un commerce équitable afin de soutenir nos agriculteurs.</h1><br/>
-                            <h5 className='text-white'>Une plateforme coopérative agricole pour le commerce équitable peut aider à soutenir les agriculteurs en permettant la vente directe de leurs produits, 
-                                en réduisant les intermédiaires et en offrant des prix équitables pour leur travail.</h5><br/>
-                            <button className='btn btn-success'>Plus de détails</button>
-                        </div>
+                </div>
+                <div className="carousel-caption d-none d-md-block centered info" data-aos="fade-up">
+                    <div className="col-lg-12 justify-content-center mx-auto text-center">
+                        <h1 className='for-mobile'>Plateforme de coopératives agricoles pour un commerce équitable afin de soutenir nos agriculteurs.</h1><br/>
+                        <h5 className='text-white'>Une plateforme coopérative agricole pour le commerce équitable peut aider à soutenir les agriculteurs en permettant la vente directe de leurs produits, 
+                            en réduisant les intermédiaires et en offrant des prix équitables pour leur travail.</h5><br/>
+                        <button className='btn btn-success'>Plus de détails</button>
                     </div>
                 </div>
-            </div>
+            </div> */}
 
-            <div data-aos="fade-up" style={{backgroundColor : "#ebebeb"}}>
-                <div className='text-center text-success' style={{marginTop : "20px", backgroundColor : "#dbdbdb", padding : "25px"}}>
+            {/* <div class="hero-slide owl-carousel site-blocks-cover"> */}
+                <div className="intro-section" style={{backgroundImage : "url('/src/images/hero_1.jpg')"}}>
+                    <div className="container">
+                    <div className="row align-items-center">
+                        <div className="justify-content-center mx-auto text-center" data-aos="fade-up">
+                        <h1>Plateforme de coopératives agricoles pour un commerce équitable afin de soutenir nos agriculteurs.</h1>
+                        <button className='btn btn-success btn-rounded btn-lg gradient-custom-4 px-5 text-white' onClick={() => {
+                            const element = document.querySelector('#products');
+                            const offset = -100; // ajustez cette valeur en fonction de la hauteur de votre en-tête
+                            const yCoordinate = element.getBoundingClientRect().top + window.pageYOffset + offset;
+                            window.scrollTo({ top: yCoordinate, behavior: 'smooth' });
+                            }}>En savoir plus</button>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
+                {/* <div class="intro-section" style={{backgroundImage : "url('/src/images/hero_2.jpg')"}}>
+                    <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-lg-7 justify-content-center mx-auto text-center" data-aos="fade-up">
+                        <span class="d-block"></span>
+                        <h1>Les légumes bio sont bons pour la santé</h1>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
+                <div class="intro-section" style={{backgroundImage : "url('/src/images/hero_3.jpg')"}}>
+                    <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-lg-7 justify-content-center mx-auto text-center" data-aos="fade-up">
+                        <span class="d-block"></span>
+                        <h1>Fournir des produits frais chaque jour</h1>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
+                <div class="intro-section" style={{backgroundImage : "url('/src/images/hero_4.jpg')"}}>
+                    <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-lg-7 justify-content-center mx-auto text-center" data-aos="fade-up">
+                        <span class="d-block"></span>
+                        <h1>L'agriculture comme passion</h1>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
+                <div class="intro-section" style={{backgroundImage : "url('/src/images/hero_5.jpg')"}}>
+                    <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-lg-7 justify-content-center mx-auto text-center" data-aos="fade-up">
+                        <span class="d-block"></span>
+                        <h1>De la bonne nourriture pour tous</h1>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
+                <div class="intro-section" style={{backgroundImage : "url('/src/images/hero_6.jpg')"}}>
+                    <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-lg-7 justify-content-center mx-auto text-center" data-aos="fade-up">
+                        <span class="d-block"></span>
+                        <h1>Les plantes rendent la vie meilleure</h1>
+                        </div>
+                    </div>
+                    </div>
+                </div> */}
+
+            {/* </div> */}
+
+            <div id="products" data-aos="fade-up" style={{backgroundColor : "#ebebeb"}}>
+                <div className='text-center text-success' style={{backgroundColor : "#dbdbdb", padding : "25px"}}>
                     <h1>Nos produits récents</h1><br/>
                     <Link className="text-body" to="/produits"><button className='btn btn-success btn-rounded btn-lg gradient-custom-4 px-5 text-white'>Voir la liste complète</button></Link>
                 </div>
