@@ -1,66 +1,60 @@
 import React, { useState } from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import iconProduct from "../../../farm-products.png";
-import { Dropdown } from 'primereact/dropdown';
 import axios from "axios";
+import GetCooperativeId from "../../components/GetCooperativeId";
 
 function ApprovisionnementProduitAgriculteur() {
-  const [produit, setProduit] = useState();
-  const [produitsAjoutes, setProduitsAjoutes] = useState([]);
-  const [agriculteur, setAgriculteur] = useState("");
-  const savedAgriculteur = JSON.parse(localStorage.getItem("user"));
 
+  const [produit, setProduit] = useState("");
+  const [agriculteur, setAgriculteur] = useState("");
+const saveUser =  JSON.parse(sessionStorage.getItem("user"));
   const [approvisionnement, setApprovisionnement] = useState({
-    // utilisateur: '',
-    utilisateur: savedAgriculteur,
-    produit: "",
+    utilisateur: saveUser,
+    //utilisateur: {login : 2},
+    produit: '',
     quantiteApprovisionnement: 0,
     //uniteApprovisionnement:'',
-    prixUnitaire: 0.0,
-    dateApprovisionnement: new Date().toISOString(),
+    prixUnitaire: 0.00,
+    dateApprovisionnement: new Date().toISOString()
   });
-  const handleInputChange = event => {
-    const { name, value } = event.target;
-    setApprovisionnement({ ...approvisionnement, [name]: value });
+  const handleSelectChange = event => {
+    const { value } = event.target;
+    setApprovisionnement({ ...approvisionnement, produit: { idProduit: value } });
     };
-  // const handleSelectChange = (event) => {
-  //   const { value } = event.target;
-  //   setApprovisionnement({
-  //     ...approvisionnement,
-  //     produit: { idProduit: value },
-  //   });
-  // };
   // Récupération de la liste de produits depuis le local storage
-  const savedProduits = JSON.parse(localStorage.getItem("produits"));
-  const initialProduits = savedProduits ? savedProduits : [];
+const savedProduits = JSON.parse(localStorage.getItem('produits'));
+const initialProduits = savedProduits ? savedProduits : [];
 
-  // Définition de l'état initial en utilisant la liste de produits récupérée
-  const [produits, setProduits] = useState(initialProduits);
+// Définition de l'état initial en utilisant la liste de produits récupérée
+const [produits, setProduits] = useState(initialProduits);
 
-  
-  
+// Récupération de la liste de agriculteurs depuis le local storage
+const savedAgriculteurs = JSON.parse(localStorage.getItem('agriculteurs'));
+const initialAgriculteurs = savedAgriculteurs ? savedAgriculteurs : [];
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    axios
-      .post("http://localhost:8085/approvisionnements/add", approvisionnement)
-      .then((response) => {
-        const produitAjoute = { ...approvisionnement, idProduitAjoute: response.data.idProduit };
-        setProduitsAjoutes([...produitsAjoutes, produitAjoute]);
-        setApprovisionnement({
-          utilisateur: savedAgriculteur,
-          produit: "",
-          quantiteApprovisionnement: 0,
-          prixUnitaire: 0.0,
-          dateApprovisionnement: new Date().toISOString(),
-        });
-        setProduit("");
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+// Définition de l'état initial en utilisant la liste de agriculteurs récupérée
+const [agriculteurs, setAgriculteurs] = useState(initialAgriculteurs);
+
+const handleInputChange = event => {
+  const { name, value } = event.target;
+  setApprovisionnement({ ...approvisionnement, [name]: value });
+};
+const handleSelectChange1 = event => {
+  const { value } = event.target;
+  setApprovisionnement({ ...approvisionnement, utilisateur: { id: value } });
   };
-  
+
+const handleSubmit = event => {
+  event.preventDefault();
+  axios.post('http://localhost:8085/approvisionnements/add', approvisionnement)
+    .then(response => {
+      console.log(response.data);
+    })
+    .catch(error => {
+      console.log(error);
+    });
+};
 
   return (
     <Container className="mb-5">
@@ -77,7 +71,7 @@ function ApprovisionnementProduitAgriculteur() {
             <Form.Control
               as="select"
               value={produit}
-              onChange={handleInputChange}
+              onChange={handleSelectChange}
             >
               <option value="">Sélectionnez un produit</option>
               {produits.map((produit) => (
@@ -91,19 +85,34 @@ function ApprovisionnementProduitAgriculteur() {
             </Form.Control> 
            </Col>
 
-          {/* <Col xs={12} sm={6} md={6}>
-            <Form.Label>Nom de l'agriculteur</Form.Label>
+          <Col xs={12} sm={6} md={6}>
+            {/* <Form.Label>Nom de l'agriculteur</Form.Label>
             <Form.Control
               type="text"
               name="nomApprovisionnement"
-              readOnly
+              // readOnly
               value={
                 approvisionnement.utilisateur.nomUtilisateur +
                 " " +
                 approvisionnement.utilisateur.prenomUtilisateur
               }
-            />
-          </Col> */}
+            /> */}
+            <Form.Control
+              as="select"
+              value={agriculteur}
+              onChange={handleSelectChange1}
+            >
+              <option value="">Sélectionnez un agriculteur</option>
+              {agriculteurs.map((agriculteur) => (
+                <option
+                  key={approvisionnement.utilisateur.id}
+                  value={agriculteur.id}
+                >
+                  {agriculteur.nomUtilisateur}
+                </option>
+              ))}
+              </Form.Control> 
+          </Col>
 
           <Col xs={12} sm={6} md={6}>
             <Form.Group controlId="quantite">
@@ -146,13 +155,7 @@ function ApprovisionnementProduitAgriculteur() {
           </Form.Group>
 
           <Col xs={12} sm={15} md={6}>
-          <ul>
-    {produitsAjoutes.map((produitAjoute) => (
-      <li key={produitAjoute.idProduitAjoute}>
-        {produitAjoute.produit.nomProduit} - {produitAjoute.quantiteApprovisionnement}
-      </li>
-    ))}
-  </ul>
+       
           </Col>
         </Row>
 
