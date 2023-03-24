@@ -3,23 +3,17 @@ import axios from 'axios';
 
 const ListAgriculteur = () => {
   const [agriculteurs, setAgriculteurs] = useState([]);
-//T
-  useEffect(() => {
-    const storedAgriculteurs = localStorage.getItem('agriculteurs');
-    if (storedAgriculteurs && Array.isArray(JSON.parse(storedAgriculteurs))) {
-      setAgriculteurs(JSON.parse(storedAgriculteurs));
-    } else {
-      axios.get('http://localhost:8085/api/utilisateurs/list')
-        .then(response => {
-          setAgriculteurs(response.data);
-          localStorage.setItem('agriculteurs', JSON.stringify(response.data));
-        })
-        .catch(error => {
-          console.log(error);
-        });
-    }
-  }, []);
+  const id = sessionStorage.getItem("idCoop");
 
+  useEffect(() => {
+    const fetchAgriculteurs = async () => {
+      const response = await fetch(`http://localhost:8085/api/utilisateurs/cooperatives/${id}/agriculteurs`);
+      const data = await response.json();
+      sessionStorage.setItem('agriculteurs', JSON.stringify(data)); // stockage des données dans sessionStorage
+      setAgriculteurs(data);
+    };
+    fetchAgriculteurs();
+  }, [id]);
   return (
     <div>
       {/* <h1>Liste des agriculteurs</h1>

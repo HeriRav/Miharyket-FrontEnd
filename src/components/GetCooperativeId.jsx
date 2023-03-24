@@ -4,16 +4,18 @@ import axios from "axios";
 const GetCooperativeId = () => {
   const [produitCooperative, setProduits] = useState([]);
   const [selectedProduit, setSelectedProduit] = useState("");
-  const user = sessionStorage.getItem("user");
-  const reference = user.id;
+  //const user = sessionStorage.getItem("user");
+  const reference = sessionStorage.getItem("idUser");
 
   useEffect(() => {
-    const fetchData = async () => {
-      const result = await axios.get(`http://localhost:8085/produits/reference/${reference}`);
-      setProduits(result.data);
-    };
-//test
-    fetchData();
+    axios.get('http://localhost:8085/api/utilisateurs/agriculteurs/${idAgriculteur}/cooperative')
+      .then(response => {
+        setIdCoop(response.data);
+        sessionStorage.setItem("idcoop", response.data);
+      })
+      .catch(error => {
+        console.log(error);
+      });
   }, []);
 
   const handleChange = (event) => {
@@ -25,7 +27,5 @@ const GetCooperativeId = () => {
     {produitCooperative}
   );
 };
-
-
 
 export default GetCooperativeId;

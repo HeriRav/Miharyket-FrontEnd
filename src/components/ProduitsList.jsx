@@ -3,12 +3,13 @@ import axios from 'axios';
 
 const ProduitsList = () => {
   const [produits, setProduits] = useState([]);
-//T
+  //let [idCoop, setIdCoop] = useState();
+  const idCoop = sessionStorage.getItem("idCoop");
   useEffect(() => {
-    axios.get('http://localhost:8085/produits/list')
+    axios.get('http://localhost:8085/produits/reference/${idCoop}')
       .then(response => {
         setProduits(response.data);
-        localStorage.setItem('produits', JSON.stringify(response.data));
+        sessionStorage.setItem('produits', JSON.stringify(response.data));
       })
       .catch(error => {
         console.log(error);

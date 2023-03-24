@@ -15,7 +15,7 @@ function AjouterProduit() {
   const [showModal, setShowModal] = useState(false);
   const [prix, setPrix] = useState(0);
   const [nouveauPrix, setNouveauPrix] = useState("");
-
+  const  idCoop = sessionStorage.getItem("idCoop");
   const [idProduit, setIdProduit] = useState("");
   const [produit, setProduit] = useState("");
   const [unite, setUnite] = useState("");
@@ -63,8 +63,11 @@ function AjouterProduit() {
     setNouveauPrix(event.target.value);
   };
 
+  
   useEffect(() => {
-      fetch("http://localhost:8085/produits/list")
+    //const id = parseInt(sessionStorage.getItem("idUser"));
+    const lien = "http://localhost:8085/produits/reference/" + idCoop;
+      fetch(lien)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -82,10 +85,12 @@ function AjouterProduit() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    
     const nouveauProduit = {
       nomProduit: produit,
       categorieProduit: categorie,
       descriptionProduit: description,
+      referenceProduit :  idCoop,
       uniteProduit: unite,
       prixProduit: prix,
       stockProduit: 0,
