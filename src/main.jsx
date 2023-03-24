@@ -18,6 +18,7 @@ import Register_coop from './pages/Register-coop'
 import CooperativeList from './components/CooperativeList'
 import UserList from './components/UserList'
 import Product from './pages/Product'
+import Contact from './pages/Contact'
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -27,6 +28,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route index element={<Home />}/>
         <Route path='/a-propos' element={<About />}/>
         <Route path='/produits' element={<Product />}/>
+        <Route path='/contact' element={<Contact />}/>
+
       </Route>
       <Route path='/authentification/*' element={<Login />}/>
       <Route path='/inscription/*' element={<Register />}/>
