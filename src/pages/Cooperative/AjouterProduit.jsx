@@ -57,7 +57,7 @@ function AjouterProduit() {
           toast.error('Création échouée : ' + err.message)
       })
     }
-
+//t
 
   const handleChangePrix = (event) => {
     setNouveauPrix(event.target.value);

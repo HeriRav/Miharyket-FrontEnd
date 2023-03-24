@@ -79,7 +79,7 @@ return (
 <img src={iconProduct} alt='Mihary' className='img-fluid' />
 </div>
 </h2>
-
+//T
 
   <h3 className='mt-4'>Historique des approvisionnements</h3>
 
