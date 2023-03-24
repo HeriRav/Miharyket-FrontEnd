@@ -12,12 +12,36 @@ function ListeMembre() {
       // telephone: telephoneUtilisateur,
       // email: email
     }
+
+  const raz = () => {
+
+  }
   
   ]);
   const user = sessionStorage.getItem("user");
-  const reference = parseInt(user.id);
+  const reference = JSON.parse(user);
+
+  const aggro = () => {
+    const id = reference.id;
+    useEffect(() => {
+      fetch(`http://localhost:8085/api/utilisateurs/cooperatives/${id}/agriculteurs`)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          setMembers(data);
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+    }, []);
+  }
+  const id = reference.id;
   useEffect(() => {
-    fetch("http://localhost:8085/api/utilisateurs/cooperatives/${reference}/agriculteurs")
+    fetch(`http://localhost:8085/api/utilisateurs/cooperatives/${id}/agriculteurs`)
       .then(response => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
@@ -42,9 +66,11 @@ function ListeMembre() {
 
   const handleAddMember = (e) => {
     e.preventDefault()
-    const user = sessionStorage.getItem("user");
+    const user = sessionStorage.getItem("user");    
+    const reference = JSON.parse(user);
+    console.log(reference);
     if (validate()) {
-      const agriculteur = {nomUtilisateur, login : email, adresseUtilisateur, cinAgriculteur, email, telephoneUtilisateur, mdpUtilisateur, typeUtilisateur,cooperative : {id : user.id}}
+      const agriculteur = {nomUtilisateur, login : email, adresseUtilisateur, cinAgriculteur, email, telephoneUtilisateur, mdpUtilisateur, typeUtilisateur,cooperative : reference}      
       fetch("http://localhost:8085/api/utilisateurs/ajout", {
           method:"POST", headers:{"Content-Type" : "application/json"}, body:JSON.stringify(agriculteur)
       }).then(() => {
@@ -53,11 +79,11 @@ function ListeMembre() {
             setTimeout(() => {
               setShowModal(false)
               // window.location.reload(true); 
-            }, 3000)                      
+            }, 3000)                    
       }).catch((err) => {
           toast.error('Inscription échouée : ' +err.message)
       })
-      console.log(agriculteur)
+      // console.log(agriculteur)
 
       // window.location.replace('http://localhost:5174/dashboard-coop#');
   }
@@ -69,9 +95,9 @@ function ListeMembre() {
         result = false
         toast.warning('Veuillez entrer le nom')
     }
-    if (cinAgriculteur === '' || cinAgriculteur === null) {
+    if (cinAgriculteur.length<12) {
         result = false
-        toast.warning('Veuillez entrer le numéro')
+        toast.warning('Veuillez entrer un numéro CIN valide')
     }
     if (adresseUtilisateur === '' || adresseUtilisateur === null) {
         result = false
@@ -151,8 +177,8 @@ function ListeMembre() {
               <input required="required" type="text" className="form-control" id="nom" name="nom" value={nomUtilisateur} onChange={(e) => setLName(e.target.value)}  />
             </div>
             <div className="form-group">
-              <label htmlFor="nom" style={{fontSize:"16px", color:"black"}}>CIN :</label>
-              <input required="required" type="number" className="form-control form-control-sm" id="cin" name="cin" value={cinAgriculteur} onChange={(e) => setCin(e.target.value)} />
+              <label htmlFor="nom"  style={{fontSize:"16px", color:"black"}}>CIN :</label>
+              <input required="required" maxLength={12} type="number" className="form-control form-control-sm" id="cin" name="cin" value={cinAgriculteur} onChange={(e) => setCin(e.target.value)} />
             </div>
             <div className="form-group">
               <label htmlFor="adresse" style={{fontSize:"16px", color:"black"}}>Adresse :</label>
