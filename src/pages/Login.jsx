@@ -58,7 +58,7 @@ function Login () {
           sessionStorage.setItem('type', JSON.stringify(data.typeUtilisateur))
           sessionStorage.setItem('nom', JSON.stringify(data.nomUtilisateur))
           const typeUser = data.typeUtilisateur; 
-
+          //T
           // Redirect user based on user type
           if (typeUser === "AGRICULTEUR") {
             navigate("/dashboard-aggro");

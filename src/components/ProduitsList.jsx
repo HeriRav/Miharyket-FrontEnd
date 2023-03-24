@@ -3,7 +3,7 @@ import axios from 'axios';
 
 const ProduitsList = () => {
   const [produits, setProduits] = useState([]);
-
+//T
   useEffect(() => {
     axios.get('http://localhost:8085/produits/list')
       .then(response => {

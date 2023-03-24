@@ -11,7 +11,7 @@ import { Link } from 'react-router-dom';
 
 function Home({}) {
     const [produit, setProd] = useState([])
-
+    //T
     const images = [
         { categorieProduit: "Viande", src: "/src/images/meat.jpg" },
         { categorieProduit: "Légume", src: "/src/images/organic-vegetable.jpg" },
