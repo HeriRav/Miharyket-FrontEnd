@@ -15,7 +15,7 @@ const Header = () => {
 
   const prenom = sessionStorage.getItem("prenom");
   const nom = sessionStorage.getItem("nom");
-  const userEmail = prenom +" " + nom;
+  const userEmail = nom +" " + prenom;
 
   // const util = userEmail.nomUtilisateur
 
@@ -172,7 +172,7 @@ const Header = () => {
                           <div class="btn-group">
                             
                             <nav type="button" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                              <Avatar size="small" icon={<UserOutlined />} /> {userLname} {userFname}
+                              <Avatar size="small" icon={<UserOutlined />} /> {userEmail}
                             </nav>
                             <div class="dropdown-menu">
                               <a class="dropdown-item" href="#">Profil</a>

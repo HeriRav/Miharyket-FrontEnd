@@ -65,14 +65,19 @@ function Login () {
           //T
           // Redirect user based on user type
           if (typeUser === "AGRICULTEUR") {
-            navigate("/dashboard-aggro");
+            toast.success("Connecté, vous allez être redirigé dans quelques secondes");
+            setTimeout(() => {
+              navigate('/dashboard-aggro')
+              window.location.reload(true)
+            }, 3000)
             sessionStorage.setItem("idAgriculteur",JSON.stringify(data.id));
             sessionStorage.setItem("idCoop",JSON.stringify(data.cooperative.id));
-            
-          
-            
           } else if (typeUser === "COOPERATIVE") {
-            navigate("/dashboard-coop");
+            toast.success("Connecté, vous allez être redirigé dans quelques secondes");
+            setTimeout(() => {
+              navigate('/dashboard-coop')
+              window.location.reload(true)
+            }, 3000)
             sessionStorage.setItem("idCoop",JSON.stringify(data.id));
           } else {
             toast.success("Connecté, vous allez être redirigé dans quelques secondes");
