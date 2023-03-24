@@ -26,7 +26,10 @@ function AjouterProduit() {
   const [recherche, setRecherche] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [productsPerPage] = useState(5);
-  const [stockProduit, setStock] = useState('')
+  const [stockProduit, setStock] = useState('');
+
+  const  user = sessionStorage.getItem("user");
+  const reference = JSON.parse(user);
 
   const handleSave = () => {
     // e.preventDefault()
@@ -63,8 +66,9 @@ function AjouterProduit() {
     setNouveauPrix(event.target.value);
   };
 
+  const id = reference.id;
   useEffect(() => {
-      fetch("http://localhost:8085/produits/list")
+      fetch('http://localhost:8085/produits/reference/${id}')
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -89,6 +93,7 @@ function AjouterProduit() {
       uniteProduit: unite,
       prixProduit: prix,
       stockProduit: 0,
+      referenceProduit: idCoop,
       //photo: photoUrl, // <-- set the photo property to the URL
     };
 
