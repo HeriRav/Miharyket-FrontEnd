@@ -18,6 +18,7 @@ import "react-toastify/dist/ReactToastify.css";
 function Login () {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
+  let [idConnect, setIdConnect] = useState("")
   const [email, setEmail] = useState("")
   const [error, setError] = useState("")
   const [user, setUser] = useState(null);
@@ -55,15 +56,24 @@ function Login () {
           setUser(data);
           // Store user info in sessionStorage
           sessionStorage.setItem('user', JSON.stringify(data));
+          sessionStorage.setItem('idUser', JSON.stringify(data.id));
+          setIdConnect=JSON.stringify(data.id);
           sessionStorage.setItem('type', JSON.stringify(data.typeUtilisateur))
-          sessionStorage.setItem('nom', JSON.stringify(data.nomUtilisateur))
+          sessionStorage.setItem('nom', data.nomUtilisateur)
+          sessionStorage.setItem('prenom', data.prenomUtilisateur)
           const typeUser = data.typeUtilisateur; 
           //T
           // Redirect user based on user type
           if (typeUser === "AGRICULTEUR") {
             navigate("/dashboard-aggro");
+            sessionStorage.setItem("idAgriculteur",JSON.stringify(data.id));
+            sessionStorage.setItem("idCoop",JSON.stringify(data.cooperative.id));
+            
+          
+            
           } else if (typeUser === "COOPERATIVE") {
             navigate("/dashboard-coop");
+            sessionStorage.setItem("idCoop",JSON.stringify(data.id));
           } else {
             toast.success("Connecté, vous allez être redirigé dans quelques secondes");
             // Reload the page after 3 seconds

@@ -10,8 +10,9 @@ const Header = () => {
   const activeLink = 'nav-link text-left active'
   const normalLink = 'nav-link text-left'
 
-//test
-  const userEmail = sessionStorage.getItem("nom")
+  const prenom = sessionStorage.getItem("prenom");
+  const nom = sessionStorage.getItem("nom");
+  const userEmail = prenom +" " + nom;
 
   // const util = userEmail.nomUtilisateur
 

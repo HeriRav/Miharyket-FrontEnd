@@ -13,6 +13,7 @@ import ApprovisionementProduitCooperative from './ApprovisionnementProduitCooper
 import AjouterProduit from './AjouterProduit';
 
 function Dashboard() {
+   const idCooperative = sessionStorage.getItem("idUser");
    
     const [activeMenu, setActiveMenu] = useState(0);
     
