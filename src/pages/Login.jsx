@@ -57,6 +57,7 @@ function Login () {
           sessionStorage.setItem('user', JSON.stringify(data));
           sessionStorage.setItem('type', JSON.stringify(data.typeUtilisateur))
           sessionStorage.setItem('nom', (data.nomUtilisateur))
+          sessionStorage.setItem('prenom', (data.prenomUtilisateur))
           sessionStorage.setItem('id', JSON.stringify(data.id))
           const typeUser = data.typeUtilisateur; 
 
