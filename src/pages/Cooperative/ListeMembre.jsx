@@ -22,10 +22,6 @@ function ListeMembre() {
       telephone: telephoneUtilisateur,
       email: email
     }
-
-  const raz = () => {
-
-  }
   ]);
   const user = sessionStorage.getItem("user");
   const reference = JSON.parse(user);
@@ -65,8 +61,7 @@ function ListeMembre() {
       });
   }, []);
 
-  const [showModal, setShowModal] = useState(false);
-  
+  const [showModal, setShowModal] = useState(false);  
 
   const handleInputChange = (event) => {
     // const { name, value } = event.target;
@@ -98,37 +93,46 @@ function ListeMembre() {
 
   const validate = () => {
     let result = true
+    var validRegex = /^(?=.{1,64}@.{1,255}$)(?=.{1,64}@.{1,255}\..{2,63}$)(?=.{1,254}$)(?=.{1,320}$)[a-zA-Z0-9!#$%&'*+\-/=?^_`{|}~]+(?:\.[a-zA-Z0-9!#$%&'*+\-/=?^_`{|}~]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z]{2,63}$/;
     if (nomUtilisateur === '' || nomUtilisateur === null) {
-        result = false
-        toast.warning('Veuillez entrer le nom')
+      result = false
+      toast.warning('Veuillez entrer le nom')
     }
-    if (cinAgriculteur.length<12) {
-        result = false
-        toast.warning('Veuillez entrer un numéro CIN valide')
+    if (cinAgriculteur.length < 12) {
+      result = false
+      toast.warning('Veuillez entrer un numéro CIN valide')
     }
     if (adresseUtilisateur === '' || adresseUtilisateur === null) {
-        result = false
-        toast.warning('Veuillez entrer l\'adresse')
+      result = false
+      toast.warning('Veuillez entrer l\'adresse')
     }
     if (email === '' || email === null) {
-        result = false
-        toast.warning('Veuillez entrer l\' adresse mail')
+      result = false
+      toast.warning('Veuillez entrer l\' adresse mail')
+    }
+    if (!email.match(validRegex)) {
+      result = false
+      toast.warning('Veuillez entrer un email valide')
     }
     if (telephoneUtilisateur === '' || telephoneUtilisateur === null) {
-        result = false
-        toast.warning('Veuillez entrer le numéro de téléphone')
+      result = false
+      toast.warning('Veuillez entrer le numéro de téléphone')
+    }
+    if (telephoneUtilisateur.length < 10) {
+      result = false
+      toast.warning('Veuillez entrer un numéro de téléphone valide')
     }
     if (mdpUtilisateur === '' || mdpUtilisateur === null) {
-        result = false
-        toast.warning('Veuillez entrer le mot de passe')
+      result = false
+      toast.warning('Veuillez entrer le mot de passe')
     }
     if (confirmMdp === '' || confirmMdp === null) {
-        result = false
-        toast.warning('Veuillez confirmer le mot de passe')
+      result = false
+      toast.warning('Veuillez confirmer le mot de passe')
     }
     if (mdpUtilisateur !== confirmMdp){
-        result = false
-        toast.warning('Les mots de passe ne correspondent pas')
+      result = false
+      toast.warning('Les mots de passe ne correspondent pas')
     }
     return result
   }
