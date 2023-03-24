@@ -6,12 +6,12 @@ import { Navbar } from 'react-bootstrap'
 import Product from '../pages/Product'
 import { Avatar } from 'antd'
 import { UserOutlined } from '@ant-design/icons'
+import Contact from '../pages/Contact'
 
 const Header = () => {
 
   const activeLink = 'nav-link text-left active'
   const normalLink = 'nav-link text-left'
-
 
   const userLname = sessionStorage.getItem("nom")
   const userFname = sessionStorage.getItem("prenom")
@@ -90,6 +90,27 @@ const Header = () => {
         </div>
 
         <div className="site-navbar py-2 js-sticky-header site-navbar-target d-none pl-0 d-lg-block" role="banner">
+              {sessionStorage.getItem("username") === null ? (
+                <div className="d-flex align-items-center">
+                
+                  <div className="ms-auto">
+                    <div className="site-navigation position-relative text-right" role="navigation">
+                      <ul className="site-menu main-menu js-clone-nav mr-auto d-none pl-0 d-lg-block">
+                        <li>
+                          <NavLink to="/" className={({isActive}) => isActive ? activeLink : normalLink}>Accueil</NavLink>
+                        </li>
+                        <li>
+                          <NavLink to="/a-propos" className={({isActive}) => isActive ? activeLink : normalLink}>À propos</NavLink>
+                        </li>
+                        <li>
+                          <NavLink to='/contact' className={({isActive}) => isActive ? activeLink : normalLink}>Contact</NavLink>
+                        </li>
+                        <li>
+                          <NavLink to='/produits' className={({isActive}) => isActive ? activeLink : normalLink}>Produits</NavLink>
+                        </li>
+                      </ul>                                                                                                                                                                                                                                                                                          
+                    </div>
+                  </div>
     
           <div className="container">
 
@@ -125,6 +146,15 @@ const Header = () => {
                           <Link to="/authentification" className="nav-link text-left text-white">
                             Se connecter
                           </Link>
+                        <li>
+                          <Link to="/dashboard-aggro" className="nav-link text-left">Aggro</Link>
+                        </li>
+                        <li>
+                          <Link to='/dashboard' className="nav-link text-left">Admin</Link>
+                        </li>
+                       
+                        <li>
+                          <NavLink to='/produits' className={({isActive}) => isActive ? activeLink : normalLink}>Produits</NavLink>
                         </li>
                       </ul>
                   </div>
@@ -196,13 +226,14 @@ const Header = () => {
 
         </div>
       </div>
-
-      <Routes>
-        <Route index element={<Home />}/>
-        <Route path='/a-propos' element={<About />}/>
-        <Route path='/produits' element={<Product/>}/>
-      </Routes>
-    </>
+  
+        <Routes>
+          <Route index element={<Home />}/>
+          <Route path='/a-propos' element={<About />}/>
+          <Route path='/produits' element={<Product/>}/>
+          <Route path='/contact' element={<Contact/>}/>
+        </Routes>
+      </>
   )
 }
 

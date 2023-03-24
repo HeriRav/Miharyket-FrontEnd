@@ -12,7 +12,7 @@ const GetCooperativeId = () => {
       const result = await axios.get(`http://localhost:8085/produits/reference/${reference}`);
       setProduits(result.data);
     };
-
+//test
     fetchData();
   }, []);
 

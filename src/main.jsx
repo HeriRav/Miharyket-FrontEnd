@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom'
 import App from './App'
 import './index.css'
 import About from './pages/About'
@@ -18,7 +18,16 @@ import Register_coop from './pages/Register-coop'
 import CooperativeList from './components/CooperativeList'
 import UserList from './components/UserList'
 import Product from './pages/Product'
+import Contact from './pages/Contact'
 
+// Fonction de vérification de l'authentification de l'utilisateur
+const isAuthenticated = () => {
+  // Vérifie si l'utilisateur est authentifié (par exemple, en vérifiant si un jeton JWT est présent dans le stockage local ou de session)
+  // Retourne true si l'utilisateur est authentifié, false sinon
+  const token = sessionStorage.getItem('token');
+  const username = sessionStorage.getItem('username');
+  return !!token && !!username;
+}
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <BrowserRouter>
@@ -27,17 +36,20 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route index element={<Home />}/>
         <Route path='/a-propos' element={<About />}/>
         <Route path='/produits' element={<Product />}/>
+        <Route path='/contact' element={<Contact />}/>
+
       </Route>
       <Route path='/authentification/*' element={<Login />}/>
       <Route path='/inscription/*' element={<Register />}/>
       <Route path='/inscription-coop/*' element={<Register_coop />}/>
       <Route path='/inscription-client/*' element={<Register_client />}/>
-      <Route path='/dashboard' element={<DashboardAdmin />}/>
-      <Route path='/listProduit' element={<ListProduit />}/>
-      <Route path='/listAgriculteurs' element={<ListAgriculteur />}/>
-      <Route path='/ajoutProduit' element={<AjoutProduit />}/>
-      <Route path='/dashboard-coop' element={<DashboardCooperative />}/>
-      <Route path='/dashboard-aggro' element={<DashboardAgriculteur />}/>
+      {/* Routes protégées */}
+      <Route path='/dashboard' element={isAuthenticated() ? <DashboardAdmin /> : <Navigate to='/authentification/login' />} />
+      <Route path='/listProduit' element={isAuthenticated() ? <ListProduit /> : <Navigate to='/authentification/login' />} />
+      <Route path='/listAgriculteurs' element={isAuthenticated() ? <ListAgriculteur /> : <Navigate to='/authentification/login' />} />
+      <Route path='/ajoutProduit' element={isAuthenticated() ? <AjoutProduit /> : <Navigate to='/authentification/login' />} />
+      <Route path='/dashboard-coop' element={isAuthenticated() ? <DashboardCooperative /> : <Navigate to='/authentification/login' />} />
+      <Route path='/dashboard-aggro' element={isAuthenticated() ? <DashboardAgriculteur /> : <Navigate to='/authentification/login' />} />
       {/* <Route path='*' element={<Error404/>}/> */}
     </Routes>
   </BrowserRouter>,

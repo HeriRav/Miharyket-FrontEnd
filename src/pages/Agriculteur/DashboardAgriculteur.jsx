@@ -38,7 +38,7 @@ function Dashboard() {
         navigate('/')
         window.location.reload(true)
     }
-       
+       //t
     let navigate = useNavigate()
     const change = () => {
     let path = '/'
