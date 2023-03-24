@@ -31,10 +31,23 @@ function Product() {
 
     return(
         <div>
+            <title>Mihary'ket - Nos produits</title>
+            <div className="intro-section site-blocks-cover innerpage" style={{"backgroundImage": "url('/src/images/hero_2.jpg')"}}>
+                <div className="container">
+                    <div className="row align-items-center text-center">
+                        <div className="col-lg-12 mt-5" data-aos="fade-up">
+                            <h1>À propos de Nous</h1>
+                            <p className="text-white text-center">
+                                <Link to="/">Accueil</Link>
+                                <span className="mx-2">/</span>
+                                <span>À propos</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div data-aos="fade-up" style={{backgroundColor : "#ebebeb"}}>
-                <div className='text-center text-success' style={{marginTop : "20px", backgroundColor : "#dbdbdb", padding : "25px"}}>
-                    <h1>Nos produits récents</h1><br/>
-                    <Link className="text-body" to="/inscription"><button className='btn btn-success btn-rounded btn-lg gradient-custom-4 px-5 text-white'>Voir la liste complète</button></Link>
+                <div className='text-center text-success' style={{backgroundColor : "#dbdbdb", padding : "25px"}}>
                 </div>
                 <Row lg={4}>
                 {produit &&

@@ -4,19 +4,28 @@ import { Navigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';import 'react-toastify/dist/ReactToastify.css'
 
 function ListeMembre() {
+
+  const [nomUtilisateur, setLName] = useState('')
+  const [cinAgriculteur, setCin] = useState('')
+  const [adresseUtilisateur, setAdress] = useState('')
+  const [email, setEmail] = useState('')
+  const [telephoneUtilisateur, setPhone] = useState('')
+  const [mdpUtilisateur, setPass] = useState('')
+  const [confirmMdp, setConfirm] =useState('')
+  const [typeUtilisateur] = useState('AGRICULTEUR')
+
   const [members, setMembers] = useState([
     {
-      // nom: nomUtilisateur,
-      // cin: cinAgriculteur,
-      // adresse: adresseUtilisateur,
-      // telephone: telephoneUtilisateur,
-      // email: email
+      nom: nomUtilisateur,
+      cin: cinAgriculteur,
+      adresse: adresseUtilisateur,
+      telephone: telephoneUtilisateur,
+      email: email
     }
 
   const raz = () => {
 
   }
-  
   ]);
   const user = sessionStorage.getItem("user");
   const reference = JSON.parse(user);
@@ -39,7 +48,7 @@ function ListeMembre() {
         });
     }, []);
   }
-  const id = reference.id;
+  const id = sessionStorage.getItem("id")
   useEffect(() => {
     fetch(`http://localhost:8085/api/utilisateurs/cooperatives/${id}/agriculteurs`)
       .then(response => {
@@ -60,17 +69,15 @@ function ListeMembre() {
   
 
   const handleInputChange = (event) => {
-    const { name, value } = event.target;
-    setNewMember({ ...newMember, [name]: value });
+    // const { name, value } = event.target;
+    setMembers(event.target.value);
   };
 
   const handleAddMember = (e) => {
     e.preventDefault()
-    const user = sessionStorage.getItem("user");    
-    const reference = JSON.parse(user);
-    console.log(reference);
+    const user = sessionStorage.getItem("user")
     if (validate()) {
-      const agriculteur = {nomUtilisateur, login : email, adresseUtilisateur, cinAgriculteur, email, telephoneUtilisateur, mdpUtilisateur, typeUtilisateur,cooperative : reference}      
+      const agriculteur = {nomUtilisateur, login : email, adresseUtilisateur, cinAgriculteur, email, telephoneUtilisateur, mdpUtilisateur, typeUtilisateur,cooperative : {id : id}}
       fetch("http://localhost:8085/api/utilisateurs/ajout", {
           method:"POST", headers:{"Content-Type" : "application/json"}, body:JSON.stringify(agriculteur)
       }).then(() => {
@@ -124,17 +131,7 @@ function ListeMembre() {
         toast.warning('Les mots de passe ne correspondent pas')
     }
     return result
-}
-
-  const [nomUtilisateur, setLName] = useState('')
-  const [cinAgriculteur, setCin] = useState('')
-  const [adresseUtilisateur, setAdress] = useState('')
-  const [email, setEmail] = useState('')
-  const [telephoneUtilisateur, setPhone] = useState('')
-  const [mdpUtilisateur, setPass] = useState('')
-  const [confirmMdp, setConfirm] =useState('')
-  const [typeUtilisateur] = useState('AGRICULTEUR')
-  
+  }
 
   return (
     <div>
