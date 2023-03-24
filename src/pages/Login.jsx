@@ -1,4 +1,4 @@
-import { Link, Route, Routes, useNavigate } from 'react-router-dom';
+import { json, Link, Route, Routes, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import {
   MDBBtn,
@@ -56,7 +56,8 @@ function Login () {
           // Store user info in sessionStorage
           sessionStorage.setItem('user', JSON.stringify(data));
           sessionStorage.setItem('type', JSON.stringify(data.typeUtilisateur))
-          sessionStorage.setItem('nom', JSON.stringify(data.nomUtilisateur))
+          sessionStorage.setItem('nom', (data.nomUtilisateur))
+          sessionStorage.setItem('id', JSON.stringify(data.id))
           const typeUser = data.typeUtilisateur; 
 
           // Redirect user based on user type

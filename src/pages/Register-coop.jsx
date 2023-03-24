@@ -38,6 +38,7 @@ function Register_coop() {
 
     const validate = () => {
         let result = true
+        var validRegex = /^(?=.{1,64}@.{1,255}$)(?=.{1,64}@.{1,255}\..{2,63}$)(?=.{1,254}$)(?=.{1,320}$)[a-zA-Z0-9!#$%&'*+\-/=?^_`{|}~]+(?:\.[a-zA-Z0-9!#$%&'*+\-/=?^_`{|}~]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z]{2,63}$/;
         if (nomUtilisateur === '' || nomUtilisateur === null) {
             result = false
             toast.warning('Veuillez entrer votre nom')
@@ -52,19 +53,31 @@ function Register_coop() {
         }
         if (nifCoop === '' || nifCoop === null) {
             result = false
-            toast.warning('Veuillez entrer votre adresse mail')
+            toast.warning('Veuillez entrer votre numéro d\'identité fiscal')
+        }
+        if (nifCoop.length < 10) {
+            result = false
+            toast.warning('Veuillez entrer un numéro d\'identité fiscal valide')
         }
         if (statCoop === '' || statCoop === null) {
             result = false
-            toast.warning('Veuillez entrer votre adresse mail')
+            toast.warning('Veuillez entrer votre numéro statistique')
+        }
+        if (statCoop.length < 17) {
+            result = false
+            toast.warning('Veuillez entrer votre numéro statistique valide')
         }
         if (responsableCoop === '' || responsableCoop === null) {
             result = false
-            toast.warning('Veuillez entrer votre adresse mail')
+            toast.warning('Veuillez entrer votre résponsable')
         }
         if (telephoneUtilisateur === '' || telephoneUtilisateur === null) {
             result = false
             toast.warning('Veuillez entrer votre numéro de téléphone')
+        }
+        if (telephoneUtilisateur.length < 10) {
+            result = false
+            toast.warning('Veuillez entrer un numéro de téléphone valide')
         }
         if (mdpUtilisateur === '' || mdpUtilisateur === null) {
             result = false
@@ -77,6 +90,10 @@ function Register_coop() {
         if (mdpUtilisateur !== confirmMdp){
             result = false
             toast.warning('Les mots de passe ne correspondent pas')
+        }
+        if (!email.match(validRegex)) {
+            result = false
+            toast.warning('Veuillez entrer un email valide')
         }
         return result
     }
