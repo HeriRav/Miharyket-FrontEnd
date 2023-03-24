@@ -4,6 +4,7 @@ import About from '../pages/About'
 import { useState, useEffect } from 'react'
 import { Navbar } from 'react-bootstrap'
 import Product from '../pages/Product'
+import Contact from '../pages/Contact'
 
 const Header = () => {
 
@@ -103,7 +104,7 @@ const Header = () => {
                           <NavLink to="/a-propos" className={({isActive}) => isActive ? activeLink : normalLink}>À propos</NavLink>
                         </li>
                         <li>
-                          <a href="contact.html" className="nav-link text-left">Contact</a>
+                          <NavLink to='/contact' className={({isActive}) => isActive ? activeLink : normalLink}>Contact</NavLink>
                         </li>
                         <li>
                           <NavLink to='/produits' className={({isActive}) => isActive ? activeLink : normalLink}>Produits</NavLink>
@@ -149,9 +150,7 @@ const Header = () => {
                         <li>
                           <Link to='/dashboard' className="nav-link text-left">Admin</Link>
                         </li>
-                        <li>
-                          <a href="contact.html" className="nav-link text-left">Contact</a>
-                        </li>
+                       
                         <li>
                           <NavLink to='/produits' className={({isActive}) => isActive ? activeLink : normalLink}>Produits</NavLink>
                         </li>
@@ -191,6 +190,7 @@ const Header = () => {
           <Route index element={<Home />}/>
           <Route path='/a-propos' element={<About />}/>
           <Route path='/produits' element={<Product/>}/>
+          <Route path='/contact' element={<Contact/>}/>
         </Routes>
       </>
   )
