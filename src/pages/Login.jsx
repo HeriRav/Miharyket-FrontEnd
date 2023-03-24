@@ -90,7 +90,7 @@ function Login () {
       });
     }
   };
-  
+  //Test
   const validate = () => {
     let result = true
     if (email === '' || email === null) {
