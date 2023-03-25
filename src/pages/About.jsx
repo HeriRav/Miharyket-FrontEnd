@@ -4,7 +4,7 @@ function About () {
     return(
         <>
         <title>Mihary'ket - À propos</title>
-          <div className="intro-section site-blocks-cover innerpage" style={{"backgroundImage": "url('/src/images/hero_8.jpg')"}}>
+          <div className="intro-section site-blocks-cover innerpage" style={{"backgroundImage": "url('/src/images/hero_9.jpg')"}}>
               <div className="container">
                   <div className="row align-items-center text-center">
                       <div className="col-lg-12 mt-5" data-aos="fade-up">

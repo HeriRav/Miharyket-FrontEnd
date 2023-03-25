@@ -32,7 +32,7 @@ function Dashboard() {
     const handleMenu3Click = () => {
         setActiveMenu(3);
     };
-    //t
+    
     const handleMenu4Click = () => {
         setActiveMenu(4);
     };
@@ -44,19 +44,22 @@ function Dashboard() {
        
     let navigate = useNavigate()
     const change = () => {
+    sessionStorage.clear()
+    localStorage.clear()
+    window.location.reload(true)
     let path = '/'
     navigate(path)
   }
     return (
-      <div id="wrapper">
-        <ul className="navbar-nav bg-gradient-dark sidebar sidebar-dark accordion" id="accordionSidebar">
-        <div className="sidebar-brand d-flex align-items-center justify-content-center">
-        <Link onClick={refresh}>
-          <div className="sidebar-brand-icon">
-            <img src={miharyImage} alt="Mihary" className="img-fluid" />
-          </div>
-        </Link>
-      </div>
+      <div id="wrapper" className='side'>
+        <ul className="navbar-nav bg-gradient-dark sidebar sidebar-dark accordion sidenav" id="accordionSidebar">
+            <div className="sidebar-brand d-flex align-items-center justify-content-center">
+            <Link onClick={refresh}>
+            <div className="sidebar-brand-icon">
+                <img src={miharyImage} alt="Mihary" className="img-fluid" />
+            </div>
+            </Link>
+            </div>
             <hr className="sidebar-divider my-0"/>
             <li className="nav-item">
                 <Link className="nav-link" to="/dashboard-coop" onClick={handleMenu0Click}>
@@ -302,7 +305,7 @@ function Dashboard() {
                             
                             
                             <a className="dropdown-item dropdown-item-button" href="#" onClick={change}>
-                                <i className="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                <Link className="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></Link>
                                 Déconnexion
                             </a>
                             </div>
@@ -319,7 +322,7 @@ function Dashboard() {
                 {activeMenu === 3 && <ApprovisionementProduitCooperative/>}
                 {activeMenu === 4 && <AjouterProduit/>}
                
-                    <DashboardFooter></DashboardFooter>
+                <DashboardFooter></DashboardFooter>
                 </div>
             
 

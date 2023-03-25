@@ -5,6 +5,7 @@ import { ToastContainer, toast } from 'react-toastify';import 'react-toastify/di
 
 function ListeMembre() {
 
+  const [resultats, setResultats] = useState([]);
   const [nomUtilisateur, setLName] = useState('')
   const [cinAgriculteur, setCin] = useState('')
   const [adresseUtilisateur, setAdress] = useState('')
@@ -44,7 +45,7 @@ function ListeMembre() {
         });
     }, []);
   }
-  const id = sessionStorage.getItem("id")
+  const id = sessionStorage.getItem("idCoop")
   useEffect(() => {
     fetch(`http://localhost:8085/api/utilisateurs/cooperatives/${id}/agriculteurs`)
       .then(response => {
@@ -79,16 +80,19 @@ function ListeMembre() {
             toast.success('Le compte a été enregistré avec succès')            
             //react pour rediriger
             setTimeout(() => {
-              setShowModal(false)
+            setShowModal(false)
               // window.location.reload(true); 
             }, 3000)                    
       }).catch((err) => {
           toast.error('Inscription échouée : ' +err.message)
       })
-      // console.log(agriculteur)
-
-      // window.location.replace('http://localhost:5174/dashboard-coop#');
-  }
+      setResultats([...resultats, agriculteur])
+      setCin("")
+      setAdress("")
+      setEmail("")
+      setLName("")
+      setPhone("")
+    }
   };
 
   const validate = () => {
@@ -139,7 +143,12 @@ function ListeMembre() {
 
   return (
     <div>
-      <h1>Liste des agriculteurs membres</h1>
+      <h1>Liste des agriculteurs membres
+        <Button variant="success" onClick={() => setShowModal(true)} className="float-right">
+          <i className='fas fa-plus-circle fa-lg fa-fw mr-2'></i>
+          Ajouter
+        </Button>
+      </h1>
       <div className="table-responsive">
         <Table striped bordered hover>
           <thead>
@@ -163,9 +172,6 @@ function ListeMembre() {
             ))}
           </tbody>
         </Table>
-        <Button variant="primary" onClick={() => setShowModal(true)} className="float-right">
-          Ajouter agriculteur
-        </Button>
       </div>
       <Modal show={showModal} onHide={() => setShowModal(false)}>
         <Modal.Header closeButton>

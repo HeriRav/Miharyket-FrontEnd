@@ -279,7 +279,7 @@ function Dashboard() {
                
                 {activeMenu === 4 && <ApprovisionnementProduitAgriculteur/>}
                
-                    <DashboardFooter></DashboardFooter>
+                <DashboardFooter></DashboardFooter>
                 </div>
             
 

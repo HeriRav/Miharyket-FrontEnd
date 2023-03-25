@@ -19,6 +19,7 @@ import CooperativeList from './components/CooperativeList'
 import UserList from './components/UserList'
 import Product from './pages/Product'
 import Contact from './pages/Contact'
+import Cart from './pages/Cart'
 
 // Fonction de vérification de l'authentification de l'utilisateur
 const isAuthenticated = () => {
@@ -37,12 +38,14 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route path='/a-propos' element={<About />}/>
         <Route path='/produits' element={<Product />}/>
         <Route path='/contact' element={<Contact />}/>
-
+        <Route path='/panier' element={isAuthenticated() ? <Cart /> : <Navigate to='/authentification/login' />}/>
       </Route>
+
       <Route path='/authentification/*' element={<Login />}/>
       <Route path='/inscription/*' element={<Register />}/>
       <Route path='/inscription-coop/*' element={<Register_coop />}/>
       <Route path='/inscription-client/*' element={<Register_client />}/>
+
       {/* Routes protégées */}
       <Route path='/dashboard' element={isAuthenticated() ? <DashboardAdmin /> : <Navigate to='/authentification/login' />} />
       <Route path='/listProduit' element={isAuthenticated() ? <ListProduit /> : <Navigate to='/authentification/login' />} />
