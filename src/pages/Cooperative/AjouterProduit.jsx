@@ -229,7 +229,7 @@ function AjouterProduit() {
               Ajouter
             </button>
           </h1>
-          <Table striped bordered hover responsive style={{ fontSize: "0.9rem" }}>
+          <Table striped bordered hover responsive style={{ fontSize: "0.9rem" }} className="text-black">
             <thead>
               <tr>
                 <th>Nom du produit</th>
