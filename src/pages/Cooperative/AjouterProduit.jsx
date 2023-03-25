@@ -33,7 +33,10 @@ function AjouterProduit() {
   const [recherche, setRecherche] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [productsPerPage] = useState(5);
-  const [stockProduit, setStock] = useState('')
+  const [stockProduit, setStock] = useState('');
+
+  const  user = sessionStorage.getItem("user");
+  const reference = JSON.parse(user);
 
   const handleSave = () => {
     // e.preventDefault()
@@ -71,12 +74,12 @@ function AjouterProduit() {
   const handleChangePrix = (event) => {
     setNouveauPrix(event.target.value);
   };
-
   
   useEffect(() => {
     // const id = parseInt(sessionStorage.getItem("idUser"));
     const lien = "http://localhost:8085/produits/reference/" + idCoop;
       fetch(lien)
+
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -94,7 +97,6 @@ function AjouterProduit() {
 
   const handleSubmit = (event) => {
     event.preventDefault();    
-
     if (validate()) {
       const nouveauProduit = {
         nomProduit: produit,
