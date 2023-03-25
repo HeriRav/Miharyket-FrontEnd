@@ -36,50 +36,77 @@ function Product() {
                 <div className="container">
                     <div className="row align-items-center text-center">
                         <div className="col-lg-12 mt-5" data-aos="fade-up">
-                            <h1>À propos de Nous</h1>
+                            <h1>Nos produits</h1>
                             <p className="text-white text-center">
                                 <Link to="/">Accueil</Link>
                                 <span className="mx-2">/</span>
-                                <span>À propos</span>
+                                <span>Produits</span>
                             </p>
                         </div>
                     </div>
                 </div>
             </div>
             <div data-aos="fade-up" style={{backgroundColor : "#ebebeb"}}>
-                <div className='text-center text-success' style={{backgroundColor : "#dbdbdb", padding : "25px"}}>
+                <div className='text-center' style={{backgroundColor : "#dbdbdb", padding : "25px"}}>
+                    <button className='btn-dark text-white p-1 px-2 mx-5 btn fw-bold' >Fruit</button>
+                    <button className='btn-dark text-white p-1 px-2 mx-5 btn fw-bold' >Végétale</button>
+                    <button className='btn-dark text-white p-1 px-2 mx-5 btn fw-bold' >Viande</button>
+                    <button className='btn-dark text-white p-1 px-2 mx-5 btn fw-bold' >Céréale</button>
+                    <button className='btn-dark text-white p-1 px-2 mx-5 btn fw-bold' >Produit laitier</button>
+                    <button className='btn-dark text-white p-1 px-2 mx-5 btn fw-bold' >Produit arômatique</button>
+                    <button className='btn-dark text-white p-1 px-2 mx-5 btn fw-bold' >Tous</button>
                 </div>
                 <Row lg={4}>
-                {produit &&
-                    produit
-                    .filter((product) => product.stockProduit !== 0)
-                    .map((product) => {
-                    return (
-                        <div className='container-sm'>
-                        <Col className="d-flex">
-                        <Card className="flex-fill card-flyer" style={{marginTop : "20px"}}  key={product.idProduit}>
-                            <Card.Img className='image-box' variant="top" 
-                                src={images.find(image => image.categorieProduit === product.categorieProduit)?.src} />
-                            <Card.Body>
-                            <Card.Title className='text-black initialism mb-4'>{product.nomProduit}</Card.Title>
-                            <Card.Text>
-                                {product.descriptionProduit}
-                            </Card.Text>
-                            </Card.Body>
-                            <Card.Footer>
-                            <Card.Text className='text-success mb-0'><span className='text-primary'>Catégorie :</span> {product.categorieProduit}</Card.Text>
-                            <Card.Text className='text-primary'>Quantité disponible : <span className='text-success'>{product.stockProduit}{product.uniteProduit}</span></Card.Text>
-                            </Card.Footer>
-                            <Card.Footer className='text-center'>
-                            <small className="text-lg">{product.prixProduit} Ar/{product.uniteProduit}</small>
-                            </Card.Footer>
-                            <Card.Footer className='text-center'>
-                            <Button variant="primary">Ajouter au panier</Button><br/>
-                            </Card.Footer>
-                        </Card>
-                        </Col>
-                        </div>
-                    );
+                    {produit &&
+                        produit
+                        .filter((product) => product.stockProduit !== 0)
+                        .map((product) => {
+                        return (
+                            <div className='container-sm' key={product.idProduit}>
+                            <Col className="d-flex">
+                            {sessionStorage.getItem("typeUser") == "CLIENT" ? (
+                                <Card className="flex-fill card-flyer" style={{marginTop : "20px"}}>
+                                    <Card.Img className='image-box' variant="top" 
+                                    src={images.find(image => image.categorieProduit === product.categorieProduit)?.src} />
+                                    <Card.Body>
+                                    <Card.Title className='text-black initialism mb-4'>{product.nomProduit}</Card.Title>
+                                    <Card.Text>
+                                        {product.descriptionProduit}
+                                    </Card.Text>
+                                    </Card.Body>
+                                    <Card.Footer>
+                                    <Card.Text className='text-success mb-0'><span className='text-primary'>Catégorie :</span> {product.categorieProduit}</Card.Text>
+                                    <Card.Text className='text-primary'>Quantité disponible : <span className='text-success'>{product.stockProduit}{product.uniteProduit}</span></Card.Text>
+                                    </Card.Footer>
+                                    <Card.Footer className='text-center'>
+                                    <small className="text-lg">{product.prixProduit} Ar/{product.uniteProduit}</small>
+                                    </Card.Footer>
+                                    <Card.Footer className='text-center'>
+                                    <Button className="primary" onClick={() => handleShow(product)}>Ajouter au panier</Button><br/>
+                                    </Card.Footer>
+                                </Card>
+                            ) : (
+                                <Card className="flex-fill card-flyer" style={{marginTop : "20px"}}  key={product.idProduit}>
+                                    <Card.Img className='image-box' variant="top" 
+                                    src={images.find(image => image.categorieProduit === product.categorieProduit)?.src} />
+                                    <Card.Body>
+                                    <Card.Title className='text-black initialism mb-4'>{product.nomProduit}</Card.Title>
+                                    <Card.Text>
+                                        {product.descriptionProduit}
+                                    </Card.Text>
+                                    </Card.Body>
+                                    <Card.Footer>
+                                    <Card.Text className='text-success mb-0'><span className='text-primary'>Catégorie :</span> {product.categorieProduit}</Card.Text>
+                                    <Card.Text className='text-primary'>Quantité disponible : <span className='text-success'>{product.stockProduit}{product.uniteProduit}</span></Card.Text>
+                                    </Card.Footer>
+                                    <Card.Footer className='text-center'>
+                                    <small className="text-lg">{product.prixProduit} Ar/{product.uniteProduit}</small>
+                                    </Card.Footer>
+                                </Card>
+                            )}
+                            </Col>
+                            </div>
+                        );
                     })}
                 </Row><br/>
             </div>

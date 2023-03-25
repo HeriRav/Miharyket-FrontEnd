@@ -8,14 +8,17 @@ import { useEffect, useState } from 'react';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import { Link } from 'react-router-dom';
-import { Modal, Form } from "react-bootstrap";
+import { Modal, Form, ToastContainer } from "react-bootstrap";
+import { toast } from 'react-toastify';
 
-function Home({}) {
+function Home() {
     const [produit, setProd] = useState([])
 
     const [panier, setPanier] = useState([]);
 
-    const [categorieProduit, setCategory] = useState(false);
+    const [date, setDate] = useState("")
+    const [statut, setStatut] = useState("")
+    const [refCommand, setRef] = useState("")
 
     function handle1Click(product) {
         setPanier(panier.filter((p) => p !== product));
@@ -49,7 +52,7 @@ function Home({}) {
 
     const handleConfirm = () => {
         handle1Click(productToRemove);
-        handleHide();
+        // handleHide();
     }
 
     useEffect(() => {
@@ -83,6 +86,12 @@ function Home({}) {
     prixTotal += prixTotalProduit;
     }
 
+    const validate = () => {
+        if (quantite > produit.stockProduit) {
+            toast.warning("Le nombre est au-dessus du stock")
+        }
+    }
+
     return (
         <div>           
             <title>Mihary'ket - Page d'accueil</title>
@@ -112,35 +121,55 @@ function Home({}) {
                 <Row lg={4}>
                 {produit &&
                     produit
-                    .slice(0, 8)
                     .filter((product) => product.stockProduit !== 0)
+                    .slice(0, 8)                    
                     .map((product) => {
-                    return (
-                        <div className='container-sm'>
-                        <Col className="d-flex">
-                        <Card className="flex-fill card-flyer" style={{marginTop : "20px"}}  key={product.idProduit}>
-                            <Card.Img className='image-box' variant="top" 
-                            src={images.find(image => image.categorieProduit === product.categorieProduit)?.src} />
-                            <Card.Body>
-                            <Card.Title className='text-black initialism mb-4'>{product.nomProduit}</Card.Title>
-                            <Card.Text>
-                                {product.descriptionProduit}
-                            </Card.Text>
-                            </Card.Body>
-                            <Card.Footer>
-                            <Card.Text className='text-success mb-0'><span className='text-primary'>Catégorie :</span> {product.categorieProduit}</Card.Text>
-                            <Card.Text className='text-primary'>Quantité disponible : <span className='text-success'>{product.stockProduit}{product.uniteProduit}</span></Card.Text>
-                            </Card.Footer>
-                            <Card.Footer className='text-center'>
-                            <small className="text-lg">{product.prixProduit} Ar/{product.uniteProduit}</small>
-                            </Card.Footer>
-                            <Card.Footer className='text-center'>
-                            <Button className="primary" onClick={() => handleShow(product)}>Ajouter au panier</Button><br/>
-                            </Card.Footer>
-                        </Card>
-                        </Col>
-                        </div>
-                    );
+                        return (
+                            <div className='container-sm' key={product.idProduit}>
+                                <Col className="d-flex">
+                                {sessionStorage.getItem("typeUser") == "CLIENT" ? (
+                                    <Card className="flex-fill card-flyer" style={{marginTop : "20px"}}>
+                                        <Card.Img className='image-box' variant="top" 
+                                        src={images.find(image => image.categorieProduit === product.categorieProduit)?.src} />
+                                        <Card.Body>
+                                        <Card.Title className='text-black initialism mb-4'>{product.nomProduit}</Card.Title>
+                                        <Card.Text>
+                                            {product.descriptionProduit}
+                                        </Card.Text>
+                                        </Card.Body>
+                                        <Card.Footer>
+                                        <Card.Text className='text-success mb-0'><span className='text-primary'>Catégorie :</span> {product.categorieProduit}</Card.Text>
+                                        <Card.Text className='text-primary'>Quantité disponible : <span className='text-success'>{product.stockProduit}{product.uniteProduit}</span></Card.Text>
+                                        </Card.Footer>
+                                        <Card.Footer className='text-center'>
+                                        <small className="text-lg">{product.prixProduit} Ar/{product.uniteProduit}</small>
+                                        </Card.Footer>
+                                        <Card.Footer className='text-center'>
+                                        <Button className="primary w-100 d-flex align-items-center flex-column" onClick={() => handleShow(product)}>+ Ajouter au panier</Button>
+                                        </Card.Footer>                                       
+                                    </Card>
+                                ) : (
+                                    <Card className="flex-fill card-flyer" style={{marginTop : "20px"}}  key={product.idProduit}>
+                                        <Card.Img className='image-box' variant="top" 
+                                        src={images.find(image => image.categorieProduit === product.categorieProduit)?.src} />
+                                        <Card.Body>
+                                        <Card.Title className='text-black initialism mb-4'>{product.nomProduit}</Card.Title>
+                                        <Card.Text>
+                                            {product.descriptionProduit}
+                                        </Card.Text>
+                                        </Card.Body>
+                                        <Card.Footer>
+                                        <Card.Text className='text-success mb-0'><span className='text-primary'>Catégorie :</span> {product.categorieProduit}</Card.Text>
+                                        <Card.Text className='text-primary'>Quantité disponible : <span className='text-success'>{product.stockProduit}{product.uniteProduit}</span></Card.Text>
+                                        </Card.Footer>
+                                        <Card.Footer className='text-center'>
+                                        <small className="text-lg">{product.prixProduit} Ar/{product.uniteProduit}</small>
+                                        </Card.Footer>
+                                    </Card>
+                                )}
+                                </Col>
+                            </div>
+                        );
                     })}
                 </Row><br/>
             </div>
@@ -178,7 +207,7 @@ function Home({}) {
             </Modal> */}
 
             <Modal show={show} onHide={handleHide}>
-            <Modal.Header closeButton>
+            <Modal.Header closeButton countPanier={panier.length}>
                 <Modal.Title>Choisir quantité</Modal.Title>
             </Modal.Header>
             <Modal.Body>
@@ -212,12 +241,16 @@ function Home({}) {
                             {product.quantite * product.prixProduit} Ar <br />
                             </Card.Text>
                         </Card.Body>
+                        <Card.Footer className='text-center'>
+                        <Button variant='danger' className='w-100 d-flex align-items-center flex-column' onClick={() => handleConfirm(produit)}>Retirer</Button>
+                        <ToastContainer />
+                        </Card.Footer>
                         </Card>
                     );
                 })}
                 </Modal.Body>
                 <Modal.Footer>
-                <Button variant="primary" onClick={() => handleClick(produit)}>
+                <Button variant="primary" className='w-100 d-flex align-items-center flex-column' onClick={() => handleClick(produit)}>
                     Ajouter au panier
                 </Button>
                 <br />
