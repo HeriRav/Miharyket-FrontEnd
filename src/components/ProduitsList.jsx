@@ -5,8 +5,9 @@ const ProduitsList = () => {
   const [produits, setProduits] = useState([]);
   //let [idCoop, setIdCoop] = useState();
   const idCoop = sessionStorage.getItem("idCoop");
+  const lien =  "http://localhost:8085/produits/reference/" + idCoop;
   useEffect(() => {
-    axios.get('http://localhost:8085/produits/reference/${idCoop}')
+    axios.get(lien)
       .then(response => {
         setProduits(response.data);
         sessionStorage.setItem('produits', JSON.stringify(response.data));
