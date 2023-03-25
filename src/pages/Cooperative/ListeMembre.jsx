@@ -150,7 +150,7 @@ function ListeMembre() {
         </Button>
       </h1>
       <div className="table-responsive">
-        <Table striped bordered hover>
+        <Table striped bordered hover className="text-black">
           <thead>
             <tr>
               <th>Nom</th>
