@@ -173,7 +173,7 @@ const Header = () => {
                           <Link className="nav-link text-left text-white">
                           <div className="btn-group">                            
                             <nav type="button" className="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                              <img src='../src/images/user.png' width={24} height={24} alt='profil'/>&nbsp;
+                              <img src='../src/images/user-reverse.png' width={24} height={24} alt='profil'/>&nbsp;
                               {userEmail}
                             </nav>
                             <div className="dropdown-menu">
@@ -208,7 +208,7 @@ const Header = () => {
                           <Link className="nav-link text-left text-white">
                           <div className="btn-group">                            
                             <nav type="button" className="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                              <img src='../src/images/user.png' width={24} height={24} alt='profil'/>&nbsp;
+                              <img src='../src/images/user-reverse.png' width={24} height={24} alt='profil'/>&nbsp;
                               {nom}
                             </nav>
                             <div className="dropdown-menu">
@@ -234,7 +234,7 @@ const Header = () => {
                           <Link className="nav-link text-left text-white">
                           <div className="btn-group">                            
                             <nav type="button" className="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                              <img src='../src/images/user.png' width={24} height={24} alt='profil'/>&nbsp;
+                              <img src='../src/images/user-reverse.png' width={24} height={24} alt='profil'/>&nbsp;
                               {nom}
                             </nav>
                             <div className="dropdown-menu">
@@ -260,7 +260,7 @@ const Header = () => {
                           <Link className="nav-link text-left text-white">
                           <div className="btn-group">                            
                             <nav type="button" className="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                              <img src='../src/images/user.png' width={24} height={24} alt='profil'/>&nbsp;
+                              <img src='../src/images/user-reverse.png' width={24} height={24} alt='profil'/>&nbsp;
                               {nom}
                             </nav>
                             <div className="dropdown-menu">

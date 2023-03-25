@@ -7,18 +7,17 @@ import CardGroup from 'react-bootstrap/CardGroup';
 import { useEffect, useState } from 'react';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
-import { Link } from 'react-router-dom';
-import { Modal, Form, ToastContainer } from "react-bootstrap";
-import { toast } from 'react-toastify';
+import { Link, useNavigate } from 'react-router-dom';
+import { Modal, Form } from "react-bootstrap";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'
 
 function Home() {
     const [produit, setProd] = useState([])
 
     const [panier, setPanier] = useState([]);
 
-    const [date, setDate] = useState("")
-    const [statut, setStatut] = useState("")
-    const [refCommand, setRef] = useState("")
+    let navigate = useNavigate()
 
     function handle1Click(product) {
         setPanier(panier.filter((p) => p !== product));
@@ -69,7 +68,71 @@ function Home() {
           setPanier([...panier, product]);
         }
     }
-    
+
+    const [idProduit, setIdProduit] = useState("");
+    const [nomProduit, setProduit] = useState("");
+    const [unite, setUnite] = useState("");
+    const [description, setDescription] = useState("");
+    const [categorie, setCategorie] = useState("");
+    const [resultats, setResultats] = useState([]);
+    const [stockProduit, setStock] = useState('');
+    const [idCommande, setIdCommande] = useState('');
+    const [dateCommande, setDate] = useState('');
+    const [refCommande, setRefCommande] = useState('');
+    const [statutCommande, setStatut] = useState('en cours');
+    const [prixProduit, setPrix] = useState('');
+    const [quantite, setQuantite] = useState('');
+    const  idClient = sessionStorage.getItem("id");
+
+    // date
+    const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+    const date = new Date().toLocaleDateString('fr-FR', options).split('/').reverse().join('-');
+
+    // Fonction pour générer une référence unique de commande
+    function genererReferenceCommande(nombreDeCommandes) {
+    // Convertir le nombre de commandes en chaîne de caractères et ajouter des zéros au début si nécessaire
+    let numeroDeCommande = (nombreDeCommandes + 1).toString().padStart(3, '0');
+    // Retourner la référence de commande formatée
+    return 'C-' + numeroDeCommande;
+    }
+
+    const ajoutPanier = (event) => {
+        event.preventDefault();
+        const nouvelleCommande = {
+        utilisateur : {id : idClient } ,
+        dateCommande : date,
+        refCommande: genererReferenceCommande(5),
+        statutCommande: statutCommande,
+        };  
+
+        fetch("http://localhost:8085/commandes/ajout", {
+            method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(nouvelleCommande)
+        }) .then(response => response.json())  
+        .then(data => {
+        // Récupération de l'ID de la commande générée
+        const idCommande = data.id;
+        // Création d'un objet ligne de commande
+        const ligneCommande = {
+            commande: idCommande,
+            prixUnitaire: prixProduit,
+            quantiteApprovisionnement: quantite,
+            produit : {idProduit: idProduit},
+        };
+        console.log(ligneCommande);
+        // fetch("http://localhost:8085/ligne-commande/ajout", {
+        //     method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(ligneCommande)
+        // }) .then(response => response.json())
+        // .then(data => {
+        //     toast.success('Ce produit a été ajouté au panier')
+        // }).catch((error) => {
+        //     toast.error('Création échouée : ' + err.message)
+        // });
+        })
+        .catch((error) => {
+            toast.error('Création échouée : ' + err.message)
+        });
+    }
+
     function handleChange(e, index) {
     const newPanier = [...panier];
     newPanier[index].quantite = parseInt(e.target.value);
@@ -90,6 +153,11 @@ function Home() {
         if (quantite > produit.stockProduit) {
             toast.warning("Le nombre est au-dessus du stock")
         }
+    }
+
+    const redirect = () => {
+        navigate('/authentification')
+        toast.warning("Veuillez vous connecter")
     }
 
     return (
@@ -127,7 +195,7 @@ function Home() {
                         return (
                             <div className='container-sm' key={product.idProduit}>
                                 <Col className="d-flex">
-                                {sessionStorage.getItem("typeUser") == "CLIENT" ? (
+                                {sessionStorage.getItem("typeUser") === "CLIENT" ? (
                                     <Card className="flex-fill card-flyer" style={{marginTop : "20px"}}>
                                         <Card.Img className='image-box' variant="top" 
                                         src={images.find(image => image.categorieProduit === product.categorieProduit)?.src} />
@@ -148,7 +216,7 @@ function Home() {
                                         <Button className="primary w-100 d-flex align-items-center flex-column" onClick={() => handleShow(product)}>+ Ajouter au panier</Button>
                                         </Card.Footer>                                       
                                     </Card>
-                                ) : (
+                                ) : sessionStorage.getItem("typeUser") === "COOPERATIVE" ? (
                                     <Card className="flex-fill card-flyer" style={{marginTop : "20px"}}  key={product.idProduit}>
                                         <Card.Img className='image-box' variant="top" 
                                         src={images.find(image => image.categorieProduit === product.categorieProduit)?.src} />
@@ -165,6 +233,45 @@ function Home() {
                                         <Card.Footer className='text-center'>
                                         <small className="text-lg">{product.prixProduit} Ar/{product.uniteProduit}</small>
                                         </Card.Footer>
+                                    </Card>
+                                ) : sessionStorage.getItem("typeUser") === "AGRICULTEUR" ? (
+                                    <Card className="flex-fill card-flyer" style={{marginTop : "20px"}}  key={product.idProduit}>
+                                        <Card.Img className='image-box' variant="top" 
+                                        src={images.find(image => image.categorieProduit === product.categorieProduit)?.src} />
+                                        <Card.Body>
+                                        <Card.Title className='text-black initialism mb-4'>{product.nomProduit}</Card.Title>
+                                        <Card.Text>
+                                            {product.descriptionProduit}
+                                        </Card.Text>
+                                        </Card.Body>
+                                        <Card.Footer>
+                                        <Card.Text className='text-success mb-0'><span className='text-primary'>Catégorie :</span> {product.categorieProduit}</Card.Text>
+                                        <Card.Text className='text-primary'>Quantité disponible : <span className='text-success'>{product.stockProduit}{product.uniteProduit}</span></Card.Text>
+                                        </Card.Footer>
+                                        <Card.Footer className='text-center'>
+                                        <small className="text-lg">{product.prixProduit} Ar/{product.uniteProduit}</small>
+                                        </Card.Footer>
+                                    </Card>
+                                ) : (
+                                    <Card className="flex-fill card-flyer" style={{marginTop : "20px"}}>
+                                        <Card.Img className='image-box' variant="top" 
+                                        src={images.find(image => image.categorieProduit === product.categorieProduit)?.src} />
+                                        <Card.Body>
+                                        <Card.Title className='text-black initialism mb-4'>{product.nomProduit}</Card.Title>
+                                        <Card.Text>
+                                            {product.descriptionProduit}
+                                        </Card.Text>
+                                        </Card.Body>
+                                        <Card.Footer>
+                                        <Card.Text className='text-success mb-0'><span className='text-primary'>Catégorie :</span> {product.categorieProduit}</Card.Text>
+                                        <Card.Text className='text-primary'>Quantité disponible : <span className='text-success'>{product.stockProduit}{product.uniteProduit}</span></Card.Text>
+                                        </Card.Footer>
+                                        <Card.Footer className='text-center'>
+                                        <small className="text-lg">{product.prixProduit} Ar/{product.uniteProduit}</small>
+                                        </Card.Footer>
+                                        <Card.Footer className='text-center'>
+                                        <Button className="primary w-100 d-flex align-items-center flex-column" onClick={redirect}>+ Ajouter au panier</Button>
+                                        </Card.Footer>                                       
                                     </Card>
                                 )}
                                 </Col>
@@ -193,21 +300,8 @@ function Home() {
             </Card.Body>
             </Card>
 
-            {/* <Modal show={show} onHide={handleHide}>
-                <Modal.Header closeButton>
-                <Modal.Title>Retirer un produit du panier</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                Êtes-vous sûr de vouloir retirer {productToRemove && productToRemove.nomProduit} du panier ?
-                </Modal.Body>
-                <Modal.Footer>
-                <Button variant="secondary" onClick={handleHide}>Annuler</Button>
-                <Button variant="danger" onClick={handleConfirm}>Retirer</Button>
-                </Modal.Footer>
-            </Modal> */}
-
             <Modal show={show} onHide={handleHide}>
-            <Modal.Header closeButton countPanier={panier.length}>
+            <Modal.Header closeButton>
                 <Modal.Title>Choisir quantité</Modal.Title>
             </Modal.Header>
             <Modal.Body>
@@ -234,7 +328,7 @@ function Home() {
                                 min="1"
                                 max={product.stockProduit}
                                 value={product.quantite}
-                                onChange={(e) => handleChange(e, index)}
+                                onChange={(e) => setQuantite(e.target.value)}
                                 style={{ marginTop: "10px" }}
                             />
                             Total prix par produit:{" "}
@@ -243,16 +337,16 @@ function Home() {
                         </Card.Body>
                         <Card.Footer className='text-center'>
                         <Button variant='danger' className='w-100 d-flex align-items-center flex-column' onClick={() => handleConfirm(produit)}>Retirer</Button>
-                        <ToastContainer />
                         </Card.Footer>
                         </Card>
                     );
                 })}
                 </Modal.Body>
                 <Modal.Footer>
-                <Button variant="primary" className='w-100 d-flex align-items-center flex-column' onClick={() => handleClick(produit)}>
+                <Button variant="primary" className='w-100 d-flex align-items-center flex-column' onClick={ajoutPanier}>
                     Ajouter au panier
                 </Button>
+                <ToastContainer />
                 <br />
                 </Modal.Footer>
                 
