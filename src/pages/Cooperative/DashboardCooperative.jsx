@@ -15,6 +15,8 @@ import ListAgriculteur from '../../components/ListAgriculteur';
 
 function Dashboard() {
    const idCooperative = sessionStorage.getItem("idUser");
+
+   const nom = sessionStorage.getItem("nom")
    
     const [activeMenu, setActiveMenu] = useState(0);
     
@@ -52,7 +54,6 @@ function Dashboard() {
     navigate(path)
   }
     return (
-      <div id="wrapper" className='side'>
         <>
         <title>Mihary'ket - Dashboard Coopérative</title>
         <ProduitsList/>
@@ -298,7 +299,7 @@ function Dashboard() {
                         <li className="nav-item dropdown no-arrow">
                             <a className="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span className="mr-2 d-none d-lg-inline text-gray-600 small">Nom Coopérative</span>
+                                <span className="mr-2 d-none d-lg-inline text-gray-600 small">{nom}</span>
                                 <img src='../src/images/user.png' width={24} height={24} alt='profil'/>
                             </a>
                             
