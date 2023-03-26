@@ -8,6 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { Navigate, useNavigate } from "react-router-dom";
 import StatCooperative from "./StatCooperative";
 import axios from "axios";
+import { MDBBadge, MDBBtn, MDBTable, MDBTableHead, MDBTableBody } from 'mdb-react-ui-kit';
 
 function AjouterProduit() {
 
@@ -209,7 +210,7 @@ function AjouterProduit() {
   };
 
   return (
-    <div className="mt-5 mb-5">
+    <div className="mt-5 mb-5 text-black">
       <h1 className="text-center mt-5">Detail produits</h1>
       <h2 className="text-center">
         <div className="sidebar-brand-icon">
@@ -237,8 +238,8 @@ function AjouterProduit() {
               Ajouter
             </button>
           </h1>
-          <Table striped bordered hover responsive style={{ fontSize: "0.9rem" }} className="text-black">
-            <thead>
+          <MDBTable  striped bordered hover responsive style={{ fontSize: "0.9rem" }} className="text-black text-center">
+            <MDBTableHead>
               <tr>
                 <th>Nom du produit</th>
                 <th >Catégorie</th>
@@ -248,20 +249,20 @@ function AjouterProduit() {
                 <th >Unité</th>
                 <th >Modifier prix</th>
               </tr>
-            </thead>
-            <tbody>
+            </MDBTableHead>
+            <MDBTableBody>
               {resultats
               
               .map((resultat, index) => (
                 <tr key={index}>
-                  <td>{resultat.nomProduit}</td>
-                  <td>{resultat.categorieProduit}</td>
-                  <td>{resultat.prixProduit}</td>
-                  <td>{resultat.stockProduit}</td>
-                  <td>{resultat.photoProduit && (
+                  <td className="align-middle">{resultat.nomProduit}</td>
+                  <td className="align-middle">{resultat.categorieProduit}</td>
+                  <td className="align-middle">{resultat.prixProduit}</td>
+                  <td className="align-middle">{resultat.stockProduit}</td>
+                  <td className="align-middle">{resultat.photoProduit && (
                 <img width={"100px"}  src={`data:image/jpeg;base64,${resultat.photoProduit}`} alt={resultat.nomProduit} />
               )}</td>
-                  <td >{resultat.uniteProduit}</td>
+                  <td className="align-middle">{resultat.uniteProduit}</td>
                   <td>
                     <button
                       className="btn btn-link"
@@ -281,8 +282,8 @@ function AjouterProduit() {
                   </td>
                 </tr>
               ))}
-            </tbody>
-          </Table>
+            </MDBTableBody>
+          </MDBTable >
         </Col>
 
       </Row>

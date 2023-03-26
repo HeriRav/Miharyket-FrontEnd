@@ -170,7 +170,7 @@ const Header = () => {
                     {sessionStorage.getItem('typeUser') === "CLIENT" ? (
                       <ul className="site-menu main-menu js-clone-nav mr-auto d-none pl-0 d-lg-block">
                         <li>
-                          <Link className="nav-link text-left text-white">
+                          <Link className="nav-link text-left">
                           <div className="btn-group">                            
                             <nav type="button" className="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                               <img src='../src/images/user-reverse.png' width={24} height={24} alt='profil'/>&nbsp;
@@ -205,7 +205,7 @@ const Header = () => {
                     ) : sessionStorage.getItem("typeUser") === "COOPERATIVE" ? (
                       <ul className="site-menu main-menu js-clone-nav mr-auto d-none pl-0 d-lg-block">
                         <li>
-                          <Link className="nav-link text-left text-white">
+                          <Link className="nav-link text-left">
                           <div className="btn-group">                            
                             <nav type="button" className="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                               <img src='../src/images/user-reverse.png' width={24} height={24} alt='profil'/>&nbsp;
@@ -231,7 +231,7 @@ const Header = () => {
                     ) : sessionStorage.getItem("typeUser") === "AGRICULTEUR" ? (
                       <ul className="site-menu main-menu js-clone-nav mr-auto d-none pl-0 d-lg-block">
                         <li>
-                          <Link className="nav-link text-left text-white">
+                          <Link className="nav-link text-left">
                           <div className="btn-group">                            
                             <nav type="button" className="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                               <img src='../src/images/user-reverse.png' width={24} height={24} alt='profil'/>&nbsp;
@@ -257,7 +257,7 @@ const Header = () => {
                     ) : (
                       <ul className="site-menu main-menu js-clone-nav mr-auto d-none pl-0 d-lg-block">
                         <li>
-                          <Link className="nav-link text-left text-white">
+                          <Link className="nav-link text-left">
                           <div className="btn-group">                            
                             <nav type="button" className="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                               <img src='../src/images/user-reverse.png' width={24} height={24} alt='profil'/>&nbsp;
