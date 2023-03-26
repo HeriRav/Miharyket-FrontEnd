@@ -158,8 +158,6 @@ function Home() {
     }
 
     const redirect = (id, nom, price) => {
-        // navigate('/authentification')
-        // toast.warning("Veuillez vous connecter")
 
         /*
             1. créer une variable dans le localstorage
@@ -178,6 +176,11 @@ function Home() {
            
             setCount(count + 1)
             localStorage.setItem("nb_article", count);
+    }
+
+    const needLogin = () => {
+        navigate('/authentification')
+        toast.warning("Vous devez vous connecter")
     }
 
     return (
@@ -210,7 +213,7 @@ function Home() {
                 {produit &&
                     produit
                     .filter((product) => product.stockProduit !== 0)
-                    .slice(0, 8)                    
+                    .slice(0, 8)
                     .map((product) => {
                         return (
                             <div className='container-sm' key={product.idProduit}>
@@ -290,7 +293,7 @@ function Home() {
                                         <small className="text-lg">{product.prixProduit} Ar/{product.uniteProduit}</small>
                                         </Card.Footer>
                                         <Card.Footer className='text-center'>
-                                        <Button className="primary w-100 d-flex align-items-center flex-column" onClick={redirect}>+ Ajouter au panier</Button>
+                                        <Button className="primary w-100 d-flex align-items-center flex-column" onClick={needLogin}>+ Ajouter au panier</Button>
                                         </Card.Footer>                                       
                                     </Card>
                                 )}
@@ -301,7 +304,7 @@ function Home() {
                 </Row><br/>
             </div>
 
-            <div
+            {/* <div
                 style={{
                 backgroundColor: "#ebebeb",
                 display: "flex",
@@ -318,7 +321,7 @@ function Home() {
                 </Button>
                 </Card.Text>
             </Card.Body>
-            </Card>
+            </Card> */}
 {/* 
             <Modal show={show} onHide={handleHide}>
             <Modal.Header closeButton>
@@ -371,7 +374,7 @@ function Home() {
                 </Modal.Footer>
                 
                 </Modal> */}
-            </div>           
+            {/* </div> */}
         </div>
     )
 }

@@ -56,10 +56,11 @@ function Product() {
                     <button className='btn-dark text-white p-1 px-2 mx-5 btn fw-bold' >Produit arômatique</button>
                     <button className='btn-dark text-white p-1 px-2 mx-5 btn fw-bold' >Tous</button>
                 </div>
+                <h1 style={{textAlign : "center"}}>Fruits</h1>
                 <Row lg={4}>
                     {produit &&
                         produit
-                        .filter((product) => product.stockProduit !== 0)
+                        .filter((product) => product.stockProduit !== 0 && product.categorieProduit === "Fruit")
                         .map((product) => {
                         return (
                             <div className='container-sm' key={product.idProduit}>
@@ -82,11 +83,281 @@ function Product() {
                                     <small className="text-lg">{product.prixProduit} Ar/{product.uniteProduit}</small>
                                     </Card.Footer>
                                     <Card.Footer className='text-center'>
-                                    <Button className="primary" onClick={() => handleShow(product)}>Ajouter au panier</Button><br/>
+                                    <Button className="primary w-100 d-flex align-items-center flex-column" onClick={() => handleShow(product)}>+ Ajouter au panier</Button>
                                     </Card.Footer>
                                 </Card>
                             ) : (
-                                <Card className="flex-fill card-flyer" style={{marginTop : "20px"}}  key={product.idProduit}>
+                                <Card className="flex-fill card-flyer" style={{marginTop : "20px"}}>
+                                    <Card.Img className='image-box' variant="top" 
+                                    src={images.find(image => image.categorieProduit === product.categorieProduit)?.src} />
+                                    <Card.Body>
+                                    <Card.Title className='text-black initialism mb-4'>{product.nomProduit}</Card.Title>
+                                    <Card.Text>
+                                        {product.descriptionProduit}
+                                    </Card.Text>
+                                    </Card.Body>
+                                    <Card.Footer>
+                                    <Card.Text className='text-success mb-0'><span className='text-primary'>Catégorie :</span> {product.categorieProduit}</Card.Text>
+                                    <Card.Text className='text-primary'>Quantité disponible : <span className='text-success'>{product.stockProduit}{product.uniteProduit}</span></Card.Text>
+                                    </Card.Footer>
+                                    <Card.Footer className='text-center'>
+                                    <small className="text-lg">{product.prixProduit} Ar/{product.uniteProduit}</small>
+                                    </Card.Footer>
+                                </Card>
+                            )}
+                            </Col>
+                            </div>
+                        );
+                    })}
+                </Row><br/>
+                <h1 style={{textAlign : "center"}}>Légumes</h1>
+                <Row lg={4}>
+                    {produit &&
+                        produit
+                        .filter((product) => product.stockProduit !== 0 && product.categorieProduit === "Légume")
+                        .map((product) => {
+                        return (
+                            <div className='container-sm' key={product.idProduit}>
+                            <Col className="d-flex">
+                            {sessionStorage.getItem("typeUser") == "CLIENT" ? (
+                                <Card className="flex-fill card-flyer" style={{marginTop : "20px"}}>
+                                    <Card.Img className='image-box' variant="top" 
+                                    src={images.find(image => image.categorieProduit === product.categorieProduit)?.src} />
+                                    <Card.Body>
+                                    <Card.Title className='text-black initialism mb-4'>{product.nomProduit}</Card.Title>
+                                    <Card.Text>
+                                        {product.descriptionProduit}
+                                    </Card.Text>
+                                    </Card.Body>
+                                    <Card.Footer>
+                                    <Card.Text className='text-success mb-0'><span className='text-primary'>Catégorie :</span> {product.categorieProduit}</Card.Text>
+                                    <Card.Text className='text-primary'>Quantité disponible : <span className='text-success'>{product.stockProduit}{product.uniteProduit}</span></Card.Text>
+                                    </Card.Footer>
+                                    <Card.Footer className='text-center'>
+                                    <small className="text-lg">{product.prixProduit} Ar/{product.uniteProduit}</small>
+                                    </Card.Footer>
+                                    <Card.Footer className='text-center'>
+                                    <Button className="primary w-100 d-flex align-items-center flex-column" onClick={() => handleShow(product)}>+ Ajouter au panier</Button>
+                                    </Card.Footer>
+                                </Card>
+                            ) : (
+                                <Card className="flex-fill card-flyer" style={{marginTop : "20px"}}>
+                                    <Card.Img className='image-box' variant="top" 
+                                    src={images.find(image => image.categorieProduit === product.categorieProduit)?.src} />
+                                    <Card.Body>
+                                    <Card.Title className='text-black initialism mb-4'>{product.nomProduit}</Card.Title>
+                                    <Card.Text>
+                                        {product.descriptionProduit}
+                                    </Card.Text>
+                                    </Card.Body>
+                                    <Card.Footer>
+                                    <Card.Text className='text-success mb-0'><span className='text-primary'>Catégorie :</span> {product.categorieProduit}</Card.Text>
+                                    <Card.Text className='text-primary'>Quantité disponible : <span className='text-success'>{product.stockProduit}{product.uniteProduit}</span></Card.Text>
+                                    </Card.Footer>
+                                    <Card.Footer className='text-center'>
+                                    <small className="text-lg">{product.prixProduit} Ar/{product.uniteProduit}</small>
+                                    </Card.Footer>
+                                </Card>
+                            )}
+                            </Col>
+                            </div>
+                        );
+                    })}
+                </Row><br/>
+                <h1 style={{textAlign : "center"}}>Viandes</h1>
+                <Row lg={4}>
+                    {produit &&
+                        produit
+                        .filter((product) => product.stockProduit !== 0 && product.categorieProduit === "Viande")
+                        .map((product) => {
+                        return (
+                            <div className='container-sm' key={product.idProduit}>
+                            <Col className="d-flex">
+                            {sessionStorage.getItem("typeUser") == "CLIENT" ? (
+                                <Card className="flex-fill card-flyer" style={{marginTop : "20px"}}>
+                                    <Card.Img className='image-box' variant="top" 
+                                    src={images.find(image => image.categorieProduit === product.categorieProduit)?.src} />
+                                    <Card.Body>
+                                    <Card.Title className='text-black initialism mb-4'>{product.nomProduit}</Card.Title>
+                                    <Card.Text>
+                                        {product.descriptionProduit}
+                                    </Card.Text>
+                                    </Card.Body>
+                                    <Card.Footer>
+                                    <Card.Text className='text-success mb-0'><span className='text-primary'>Catégorie :</span> {product.categorieProduit}</Card.Text>
+                                    <Card.Text className='text-primary'>Quantité disponible : <span className='text-success'>{product.stockProduit}{product.uniteProduit}</span></Card.Text>
+                                    </Card.Footer>
+                                    <Card.Footer className='text-center'>
+                                    <small className="text-lg">{product.prixProduit} Ar/{product.uniteProduit}</small>
+                                    </Card.Footer>
+                                    <Card.Footer className='text-center'>
+                                    <Button className="primary w-100 d-flex align-items-center flex-column" onClick={() => handleShow(product)}>+ Ajouter au panier</Button>
+                                    </Card.Footer>
+                                </Card>
+                            ) : (
+                                <Card className="flex-fill card-flyer" style={{marginTop : "20px"}}>
+                                    <Card.Img className='image-box' variant="top" 
+                                    src={images.find(image => image.categorieProduit === product.categorieProduit)?.src} />
+                                    <Card.Body>
+                                    <Card.Title className='text-black initialism mb-4'>{product.nomProduit}</Card.Title>
+                                    <Card.Text>
+                                        {product.descriptionProduit}
+                                    </Card.Text>
+                                    </Card.Body>
+                                    <Card.Footer>
+                                    <Card.Text className='text-success mb-0'><span className='text-primary'>Catégorie :</span> {product.categorieProduit}</Card.Text>
+                                    <Card.Text className='text-primary'>Quantité disponible : <span className='text-success'>{product.stockProduit}{product.uniteProduit}</span></Card.Text>
+                                    </Card.Footer>
+                                    <Card.Footer className='text-center'>
+                                    <small className="text-lg">{product.prixProduit} Ar/{product.uniteProduit}</small>
+                                    </Card.Footer>
+                                </Card>
+                            )}
+                            </Col>
+                            </div>
+                        );
+                    })}
+                </Row><br/>
+                <h1 style={{textAlign : "center"}}>Céréales</h1>
+                <Row lg={4}>
+                    {produit &&
+                        produit
+                        .filter((product) => product.stockProduit !== 0 && product.categorieProduit === "Céréale")
+                        .map((product) => {
+                        return (
+                            <div className='container-sm' key={product.idProduit}>
+                            <Col className="d-flex">
+                            {sessionStorage.getItem("typeUser") == "CLIENT" ? (
+                                <Card className="flex-fill card-flyer" style={{marginTop : "20px"}}>
+                                    <Card.Img className='image-box' variant="top" 
+                                    src={images.find(image => image.categorieProduit === product.categorieProduit)?.src} />
+                                    <Card.Body>
+                                    <Card.Title className='text-black initialism mb-4'>{product.nomProduit}</Card.Title>
+                                    <Card.Text>
+                                        {product.descriptionProduit}
+                                    </Card.Text>
+                                    </Card.Body>
+                                    <Card.Footer>
+                                    <Card.Text className='text-success mb-0'><span className='text-primary'>Catégorie :</span> {product.categorieProduit}</Card.Text>
+                                    <Card.Text className='text-primary'>Quantité disponible : <span className='text-success'>{product.stockProduit}{product.uniteProduit}</span></Card.Text>
+                                    </Card.Footer>
+                                    <Card.Footer className='text-center'>
+                                    <small className="text-lg">{product.prixProduit} Ar/{product.uniteProduit}</small>
+                                    </Card.Footer>
+                                    <Card.Footer className='text-center'>
+                                    <Button className="primary w-100 d-flex align-items-center flex-column" onClick={() => handleShow(product)}>+ Ajouter au panier</Button>
+                                    </Card.Footer>
+                                </Card>
+                            ) : (
+                                <Card className="flex-fill card-flyer" style={{marginTop : "20px"}}>
+                                    <Card.Img className='image-box' variant="top" 
+                                    src={images.find(image => image.categorieProduit === product.categorieProduit)?.src} />
+                                    <Card.Body>
+                                    <Card.Title className='text-black initialism mb-4'>{product.nomProduit}</Card.Title>
+                                    <Card.Text>
+                                        {product.descriptionProduit}
+                                    </Card.Text>
+                                    </Card.Body>
+                                    <Card.Footer>
+                                    <Card.Text className='text-success mb-0'><span className='text-primary'>Catégorie :</span> {product.categorieProduit}</Card.Text>
+                                    <Card.Text className='text-primary'>Quantité disponible : <span className='text-success'>{product.stockProduit}{product.uniteProduit}</span></Card.Text>
+                                    </Card.Footer>
+                                    <Card.Footer className='text-center'>
+                                    <small className="text-lg">{product.prixProduit} Ar/{product.uniteProduit}</small>
+                                    </Card.Footer>
+                                </Card>
+                            )}
+                            </Col>
+                            </div>
+                        );
+                    })}
+                </Row><br/>
+                <h1 style={{textAlign : "center"}}>Produits laitiers</h1>
+                <Row lg={4}>
+                    {produit &&
+                        produit
+                        .filter((product) => product.stockProduit !== 0 && product.categorieProduit === "Produit laitier")
+                        .map((product) => {
+                        return (
+                            <div className='container-sm' key={product.idProduit}>
+                            <Col className="d-flex">
+                            {sessionStorage.getItem("typeUser") == "CLIENT" ? (
+                                <Card className="flex-fill card-flyer" style={{marginTop : "20px"}}>
+                                    <Card.Img className='image-box' variant="top" 
+                                    src={images.find(image => image.categorieProduit === product.categorieProduit)?.src} />
+                                    <Card.Body>
+                                    <Card.Title className='text-black initialism mb-4'>{product.nomProduit}</Card.Title>
+                                    <Card.Text>
+                                        {product.descriptionProduit}
+                                    </Card.Text>
+                                    </Card.Body>
+                                    <Card.Footer>
+                                    <Card.Text className='text-success mb-0'><span className='text-primary'>Catégorie :</span> {product.categorieProduit}</Card.Text>
+                                    <Card.Text className='text-primary'>Quantité disponible : <span className='text-success'>{product.stockProduit}{product.uniteProduit}</span></Card.Text>
+                                    </Card.Footer>
+                                    <Card.Footer className='text-center'>
+                                    <small className="text-lg">{product.prixProduit} Ar/{product.uniteProduit}</small>
+                                    </Card.Footer>
+                                    <Card.Footer className='text-center'>
+                                    <Button className="primary w-100 d-flex align-items-center flex-column" onClick={() => handleShow(product)}>+ Ajouter au panier</Button>
+                                    </Card.Footer>
+                                </Card>
+                            ) : (
+                                <Card className="flex-fill card-flyer" style={{marginTop : "20px"}}>
+                                    <Card.Img className='image-box' variant="top" 
+                                    src={images.find(image => image.categorieProduit === product.categorieProduit)?.src} />
+                                    <Card.Body>
+                                    <Card.Title className='text-black initialism mb-4'>{product.nomProduit}</Card.Title>
+                                    <Card.Text>
+                                        {product.descriptionProduit}
+                                    </Card.Text>
+                                    </Card.Body>
+                                    <Card.Footer>
+                                    <Card.Text className='text-success mb-0'><span className='text-primary'>Catégorie :</span> {product.categorieProduit}</Card.Text>
+                                    <Card.Text className='text-primary'>Quantité disponible : <span className='text-success'>{product.stockProduit}{product.uniteProduit}</span></Card.Text>
+                                    </Card.Footer>
+                                    <Card.Footer className='text-center'>
+                                    <small className="text-lg">{product.prixProduit} Ar/{product.uniteProduit}</small>
+                                    </Card.Footer>
+                                </Card>
+                            )}
+                            </Col>
+                            </div>
+                        );
+                    })}
+                </Row><br/>
+                <h1 style={{textAlign : "center"}}>Produits arômatiques</h1>
+                <Row lg={4}>
+                    {produit &&
+                        produit
+                        .filter((product) => product.stockProduit !== 0 && product.categorieProduit === "Produit arômatique")
+                        .map((product) => {
+                        return (
+                            <div className='container-sm' key={product.idProduit}>
+                            <Col className="d-flex">
+                            {sessionStorage.getItem("typeUser") == "CLIENT" ? (
+                                <Card className="flex-fill card-flyer" style={{marginTop : "20px"}}>
+                                    <Card.Img className='image-box' variant="top" 
+                                    src={images.find(image => image.categorieProduit === product.categorieProduit)?.src} />
+                                    <Card.Body>
+                                    <Card.Title className='text-black initialism mb-4'>{product.nomProduit}</Card.Title>
+                                    <Card.Text>
+                                        {product.descriptionProduit}
+                                    </Card.Text>
+                                    </Card.Body>
+                                    <Card.Footer>
+                                    <Card.Text className='text-success mb-0'><span className='text-primary'>Catégorie :</span> {product.categorieProduit}</Card.Text>
+                                    <Card.Text className='text-primary'>Quantité disponible : <span className='text-success'>{product.stockProduit}{product.uniteProduit}</span></Card.Text>
+                                    </Card.Footer>
+                                    <Card.Footer className='text-center'>
+                                    <small className="text-lg">{product.prixProduit} Ar/{product.uniteProduit}</small>
+                                    </Card.Footer>
+                                    <Card.Footer className='text-center'>
+                                    <Button className="primary w-100 d-flex align-items-center flex-column" onClick={() => handleShow(product)}>+ Ajouter au panier</Button>
+                                    </Card.Footer>
+                                </Card>
+                            ) : (
+                                <Card className="flex-fill card-flyer" style={{marginTop : "20px"}}>
                                     <Card.Img className='image-box' variant="top" 
                                     src={images.find(image => image.categorieProduit === product.categorieProduit)?.src} />
                                     <Card.Body>
