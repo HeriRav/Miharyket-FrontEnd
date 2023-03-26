@@ -21,8 +21,6 @@ function App() {
   return (
     <>
       <Layout />
-    <ListAgriculteur />
-    <ProduitsList/>
     <CooperativeList/>
     <UserList/>
     </>

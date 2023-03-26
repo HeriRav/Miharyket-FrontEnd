@@ -7,6 +7,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Navigate, useNavigate } from "react-router-dom";
 import StatCooperative from "./StatCooperative";
+import axios from "axios";
 
 function AjouterProduit() {
 
@@ -42,24 +43,25 @@ function AjouterProduit() {
     // e.preventDefault()
     // Effectuer une requête HTTP pour mettre à jour le prix dans la base de données
     // Puis fermer le modal en appelant la fonction onHide
-    const currentproduct={
-      nomProduit: produit,
-      categorieProduit: categorie,
-      descriptionProduit: description,
-      uniteProduit: unite,
-      prixProduit: nouveauPrix,
-      stockProduit: stockProduit,
-    }
+    const currentproduct = new FormData();
+       
+        
+    currentproduct.append('file', photo);
+    currentproduct.append('nomProduit', produit);
+    currentproduct.append('prixProduit', prix);
+    currentproduct.append('categorieProduit', categorie);
+    currentproduct.append('uniteProduit', unite);
+    currentproduct.append('stockProduit', 0);
+    currentproduct.append('descriptionProduit', description);
+    currentproduct.append('referenceProduit', sessionStorage.getItem('idCoop'));
   
-    fetch(`http://localhost:8085/produits/${idProduit}`, {
-      method: "PUT", 
-      mode: "cors",          
-      headers: { 
-        "Content-Type": "application/json",
-        'Access-Control-Allow-Origin':'*' 
-      }, 
-      body: JSON.stringify(currentproduct)
-    }).then(() => {
+    axios.put(`http://localhost:8085/produits/${idProduit}`, currentproduct , {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+      'Access-Control-Allow-Origin':'*' 
+    }
+  })
+.then(() => {
         toast.success('Le produit a été enregistré avec succès')
         setTimeout(() => {
           setShowModal(false)
@@ -98,19 +100,23 @@ function AjouterProduit() {
   const handleSubmit = (event) => {
     event.preventDefault();    
     if (validate()) {
-      const nouveauProduit = {
-        nomProduit: produit,
-        categorieProduit: categorie,
-        descriptionProduit: description,
-        referenceProduit :  idCoop,
-        uniteProduit: unite,
-        prixProduit: prix,
-        stockProduit: 0,
-        //photo: photoUrl, // <-- set the photo property to the URL
-      };
-      fetch("http://localhost:8085/produits/ajout", {
-        method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(nouveauProduit)
-      }).then(() => {
+      const nouveauProduit = new FormData();
+       
+        
+      nouveauProduit.append('file', photo);
+      nouveauProduit.append('nomProduit', produit);
+      nouveauProduit.append('prixProduit', prix);
+      nouveauProduit.append('categorieProduit', categorie);
+      nouveauProduit.append('uniteProduit', unite);
+      nouveauProduit.append('stockProduit', 0);
+      nouveauProduit.append('descriptionProduit', description);
+      nouveauProduit.append('referenceProduit', sessionStorage.getItem('idCoop'));
+        
+      axios.post("http://localhost:8085/produits/ajout", nouveauProduit, {
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  }).then(() => {
         toast.success('Le produit a été enregistré avec succès')
         setTimeout(() => {
           setCreateModal(false)
@@ -238,6 +244,7 @@ function AjouterProduit() {
                 <th >Catégorie</th>
                 <th >Prix actuel</th>
                 <th>Stock</th>
+                <th>Photo</th>
                 <th >Unité</th>
                 <th >Modifier prix</th>
               </tr>
@@ -251,6 +258,9 @@ function AjouterProduit() {
                   <td>{resultat.categorieProduit}</td>
                   <td>{resultat.prixProduit}</td>
                   <td>{resultat.stockProduit}</td>
+                  <td>{resultat.photoProduit && (
+                <img width={"100px"}  src={`data:image/jpeg;base64,${resultat.photoProduit}`} alt={resultat.nomProduit} />
+              )}</td>
                   <td >{resultat.uniteProduit}</td>
                   <td>
                     <button
@@ -347,7 +357,8 @@ function AjouterProduit() {
                 <Form.Group as={Col} sm={12} controlId="photo">
                   <Form.Label className="mt-4">Photo</Form.Label>
                   <div className="d-flex align-items-center">
-                    <Form.Control type="file" onChange={handlePhotoChange} />
+                    <Form.Control type="file" id="photoProduit"
+          name="photoProduit" onChange={handlePhotoChange} />
                     {photoUrl && (
                       <img
                         src={photoUrl}

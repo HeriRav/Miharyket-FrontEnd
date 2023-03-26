@@ -5,12 +5,13 @@ import { useState } from 'react';
 import '../../css/dashboardCooperative.css'
 import miharyImage from "../../../mihary_logo_dark.png";
 import DashboardFooter from './DashboardFooter'
-
+import ProduitsList from '../../components/ProduitsList';
 import PaiementAgriculteur from './PaiementAgriculteur';
 import ListeMembre from './ListeMembre';
 import StatCooperative from './StatCooperative';
 import ApprovisionementProduitCooperative from './ApprovisionnementProduitCooperative';
 import AjouterProduit from './AjouterProduit';
+import ListAgriculteur from '../../components/ListAgriculteur';
 
 function Dashboard() {
    const idCooperative = sessionStorage.getItem("idUser");
@@ -51,8 +52,11 @@ function Dashboard() {
     navigate(path)
   }
     return (
+      <div id="wrapper" className='side'>
         <>
         <title>Mihary'ket - Dashboard Coopérative</title>
+        <ProduitsList/>
+        <ListAgriculteur />
         <div id="wrapper" className='side'>
         <ul className="navbar-nav bg-gradient-dark sidebar sidebar-dark accordion sidenav" id="accordionSidebar">
             <div className="sidebar-brand d-flex align-items-center justify-content-center">
