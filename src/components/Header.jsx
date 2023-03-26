@@ -1,7 +1,7 @@
 import { Link, Navigate, NavLink, Route, Routes } from 'react-router-dom'
 import Home from '../pages/Home'
 import About from '../pages/About'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { Button, Navbar } from 'react-bootstrap'
 import Product from '../pages/Product'
 import { Avatar } from 'antd'
@@ -22,7 +22,7 @@ const Header = () => {
   // const util = userEmail.nomUtilisateur
 
   const [email, setEmail] = useState("")
-
+  const [counter, setCounter] = useState(localStorage.getItem("nb_article"))
   const EndSession = () => {
     sessionStorage.clear()
     localStorage.clear()
@@ -197,7 +197,7 @@ const Header = () => {
                             <MDBIcon fas icon="fa-solid fa-shopping-cart fa-lg" style={{ color: '#fff', position : "relative"}}/>
                             <div className='rounded-circle bg-danger d-flex justify-content-center aligh-items-center' 
                             style={{width : "1.5rem", height : "1.5rem", position : "absolute", bottom : "0", right : "0", transform : "translate(-25%, -25%)", color : "white"}}>
-                              
+                              2
                             </div>
                           </Link>
                         </li>
