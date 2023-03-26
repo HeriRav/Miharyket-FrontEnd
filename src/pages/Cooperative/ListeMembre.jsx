@@ -143,7 +143,7 @@ function ListeMembre() {
 
   return (
     <div>
-      <h1>Liste des agriculteurs membres
+      <h1 className='text-black'>Liste des agriculteurs membres
         <Button variant="success" onClick={() => setShowModal(true)} className="float-right">
           <i className='fas fa-plus-circle fa-lg fa-fw mr-2'></i>
           Ajouter
