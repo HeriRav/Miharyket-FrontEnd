@@ -4,17 +4,19 @@ import Card from 'react-bootstrap/Card';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import CardGroup from 'react-bootstrap/CardGroup';
-import { useEffect, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import { Link, useNavigate } from 'react-router-dom';
-import { Modal, Form } from "react-bootstrap";
+// import { Modal, Form } from "react-bootstrap";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
 
 function Home() {
+    //créaction d'une variable pour compter le nombre d'arcticle
+    let [count, setCount] = useState(localStorage.getItem("nb_article") == null ? 1 : localStorage.getItem("nb_article"));
+    
     const [produit, setProd] = useState([])
-
     const [panier, setPanier] = useState([]);
 
     let navigate = useNavigate()
@@ -155,15 +157,33 @@ function Home() {
         }
     }
 
-    const redirect = () => {
-        navigate('/authentification')
-        toast.warning("Veuillez vous connecter")
+    const redirect = (id, nom, price) => {
+        // navigate('/authentification')
+        // toast.warning("Veuillez vous connecter")
+
+        /*
+            1. créer une variable dans le localstorage
+            2. envoyer l'id du produit, le prix unitaire et la quantité par défaut (1) dans localstorage
+            3. mettre à jour le nombre d'article sélectionné (badge de notification)
+        */            
+            if(localStorage.getItem(nom) == null) {                
+                localStorage.setItem(nom,  JSON.stringify({nom: nom, id: id, price: price, quantity: 1}) );           
+            }
+            else {                
+                let item = JSON.parse(localStorage.getItem(nom)); 
+                item.quantity++;
+
+                localStorage.setItem(nom,  JSON.stringify(item) );           
+            }            
+           
+            setCount(count + 1)
+            localStorage.setItem("nb_article", count);
     }
 
     return (
         <div>           
             <title>Mihary'ket - Page d'accueil</title>
-
+           
             {/* <div class="hero-slide owl-carousel site-blocks-cover"> */}
                 <div className="intro-section" style={{backgroundImage : "url('/src/images/hero_1.jpg')"}}>
                     <div className="container">
@@ -213,7 +233,7 @@ function Home() {
                                         <small className="text-lg">{product.prixProduit} Ar/{product.uniteProduit}</small>
                                         </Card.Footer>
                                         <Card.Footer className='text-center'>
-                                        <Button className="primary w-100 d-flex align-items-center flex-column" onClick={() => handleShow(product)}>+ Ajouter au panier</Button>
+                                        <Button className="primary w-100 d-flex align-items-center flex-column" onClick={() => redirect(product.idProduit, product.nomProduit, product.prixProduit)}>+ Ajouter au panier</Button>
                                         </Card.Footer>                                       
                                     </Card>
                                 ) : sessionStorage.getItem("typeUser") === "COOPERATIVE" ? (
@@ -299,7 +319,7 @@ function Home() {
                 </Card.Text>
             </Card.Body>
             </Card>
-
+{/* 
             <Modal show={show} onHide={handleHide}>
             <Modal.Header closeButton>
                 <Modal.Title>Choisir quantité</Modal.Title>
@@ -350,8 +370,8 @@ function Home() {
                 <br />
                 </Modal.Footer>
                 
-                </Modal>
-            </div>
+                </Modal> */}
+            </div>           
         </div>
     )
 }
