@@ -183,6 +183,24 @@ function Home() {
         toast.warning("Vous devez vous connecter")
     }
 
+    const responsive = {
+        desktop: {
+          breakpoint: { max: 3000, min: 1024 },
+          items: 4,
+          slidesToSlide: 1 // optional, default to 1.
+        },
+        tablet: {
+          breakpoint: { max: 1024, min: 464 },
+          items: 2,
+          slidesToSlide: 1 // optional, default to 1.
+        },
+        mobile: {
+          breakpoint: { max: 464, min: 0 },
+          items: 1,
+          slidesToSlide: 1 // optional, default to 1.
+        }
+    };
+
     return (
         <div>           
             <title>Mihary'ket - Page d'accueil</title>
@@ -209,11 +227,11 @@ function Home() {
                     <h1>Nos produits récents</h1><br/>
                     <Link className="text-body" to="/produits"><button className='btn btn-success btn-rounded btn-lg gradient-custom-4 px-5 text-white'>Voir la liste complète</button></Link>
                 </div>
-                <Row lg={4}>
+                <Carousel responsive={responsive} lg={4}>
                 {produit &&
                     produit
                     .filter((product) => product.stockProduit !== 0)
-                    .slice(0, 8)
+                    // .slice(0, 8)
                     .map((product) => {
                         return (
                             <div className='container-sm' key={product.idProduit}>
@@ -301,7 +319,7 @@ function Home() {
                             </div>
                         );
                     })}
-                </Row><br/>
+                </Carousel><br/>
             </div>
 
             {/* <div

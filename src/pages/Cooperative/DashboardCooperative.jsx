@@ -119,7 +119,7 @@ function Dashboard() {
                 <Link className="nav-link" to="/dashboard-coop" onClick={handleMenu4Click}
                     aria-expanded="true" aria-controls="collapsePages">
                     <i className="fas fa-fw fa-shopping-bag"></i>
-                    <span>Création</span>
+                    <span>Produits</span>
                 </Link>
                 <Link className="nav-link" to="/dashboard-coop" onClick={handleMenu3Click}
                     aria-expanded="true" aria-controls="collapsePages">
