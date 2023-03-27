@@ -227,18 +227,22 @@ function Home() {
                     <h1>Nos produits récents</h1><br/>
                     <Link className="text-body" to="/produits"><button className='btn btn-success btn-rounded btn-lg gradient-custom-4 px-5 text-white'>Voir la liste complète</button></Link>
                 </div>
-                <Carousel responsive={responsive} lg={4}>
+                <Carousel 
+                responsive={responsive}
+                ssr={true}
+                containerClass="carousel-container"
+                removeArrowOnDeviceType={["tablet", "mobile"]}>
                 {produit &&
                     produit
                     .filter((product) => product.stockProduit !== 0)
-                    // .slice(0, 8)
+                    .slice(0, 12)
                     .map((product) => {
                         return (
                             <div className='container-sm' key={product.idProduit}>
                                 <Col className="d-flex">
                                 {sessionStorage.getItem("typeUser") === "CLIENT" ? (
-                                    <Card className="flex-fill card-flyer" style={{marginTop : "20px"}}>
-                                        <Card.Img className='image-box' variant="top" 
+                                    <Card className="flex-fill card-flyer unselectable" style={{marginTop : "20px", marginBottom : "20px"}}>
+                                        <Card.Img className='image-box undragable' variant="top" 
                                         src={images.find(image => image.categorieProduit === product.categorieProduit)?.src} />
                                         <Card.Body>
                                         <Card.Title className='text-black initialism mb-4'>{product.nomProduit}</Card.Title>
@@ -319,7 +323,7 @@ function Home() {
                             </div>
                         );
                     })}
-                </Carousel><br/>
+                </Carousel>
             </div>
 
             {/* <div
