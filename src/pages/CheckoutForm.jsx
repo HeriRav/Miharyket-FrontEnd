@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import axios from "axios";
+import visa from '../images/visa.png';
 
 
 const CheckoutForm = () => {
@@ -66,41 +67,49 @@ const CheckoutForm = () => {
   return (
     <>
 
+<div class="container">
+  <div class="row justify-content-right">
+    <div class="col-md-12">
       <form onSubmit={handleSubmit} className="payment-form">
+      <br/>
         <fieldset className="FormGroup">
           <div className="FormRow">
-            {/* <div style={{ height: 50 }}>
-              <img
-                src={{ carteBancaire1 }}
-                className="img-fluid"
-                alt="carte1"
-              />
-              <img src={{ carteBancaire2 }} />
-              <img src={{ carteBancaire3 }} />
-            </div> */}
-            <h6>
-              Entrez les coordonnées de la carte : <output></output>
-            </h6>
+           <br/>      
+            <h5 >
+            Déscription de la carte : 
+            </h5>
+            <br/>
             <CardElement
               options={{ hidePostalCode: true }}
-              style={({ width: "100%" }, { marginTop: "20px" })}
+              style={({ width: "100%" }, { marginTop: "50px" })}
             />
           </div>
         </fieldset>
+        <br/>
+        <br/>
         <button
           disabled={isLoading}
           id="submit"
           className="btn btn-primary"
-          style={{ marginTop: "20px", width: "100%" }}
+          style={{ marginTop: "-30px", width: "100%" }}
         >
           <span id="button-text">
             {isLoading ? <div className="spinner" id="spinner"></div> : "Payer"}
           </span>
         </button>
         {message && <div id="payment-message">{message}</div>}
-      </form>
+      </form>  
+    </div>
+  </div>
+</div>
+
+
+
+      
     </>
   );
 };
 
 export default CheckoutForm;
+
+
