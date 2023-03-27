@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Modal, Form } from 'react-bootstrap';
+import { Button, Modal, Form,Col } from 'react-bootstrap';
 import ApprovisionnementHistorique from './ApprovisionnementHistorique';
 import axios from 'axios';
+import { User } from '@auth0/auth0-react';
 
 function ApprovisionnementProduitAgriculteur() {
   const [appros, setAppros] = useState([]);
@@ -9,6 +10,7 @@ function ApprovisionnementProduitAgriculteur() {
   const [showModal, setShowModal] = useState(false);
   const [idAgriculteur, setIdAgriculteur] = useState(sessionStorage.getItem("idAgriculteur"));
   const [idCoop, setIdCoop] = useState(sessionStorage.getItem("idCoop"));
+  const [user, setUser] = useState(sessionStorage.getItem("user"));
   const [filteredAppros, setFilteredAppros] = useState([]);
   const [produit, setProduit] = useState('');
   const [quantiteApprovisionnement, setQuantiteApprovisionnement] = useState(0);
@@ -16,12 +18,12 @@ function ApprovisionnementProduitAgriculteur() {
 
   useEffect(() => {
     const fetchAppros = async () => {
-      const res = await axios.get('http://localhost:8085/approvisionnements/agriculteur/'+idAgriculteur);
+      const res = await axios.get('http://localhost:8085/approvisionnements/agriculteur/' + idAgriculteur);
       setAppros(res.data);
       setFilteredAppros(res.data);
     };
     const fetchProduits = async () => {
-      const res = await axios.get('http://localhost:8085/produits/reference/'+idCoop);
+      const res = await axios.get('http://localhost:8085/produits/reference/' + idCoop);
       setProduits(res.data);
     };
     fetchAppros();
@@ -45,6 +47,7 @@ function ApprovisionnementProduitAgriculteur() {
     const approvisionnement = {
       produit: { idProduit: produit },
       quantiteApprovisionnement,
+      utilisateur : user,
       prixUnitaire,
     };
 
@@ -72,23 +75,29 @@ function ApprovisionnementProduitAgriculteur() {
                 ))}
               </Form.Control>
             </Form.Group>
-           
-            <Form.Group controlId="formQuantite">
-<Form.Label>Quantité</Form.Label>
-<Form.Control type="number" value={quantiteApprovisionnement} onChange={e => setQuantiteApprovisionnement(e.target.value)} />
-</Form.Group>
-<Form.Group controlId="formPrixUnitaire">
-<Form.Label>Prix unitaire</Form.Label>
-<Form.Control type="number" step="0.01" value={prixUnitaire} onChange={e => setPrixUnitaire(e.target.value)} />
-</Form.Group>
 
-<Button type="submit" onClick={() => setShowModal(false)} block >Enregistrer</Button>
-</Form>
-</Modal.Body>
-</Modal>
-<ApprovisionnementHistorique approvisionnements={filteredAppros}/>
-</div>
-);
+            <Form.Group controlId="formQuantite">
+              <Form.Label>Quantité</Form.Label>
+              <Form.Control type="number" value={quantiteApprovisionnement} onChange={e => setQuantiteApprovisionnement(e.target.value)} />
+            </Form.Group>
+            <Form.Group controlId="formPrixUnitaire">
+              <Form.Label>Prix unitaire</Form.Label>
+              <Form.Control type="number" step="0.01" value={prixUnitaire} onChange={e => setPrixUnitaire(e.target.value)} />
+            </Form.Group>
+
+            
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+        <Col>
+        <Button type="submit" onClick={() => setShowModal(false)} block >Enregistrer</Button>
+      </Col>
+        
+        </Modal.Footer>
+      </Modal>
+      <ApprovisionnementHistorique approvisionnements={filteredAppros} />
+    </div>
+  );
 }
 
 export default ApprovisionnementProduitAgriculteur;
