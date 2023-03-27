@@ -75,11 +75,6 @@ console.error('Error:', error);
 });
 }, []);
 
-
-
-
-
-
 return (
 <Container className='mt-5 mb-5'>
 <h1 className='text-center'>Approvisionnement</h1>
