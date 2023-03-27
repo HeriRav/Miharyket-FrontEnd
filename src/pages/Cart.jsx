@@ -19,8 +19,7 @@ import CheckoutForm from "./CheckoutForm";
 import Modal from "react-modal";
 
 const public_key =
-  "pk_test_51Ml5YIDWuNiudbhyyTXalbWxsmwvXCvchPVAgmY4cKeA6DaIGR2lBEZhxYc39TbsYiDwFjXVlp76wFeLe0QJYxuP00DKUR5W4G";
-
+"pk_test_51MqBM9AD78j1yqjLvHmPakZ9UxZpLY4n6QBID2WuUc6sojf67NW3Laoleg4BY26UP6KczNOsBjphJ3TTpOG0Sl6000xE6dgNzI";
 const stripePromise = loadStripe(public_key);
 
 function Cart() {

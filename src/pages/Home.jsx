@@ -165,7 +165,7 @@ function Home() {
             3. mettre à jour le nombre d'article sélectionné (badge de notification)
         */            
             if(localStorage.getItem(nom) == null) {                
-                localStorage.setItem(nom,  JSON.stringify({nom: nom, id: id, price: price, quantity: 1}) );           
+                localStorage.setItem(nom,  JSON.stringify({nom: nom, id: id, price: price, quantity: 1,}) );           
             }
             else {                
                 let item = JSON.parse(localStorage.getItem(nom)); 
