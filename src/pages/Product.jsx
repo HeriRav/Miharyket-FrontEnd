@@ -6,10 +6,12 @@ import CardGroup from 'react-bootstrap/CardGroup';
 import { useEffect, useState } from 'react';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
-import { Link, Route, Routes } from 'react-router-dom';
+import { Link, Route, Routes, useNavigate } from 'react-router-dom';
 
 function Product() {
     const [produit, setProd] = useState([])
+
+    let navigate = useNavigate()
 
     const images = [
         { categorieProduit: "Viande", src: "/src/images/meat.jpg" },
@@ -19,6 +21,29 @@ function Product() {
         { categorieProduit: "Céréale", src: "/src/images/cereal.jpg" },
         { categorieProduit: "Produit arômatique", src: "/src/images/aromatic-product.jpg" }
     ];
+
+    const responsive = {
+        desktop: {
+          breakpoint: { max: 3000, min: 1024 },
+          items: 4,
+          slidesToSlide: 1 // optional, default to 1.
+        },
+        tablet: {
+          breakpoint: { max: 1024, min: 464 },
+          items: 2,
+          slidesToSlide: 1 // optional, default to 1.
+        },
+        mobile: {
+          breakpoint: { max: 464, min: 0 },
+          items: 1,
+          slidesToSlide: 1 // optional, default to 1.
+        }
+    };
+
+    const needLogin = () => {
+        navigate('/authentification')
+        toast.warning("Vous devez vous connecter")
+    }
 
     useEffect(() => {
         fetch("http://localhost:8085/produits/list")
@@ -56,8 +81,11 @@ function Product() {
                     <button className='btn-dark text-white p-1 px-2 mx-5 btn fw-bold' >Produit arômatique</button>
                     <button className='btn-dark text-white p-1 px-2 mx-5 btn fw-bold' >Tous</button>
                 </div>
-                <h1 style={{textAlign : "center"}}>Fruits</h1>
-                <Row lg={4}>
+                <h1>Fruits</h1>
+                <Carousel responsive={responsive}
+                ssr={true}
+                containerClass="carousel-container"
+                removeArrowOnDeviceType={["tablet", "mobile"]}>
                     {produit &&
                         produit
                         .filter((product) => product.stockProduit !== 0 && product.categorieProduit === "Fruit")
@@ -65,53 +93,95 @@ function Product() {
                         return (
                             <div className='container-sm' key={product.idProduit}>
                             <Col className="d-flex">
-                            {sessionStorage.getItem("typeUser") == "CLIENT" ? (
-                                <Card className="flex-fill card-flyer" style={{marginTop : "20px"}}>
-                                    <Card.Img className='image-box' variant="top" 
-                                    src={images.find(image => image.categorieProduit === product.categorieProduit)?.src} />
-                                    <Card.Body>
-                                    <Card.Title className='text-black initialism mb-4'>{product.nomProduit}</Card.Title>
-                                    <Card.Text>
-                                        {product.descriptionProduit}
-                                    </Card.Text>
-                                    </Card.Body>
-                                    <Card.Footer>
-                                    <Card.Text className='text-success mb-0'><span className='text-primary'>Catégorie :</span> {product.categorieProduit}</Card.Text>
-                                    <Card.Text className='text-primary'>Quantité disponible : <span className='text-success'>{product.stockProduit}{product.uniteProduit}</span></Card.Text>
-                                    </Card.Footer>
-                                    <Card.Footer className='text-center'>
-                                    <small className="text-lg">{product.prixProduit} Ar/{product.uniteProduit}</small>
-                                    </Card.Footer>
-                                    <Card.Footer className='text-center'>
-                                    <Button className="primary w-100 d-flex align-items-center flex-column" onClick={() => handleShow(product)}>+ Ajouter au panier</Button>
-                                    </Card.Footer>
-                                </Card>
-                            ) : (
-                                <Card className="flex-fill card-flyer" style={{marginTop : "20px"}}>
-                                    <Card.Img className='image-box' variant="top" 
-                                    src={images.find(image => image.categorieProduit === product.categorieProduit)?.src} />
-                                    <Card.Body>
-                                    <Card.Title className='text-black initialism mb-4'>{product.nomProduit}</Card.Title>
-                                    <Card.Text>
-                                        {product.descriptionProduit}
-                                    </Card.Text>
-                                    </Card.Body>
-                                    <Card.Footer>
-                                    <Card.Text className='text-success mb-0'><span className='text-primary'>Catégorie :</span> {product.categorieProduit}</Card.Text>
-                                    <Card.Text className='text-primary'>Quantité disponible : <span className='text-success'>{product.stockProduit}{product.uniteProduit}</span></Card.Text>
-                                    </Card.Footer>
-                                    <Card.Footer className='text-center'>
-                                    <small className="text-lg">{product.prixProduit} Ar/{product.uniteProduit}</small>
-                                    </Card.Footer>
-                                </Card>
-                            )}
+                                {sessionStorage.getItem("typeUser") === "CLIENT" ? (
+                                    <Card className="flex-fill card-flyer unselectable" style={{marginTop : "20px", marginBottom : "20px"}}>
+                                        <Card.Img className='image-box undragable' variant="top" 
+                                        src={images.find(image => image.categorieProduit === product.categorieProduit)?.src} />
+                                        <Card.Body>
+                                        <Card.Title className='text-black initialism mb-4'>{product.nomProduit}</Card.Title>
+                                        <Card.Text>
+                                            {product.descriptionProduit}
+                                        </Card.Text>
+                                        </Card.Body>
+                                        <Card.Footer>
+                                        <Card.Text className='text-info mb-0'><span className='text-primary'>Catégorie :</span> {product.categorieProduit}</Card.Text>
+                                        <Card.Text className='text-primary'>Quantité disponible : <span className='text-info'>{product.stockProduit}{product.uniteProduit}</span></Card.Text>
+                                        </Card.Footer>
+                                        <Card.Footer className='text-center'>
+                                        <small className="text-lg">{product.prixProduit} Ar/{product.uniteProduit}</small>
+                                        </Card.Footer>
+                                        <Card.Footer className='text-center'>
+                                        <Button className="primary w-100 d-flex align-items-center flex-column" onClick={() => redirect(product.idProduit, product.nomProduit, product.prixProduit)}>+ Ajouter au panier</Button>
+                                        </Card.Footer>                                       
+                                    </Card>
+                                ) : sessionStorage.getItem("typeUser") === "COOPERATIVE" ? (
+                                    <Card className="flex-fill card-flyer unselectable" style={{marginTop : "20px", marginBottom : "20px"}}>
+                                        <Card.Img className='image-box undragable' variant="top" 
+                                        src={images.find(image => image.categorieProduit === product.categorieProduit)?.src} />
+                                        <Card.Body>
+                                        <Card.Title className='text-black initialism mb-4'>{product.nomProduit}</Card.Title>
+                                        <Card.Text>
+                                            {product.descriptionProduit}
+                                        </Card.Text>
+                                        </Card.Body>
+                                        <Card.Footer>
+                                        <Card.Text className='text-info mb-0'><span className='text-primary'>Catégorie :</span> {product.categorieProduit}</Card.Text>
+                                        <Card.Text className='text-primary'>Quantité disponible : <span className='text-info'>{product.stockProduit}{product.uniteProduit}</span></Card.Text>
+                                        </Card.Footer>
+                                        <Card.Footer className='text-center'>
+                                        <small className="text-lg">{product.prixProduit} Ar/{product.uniteProduit}</small>
+                                        </Card.Footer>
+                                    </Card>
+                                ) : sessionStorage.getItem("typeUser") === "AGRICULTEUR" ? (
+                                    <Card className="flex-fill card-flyer unselectable" style={{marginTop : "20px", marginBottom : "20px"}}>
+                                        <Card.Img className='image-box undragable' variant="top" 
+                                        src={images.find(image => image.categorieProduit === product.categorieProduit)?.src} />
+                                        <Card.Body>
+                                        <Card.Title className='text-black initialism mb-4'>{product.nomProduit}</Card.Title>
+                                        <Card.Text>
+                                            {product.descriptionProduit}
+                                        </Card.Text>
+                                        </Card.Body>
+                                        <Card.Footer>
+                                        <Card.Text className='text-info mb-0'><span className='text-primary'>Catégorie :</span> {product.categorieProduit}</Card.Text>
+                                        <Card.Text className='text-primary'>Quantité disponible : <span className='text-info'>{product.stockProduit}{product.uniteProduit}</span></Card.Text>
+                                        </Card.Footer>
+                                        <Card.Footer className='text-center'>
+                                        <small className="text-lg">{product.prixProduit} Ar/{product.uniteProduit}</small>
+                                        </Card.Footer>
+                                    </Card>
+                                ) : (
+                                    <Card className="flex-fill card-flyer unselectable" style={{marginTop : "20px", marginBottom : "20px"}}>
+                                        <Card.Img className='image-box undragable' variant="top" 
+                                        src={images.find(image => image.categorieProduit === product.categorieProduit)?.src} />
+                                        <Card.Body>
+                                        <Card.Title className='text-black initialism mb-4'>{product.nomProduit}</Card.Title>
+                                        <Card.Text>
+                                            {product.descriptionProduit}
+                                        </Card.Text>
+                                        </Card.Body>
+                                        <Card.Footer>
+                                        <Card.Text className='text-info mb-0'><span className='text-primary'>Catégorie :</span> {product.categorieProduit}</Card.Text>
+                                        <Card.Text className='text-primary'>Quantité disponible : <span className='text-info'>{product.stockProduit}{product.uniteProduit}</span></Card.Text>
+                                        </Card.Footer>
+                                        <Card.Footer className='text-center'>
+                                        <small className="text-lg">{product.prixProduit} Ar/{product.uniteProduit}</small>
+                                        </Card.Footer>
+                                        <Card.Footer className='text-center'>
+                                        <Button className="primary w-100 d-flex align-items-center flex-column" onClick={needLogin}>+ Ajouter au panier</Button>
+                                        </Card.Footer>                                       
+                                    </Card>
+                                )}
                             </Col>
                             </div>
                         );
                     })}
-                </Row><br/>
-                <h1 style={{textAlign : "center"}}>Légumes</h1>
-                <Row lg={4}>
+                </Carousel><br/>
+                <h1>Légumes</h1>
+                <Carousel responsive={responsive}
+                ssr={true}
+                containerClass="carousel-container"
+                removeArrowOnDeviceType={["tablet", "mobile"]}>
                     {produit &&
                         produit
                         .filter((product) => product.stockProduit !== 0 && product.categorieProduit === "Légume")
@@ -119,53 +189,95 @@ function Product() {
                         return (
                             <div className='container-sm' key={product.idProduit}>
                             <Col className="d-flex">
-                            {sessionStorage.getItem("typeUser") == "CLIENT" ? (
-                                <Card className="flex-fill card-flyer" style={{marginTop : "20px"}}>
-                                    <Card.Img className='image-box' variant="top" 
-                                    src={images.find(image => image.categorieProduit === product.categorieProduit)?.src} />
-                                    <Card.Body>
-                                    <Card.Title className='text-black initialism mb-4'>{product.nomProduit}</Card.Title>
-                                    <Card.Text>
-                                        {product.descriptionProduit}
-                                    </Card.Text>
-                                    </Card.Body>
-                                    <Card.Footer>
-                                    <Card.Text className='text-success mb-0'><span className='text-primary'>Catégorie :</span> {product.categorieProduit}</Card.Text>
-                                    <Card.Text className='text-primary'>Quantité disponible : <span className='text-success'>{product.stockProduit}{product.uniteProduit}</span></Card.Text>
-                                    </Card.Footer>
-                                    <Card.Footer className='text-center'>
-                                    <small className="text-lg">{product.prixProduit} Ar/{product.uniteProduit}</small>
-                                    </Card.Footer>
-                                    <Card.Footer className='text-center'>
-                                    <Button className="primary w-100 d-flex align-items-center flex-column" onClick={() => handleShow(product)}>+ Ajouter au panier</Button>
-                                    </Card.Footer>
-                                </Card>
-                            ) : (
-                                <Card className="flex-fill card-flyer" style={{marginTop : "20px"}}>
-                                    <Card.Img className='image-box' variant="top" 
-                                    src={images.find(image => image.categorieProduit === product.categorieProduit)?.src} />
-                                    <Card.Body>
-                                    <Card.Title className='text-black initialism mb-4'>{product.nomProduit}</Card.Title>
-                                    <Card.Text>
-                                        {product.descriptionProduit}
-                                    </Card.Text>
-                                    </Card.Body>
-                                    <Card.Footer>
-                                    <Card.Text className='text-success mb-0'><span className='text-primary'>Catégorie :</span> {product.categorieProduit}</Card.Text>
-                                    <Card.Text className='text-primary'>Quantité disponible : <span className='text-success'>{product.stockProduit}{product.uniteProduit}</span></Card.Text>
-                                    </Card.Footer>
-                                    <Card.Footer className='text-center'>
-                                    <small className="text-lg">{product.prixProduit} Ar/{product.uniteProduit}</small>
-                                    </Card.Footer>
-                                </Card>
-                            )}
+                                {sessionStorage.getItem("typeUser") === "CLIENT" ? (
+                                    <Card className="flex-fill card-flyer unselectable" style={{marginTop : "20px", marginBottom : "20px"}}>
+                                        <Card.Img className='image-box undragable' variant="top" 
+                                        src={images.find(image => image.categorieProduit === product.categorieProduit)?.src} />
+                                        <Card.Body>
+                                        <Card.Title className='text-black initialism mb-4'>{product.nomProduit}</Card.Title>
+                                        <Card.Text>
+                                            {product.descriptionProduit}
+                                        </Card.Text>
+                                        </Card.Body>
+                                        <Card.Footer>
+                                        <Card.Text className='text-info mb-0'><span className='text-primary'>Catégorie :</span> {product.categorieProduit}</Card.Text>
+                                        <Card.Text className='text-primary'>Quantité disponible : <span className='text-info'>{product.stockProduit}{product.uniteProduit}</span></Card.Text>
+                                        </Card.Footer>
+                                        <Card.Footer className='text-center'>
+                                        <small className="text-lg">{product.prixProduit} Ar/{product.uniteProduit}</small>
+                                        </Card.Footer>
+                                        <Card.Footer className='text-center'>
+                                        <Button className="primary w-100 d-flex align-items-center flex-column" onClick={() => redirect(product.idProduit, product.nomProduit, product.prixProduit)}>+ Ajouter au panier</Button>
+                                        </Card.Footer>                                       
+                                    </Card>
+                                ) : sessionStorage.getItem("typeUser") === "COOPERATIVE" ? (
+                                    <Card className="flex-fill card-flyer unselectable" style={{marginTop : "20px", marginBottom : "20px"}}>
+                                        <Card.Img className='image-box undragable' variant="top" 
+                                        src={images.find(image => image.categorieProduit === product.categorieProduit)?.src} />
+                                        <Card.Body>
+                                        <Card.Title className='text-black initialism mb-4'>{product.nomProduit}</Card.Title>
+                                        <Card.Text>
+                                            {product.descriptionProduit}
+                                        </Card.Text>
+                                        </Card.Body>
+                                        <Card.Footer>
+                                        <Card.Text className='text-info mb-0'><span className='text-primary'>Catégorie :</span> {product.categorieProduit}</Card.Text>
+                                        <Card.Text className='text-primary'>Quantité disponible : <span className='text-info'>{product.stockProduit}{product.uniteProduit}</span></Card.Text>
+                                        </Card.Footer>
+                                        <Card.Footer className='text-center'>
+                                        <small className="text-lg">{product.prixProduit} Ar/{product.uniteProduit}</small>
+                                        </Card.Footer>
+                                    </Card>
+                                ) : sessionStorage.getItem("typeUser") === "AGRICULTEUR" ? (
+                                    <Card className="flex-fill card-flyer unselectable" style={{marginTop : "20px", marginBottom : "20px"}}>
+                                        <Card.Img className='image-box undragable' variant="top" 
+                                        src={images.find(image => image.categorieProduit === product.categorieProduit)?.src} />
+                                        <Card.Body>
+                                        <Card.Title className='text-black initialism mb-4'>{product.nomProduit}</Card.Title>
+                                        <Card.Text>
+                                            {product.descriptionProduit}
+                                        </Card.Text>
+                                        </Card.Body>
+                                        <Card.Footer>
+                                        <Card.Text className='text-info mb-0'><span className='text-primary'>Catégorie :</span> {product.categorieProduit}</Card.Text>
+                                        <Card.Text className='text-primary'>Quantité disponible : <span className='text-info'>{product.stockProduit}{product.uniteProduit}</span></Card.Text>
+                                        </Card.Footer>
+                                        <Card.Footer className='text-center'>
+                                        <small className="text-lg">{product.prixProduit} Ar/{product.uniteProduit}</small>
+                                        </Card.Footer>
+                                    </Card>
+                                ) : (
+                                    <Card className="flex-fill card-flyer unselectable" style={{marginTop : "20px", marginBottom : "20px"}}>
+                                        <Card.Img className='image-box undragable' variant="top" 
+                                        src={images.find(image => image.categorieProduit === product.categorieProduit)?.src} />
+                                        <Card.Body>
+                                        <Card.Title className='text-black initialism mb-4'>{product.nomProduit}</Card.Title>
+                                        <Card.Text>
+                                            {product.descriptionProduit}
+                                        </Card.Text>
+                                        </Card.Body>
+                                        <Card.Footer>
+                                        <Card.Text className='text-info mb-0'><span className='text-primary'>Catégorie :</span> {product.categorieProduit}</Card.Text>
+                                        <Card.Text className='text-primary'>Quantité disponible : <span className='text-info'>{product.stockProduit}{product.uniteProduit}</span></Card.Text>
+                                        </Card.Footer>
+                                        <Card.Footer className='text-center'>
+                                        <small className="text-lg">{product.prixProduit} Ar/{product.uniteProduit}</small>
+                                        </Card.Footer>
+                                        <Card.Footer className='text-center'>
+                                        <Button className="primary w-100 d-flex align-items-center flex-column" onClick={needLogin}>+ Ajouter au panier</Button>
+                                        </Card.Footer>                                       
+                                    </Card>
+                                )}
                             </Col>
                             </div>
                         );
                     })}
-                </Row><br/>
-                <h1 style={{textAlign : "center"}}>Viandes</h1>
-                <Row lg={4}>
+                </Carousel><br/>
+                <h1>Viandes</h1>
+                <Carousel responsive={responsive}
+                ssr={true}
+                containerClass="carousel-container"
+                removeArrowOnDeviceType={["tablet", "mobile"]}>
                     {produit &&
                         produit
                         .filter((product) => product.stockProduit !== 0 && product.categorieProduit === "Viande")
@@ -173,53 +285,95 @@ function Product() {
                         return (
                             <div className='container-sm' key={product.idProduit}>
                             <Col className="d-flex">
-                            {sessionStorage.getItem("typeUser") == "CLIENT" ? (
-                                <Card className="flex-fill card-flyer" style={{marginTop : "20px"}}>
-                                    <Card.Img className='image-box' variant="top" 
-                                    src={images.find(image => image.categorieProduit === product.categorieProduit)?.src} />
-                                    <Card.Body>
-                                    <Card.Title className='text-black initialism mb-4'>{product.nomProduit}</Card.Title>
-                                    <Card.Text>
-                                        {product.descriptionProduit}
-                                    </Card.Text>
-                                    </Card.Body>
-                                    <Card.Footer>
-                                    <Card.Text className='text-success mb-0'><span className='text-primary'>Catégorie :</span> {product.categorieProduit}</Card.Text>
-                                    <Card.Text className='text-primary'>Quantité disponible : <span className='text-success'>{product.stockProduit}{product.uniteProduit}</span></Card.Text>
-                                    </Card.Footer>
-                                    <Card.Footer className='text-center'>
-                                    <small className="text-lg">{product.prixProduit} Ar/{product.uniteProduit}</small>
-                                    </Card.Footer>
-                                    <Card.Footer className='text-center'>
-                                    <Button className="primary w-100 d-flex align-items-center flex-column" onClick={() => handleShow(product)}>+ Ajouter au panier</Button>
-                                    </Card.Footer>
-                                </Card>
-                            ) : (
-                                <Card className="flex-fill card-flyer" style={{marginTop : "20px"}}>
-                                    <Card.Img className='image-box' variant="top" 
-                                    src={images.find(image => image.categorieProduit === product.categorieProduit)?.src} />
-                                    <Card.Body>
-                                    <Card.Title className='text-black initialism mb-4'>{product.nomProduit}</Card.Title>
-                                    <Card.Text>
-                                        {product.descriptionProduit}
-                                    </Card.Text>
-                                    </Card.Body>
-                                    <Card.Footer>
-                                    <Card.Text className='text-success mb-0'><span className='text-primary'>Catégorie :</span> {product.categorieProduit}</Card.Text>
-                                    <Card.Text className='text-primary'>Quantité disponible : <span className='text-success'>{product.stockProduit}{product.uniteProduit}</span></Card.Text>
-                                    </Card.Footer>
-                                    <Card.Footer className='text-center'>
-                                    <small className="text-lg">{product.prixProduit} Ar/{product.uniteProduit}</small>
-                                    </Card.Footer>
-                                </Card>
-                            )}
+                                {sessionStorage.getItem("typeUser") === "CLIENT" ? (
+                                    <Card className="flex-fill card-flyer unselectable" style={{marginTop : "20px", marginBottom : "20px"}}>
+                                        <Card.Img className='image-box undragable' variant="top" 
+                                        src={images.find(image => image.categorieProduit === product.categorieProduit)?.src} />
+                                        <Card.Body>
+                                        <Card.Title className='text-black initialism mb-4'>{product.nomProduit}</Card.Title>
+                                        <Card.Text>
+                                            {product.descriptionProduit}
+                                        </Card.Text>
+                                        </Card.Body>
+                                        <Card.Footer>
+                                        <Card.Text className='text-info mb-0'><span className='text-primary'>Catégorie :</span> {product.categorieProduit}</Card.Text>
+                                        <Card.Text className='text-primary'>Quantité disponible : <span className='text-info'>{product.stockProduit}{product.uniteProduit}</span></Card.Text>
+                                        </Card.Footer>
+                                        <Card.Footer className='text-center'>
+                                        <small className="text-lg">{product.prixProduit} Ar/{product.uniteProduit}</small>
+                                        </Card.Footer>
+                                        <Card.Footer className='text-center'>
+                                        <Button className="primary w-100 d-flex align-items-center flex-column" onClick={() => redirect(product.idProduit, product.nomProduit, product.prixProduit)}>+ Ajouter au panier</Button>
+                                        </Card.Footer>                                       
+                                    </Card>
+                                ) : sessionStorage.getItem("typeUser") === "COOPERATIVE" ? (
+                                    <Card className="flex-fill card-flyer unselectable" style={{marginTop : "20px", marginBottom : "20px"}}>
+                                        <Card.Img className='image-box undragable' variant="top" 
+                                        src={images.find(image => image.categorieProduit === product.categorieProduit)?.src} />
+                                        <Card.Body>
+                                        <Card.Title className='text-black initialism mb-4'>{product.nomProduit}</Card.Title>
+                                        <Card.Text>
+                                            {product.descriptionProduit}
+                                        </Card.Text>
+                                        </Card.Body>
+                                        <Card.Footer>
+                                        <Card.Text className='text-info mb-0'><span className='text-primary'>Catégorie :</span> {product.categorieProduit}</Card.Text>
+                                        <Card.Text className='text-primary'>Quantité disponible : <span className='text-info'>{product.stockProduit}{product.uniteProduit}</span></Card.Text>
+                                        </Card.Footer>
+                                        <Card.Footer className='text-center'>
+                                        <small className="text-lg">{product.prixProduit} Ar/{product.uniteProduit}</small>
+                                        </Card.Footer>
+                                    </Card>
+                                ) : sessionStorage.getItem("typeUser") === "AGRICULTEUR" ? (
+                                    <Card className="flex-fill card-flyer unselectable" style={{marginTop : "20px", marginBottom : "20px"}}>
+                                        <Card.Img className='image-box undragable' variant="top" 
+                                        src={images.find(image => image.categorieProduit === product.categorieProduit)?.src} />
+                                        <Card.Body>
+                                        <Card.Title className='text-black initialism mb-4'>{product.nomProduit}</Card.Title>
+                                        <Card.Text>
+                                            {product.descriptionProduit}
+                                        </Card.Text>
+                                        </Card.Body>
+                                        <Card.Footer>
+                                        <Card.Text className='text-info mb-0'><span className='text-primary'>Catégorie :</span> {product.categorieProduit}</Card.Text>
+                                        <Card.Text className='text-primary'>Quantité disponible : <span className='text-info'>{product.stockProduit}{product.uniteProduit}</span></Card.Text>
+                                        </Card.Footer>
+                                        <Card.Footer className='text-center'>
+                                        <small className="text-lg">{product.prixProduit} Ar/{product.uniteProduit}</small>
+                                        </Card.Footer>
+                                    </Card>
+                                ) : (
+                                    <Card className="flex-fill card-flyer unselectable" style={{marginTop : "20px", marginBottom : "20px"}}>
+                                        <Card.Img className='image-box undragable' variant="top" 
+                                        src={images.find(image => image.categorieProduit === product.categorieProduit)?.src} />
+                                        <Card.Body>
+                                        <Card.Title className='text-black initialism mb-4'>{product.nomProduit}</Card.Title>
+                                        <Card.Text>
+                                            {product.descriptionProduit}
+                                        </Card.Text>
+                                        </Card.Body>
+                                        <Card.Footer>
+                                        <Card.Text className='text-info mb-0'><span className='text-primary'>Catégorie :</span> {product.categorieProduit}</Card.Text>
+                                        <Card.Text className='text-primary'>Quantité disponible : <span className='text-info'>{product.stockProduit}{product.uniteProduit}</span></Card.Text>
+                                        </Card.Footer>
+                                        <Card.Footer className='text-center'>
+                                        <small className="text-lg">{product.prixProduit} Ar/{product.uniteProduit}</small>
+                                        </Card.Footer>
+                                        <Card.Footer className='text-center'>
+                                        <Button className="primary w-100 d-flex align-items-center flex-column" onClick={needLogin}>+ Ajouter au panier</Button>
+                                        </Card.Footer>                                       
+                                    </Card>
+                                )}
                             </Col>
                             </div>
                         );
                     })}
-                </Row><br/>
-                <h1 style={{textAlign : "center"}}>Céréales</h1>
-                <Row lg={4}>
+                </Carousel><br/>
+                <h1>Céréales</h1>
+                <Carousel responsive={responsive}
+                ssr={true}
+                containerClass="carousel-container"
+                removeArrowOnDeviceType={["tablet", "mobile"]}>
                     {produit &&
                         produit
                         .filter((product) => product.stockProduit !== 0 && product.categorieProduit === "Céréale")
@@ -227,53 +381,95 @@ function Product() {
                         return (
                             <div className='container-sm' key={product.idProduit}>
                             <Col className="d-flex">
-                            {sessionStorage.getItem("typeUser") == "CLIENT" ? (
-                                <Card className="flex-fill card-flyer" style={{marginTop : "20px"}}>
-                                    <Card.Img className='image-box' variant="top" 
-                                    src={images.find(image => image.categorieProduit === product.categorieProduit)?.src} />
-                                    <Card.Body>
-                                    <Card.Title className='text-black initialism mb-4'>{product.nomProduit}</Card.Title>
-                                    <Card.Text>
-                                        {product.descriptionProduit}
-                                    </Card.Text>
-                                    </Card.Body>
-                                    <Card.Footer>
-                                    <Card.Text className='text-success mb-0'><span className='text-primary'>Catégorie :</span> {product.categorieProduit}</Card.Text>
-                                    <Card.Text className='text-primary'>Quantité disponible : <span className='text-success'>{product.stockProduit}{product.uniteProduit}</span></Card.Text>
-                                    </Card.Footer>
-                                    <Card.Footer className='text-center'>
-                                    <small className="text-lg">{product.prixProduit} Ar/{product.uniteProduit}</small>
-                                    </Card.Footer>
-                                    <Card.Footer className='text-center'>
-                                    <Button className="primary w-100 d-flex align-items-center flex-column" onClick={() => handleShow(product)}>+ Ajouter au panier</Button>
-                                    </Card.Footer>
-                                </Card>
-                            ) : (
-                                <Card className="flex-fill card-flyer" style={{marginTop : "20px"}}>
-                                    <Card.Img className='image-box' variant="top" 
-                                    src={images.find(image => image.categorieProduit === product.categorieProduit)?.src} />
-                                    <Card.Body>
-                                    <Card.Title className='text-black initialism mb-4'>{product.nomProduit}</Card.Title>
-                                    <Card.Text>
-                                        {product.descriptionProduit}
-                                    </Card.Text>
-                                    </Card.Body>
-                                    <Card.Footer>
-                                    <Card.Text className='text-success mb-0'><span className='text-primary'>Catégorie :</span> {product.categorieProduit}</Card.Text>
-                                    <Card.Text className='text-primary'>Quantité disponible : <span className='text-success'>{product.stockProduit}{product.uniteProduit}</span></Card.Text>
-                                    </Card.Footer>
-                                    <Card.Footer className='text-center'>
-                                    <small className="text-lg">{product.prixProduit} Ar/{product.uniteProduit}</small>
-                                    </Card.Footer>
-                                </Card>
-                            )}
+                                {sessionStorage.getItem("typeUser") === "CLIENT" ? (
+                                    <Card className="flex-fill card-flyer unselectable" style={{marginTop : "20px", marginBottom : "20px"}}>
+                                        <Card.Img className='image-box undragable' variant="top" 
+                                        src={images.find(image => image.categorieProduit === product.categorieProduit)?.src} />
+                                        <Card.Body>
+                                        <Card.Title className='text-black initialism mb-4'>{product.nomProduit}</Card.Title>
+                                        <Card.Text>
+                                            {product.descriptionProduit}
+                                        </Card.Text>
+                                        </Card.Body>
+                                        <Card.Footer>
+                                        <Card.Text className='text-info mb-0'><span className='text-primary'>Catégorie :</span> {product.categorieProduit}</Card.Text>
+                                        <Card.Text className='text-primary'>Quantité disponible : <span className='text-info'>{product.stockProduit}{product.uniteProduit}</span></Card.Text>
+                                        </Card.Footer>
+                                        <Card.Footer className='text-center'>
+                                        <small className="text-lg">{product.prixProduit} Ar/{product.uniteProduit}</small>
+                                        </Card.Footer>
+                                        <Card.Footer className='text-center'>
+                                        <Button className="primary w-100 d-flex align-items-center flex-column" onClick={() => redirect(product.idProduit, product.nomProduit, product.prixProduit)}>+ Ajouter au panier</Button>
+                                        </Card.Footer>                                       
+                                    </Card>
+                                ) : sessionStorage.getItem("typeUser") === "COOPERATIVE" ? (
+                                    <Card className="flex-fill card-flyer unselectable" style={{marginTop : "20px", marginBottom : "20px"}}>
+                                        <Card.Img className='image-box undragable' variant="top" 
+                                        src={images.find(image => image.categorieProduit === product.categorieProduit)?.src} />
+                                        <Card.Body>
+                                        <Card.Title className='text-black initialism mb-4'>{product.nomProduit}</Card.Title>
+                                        <Card.Text>
+                                            {product.descriptionProduit}
+                                        </Card.Text>
+                                        </Card.Body>
+                                        <Card.Footer>
+                                        <Card.Text className='text-info mb-0'><span className='text-primary'>Catégorie :</span> {product.categorieProduit}</Card.Text>
+                                        <Card.Text className='text-primary'>Quantité disponible : <span className='text-info'>{product.stockProduit}{product.uniteProduit}</span></Card.Text>
+                                        </Card.Footer>
+                                        <Card.Footer className='text-center'>
+                                        <small className="text-lg">{product.prixProduit} Ar/{product.uniteProduit}</small>
+                                        </Card.Footer>
+                                    </Card>
+                                ) : sessionStorage.getItem("typeUser") === "AGRICULTEUR" ? (
+                                    <Card className="flex-fill card-flyer unselectable" style={{marginTop : "20px", marginBottom : "20px"}}>
+                                        <Card.Img className='image-box undragable' variant="top" 
+                                        src={images.find(image => image.categorieProduit === product.categorieProduit)?.src} />
+                                        <Card.Body>
+                                        <Card.Title className='text-black initialism mb-4'>{product.nomProduit}</Card.Title>
+                                        <Card.Text>
+                                            {product.descriptionProduit}
+                                        </Card.Text>
+                                        </Card.Body>
+                                        <Card.Footer>
+                                        <Card.Text className='text-info mb-0'><span className='text-primary'>Catégorie :</span> {product.categorieProduit}</Card.Text>
+                                        <Card.Text className='text-primary'>Quantité disponible : <span className='text-info'>{product.stockProduit}{product.uniteProduit}</span></Card.Text>
+                                        </Card.Footer>
+                                        <Card.Footer className='text-center'>
+                                        <small className="text-lg">{product.prixProduit} Ar/{product.uniteProduit}</small>
+                                        </Card.Footer>
+                                    </Card>
+                                ) : (
+                                    <Card className="flex-fill card-flyer unselectable" style={{marginTop : "20px", marginBottom : "20px"}}>
+                                        <Card.Img className='image-box undragable' variant="top" 
+                                        src={images.find(image => image.categorieProduit === product.categorieProduit)?.src} />
+                                        <Card.Body>
+                                        <Card.Title className='text-black initialism mb-4'>{product.nomProduit}</Card.Title>
+                                        <Card.Text>
+                                            {product.descriptionProduit}
+                                        </Card.Text>
+                                        </Card.Body>
+                                        <Card.Footer>
+                                        <Card.Text className='text-info mb-0'><span className='text-primary'>Catégorie :</span> {product.categorieProduit}</Card.Text>
+                                        <Card.Text className='text-primary'>Quantité disponible : <span className='text-info'>{product.stockProduit}{product.uniteProduit}</span></Card.Text>
+                                        </Card.Footer>
+                                        <Card.Footer className='text-center'>
+                                        <small className="text-lg">{product.prixProduit} Ar/{product.uniteProduit}</small>
+                                        </Card.Footer>
+                                        <Card.Footer className='text-center'>
+                                        <Button className="primary w-100 d-flex align-items-center flex-column" onClick={needLogin}>+ Ajouter au panier</Button>
+                                        </Card.Footer>                                       
+                                    </Card>
+                                )}
                             </Col>
                             </div>
                         );
                     })}
-                </Row><br/>
-                <h1 style={{textAlign : "center"}}>Produits laitiers</h1>
-                <Row lg={4}>
+                </Carousel><br/>
+                <h1>Produits laitiers</h1>
+                <Carousel responsive={responsive}
+                ssr={true}
+                containerClass="carousel-container"
+                removeArrowOnDeviceType={["tablet", "mobile"]}>
                     {produit &&
                         produit
                         .filter((product) => product.stockProduit !== 0 && product.categorieProduit === "Produit laitier")
@@ -281,53 +477,95 @@ function Product() {
                         return (
                             <div className='container-sm' key={product.idProduit}>
                             <Col className="d-flex">
-                            {sessionStorage.getItem("typeUser") == "CLIENT" ? (
-                                <Card className="flex-fill card-flyer" style={{marginTop : "20px"}}>
-                                    <Card.Img className='image-box' variant="top" 
-                                    src={images.find(image => image.categorieProduit === product.categorieProduit)?.src} />
-                                    <Card.Body>
-                                    <Card.Title className='text-black initialism mb-4'>{product.nomProduit}</Card.Title>
-                                    <Card.Text>
-                                        {product.descriptionProduit}
-                                    </Card.Text>
-                                    </Card.Body>
-                                    <Card.Footer>
-                                    <Card.Text className='text-success mb-0'><span className='text-primary'>Catégorie :</span> {product.categorieProduit}</Card.Text>
-                                    <Card.Text className='text-primary'>Quantité disponible : <span className='text-success'>{product.stockProduit}{product.uniteProduit}</span></Card.Text>
-                                    </Card.Footer>
-                                    <Card.Footer className='text-center'>
-                                    <small className="text-lg">{product.prixProduit} Ar/{product.uniteProduit}</small>
-                                    </Card.Footer>
-                                    <Card.Footer className='text-center'>
-                                    <Button className="primary w-100 d-flex align-items-center flex-column" onClick={() => handleShow(product)}>+ Ajouter au panier</Button>
-                                    </Card.Footer>
-                                </Card>
-                            ) : (
-                                <Card className="flex-fill card-flyer" style={{marginTop : "20px"}}>
-                                    <Card.Img className='image-box' variant="top" 
-                                    src={images.find(image => image.categorieProduit === product.categorieProduit)?.src} />
-                                    <Card.Body>
-                                    <Card.Title className='text-black initialism mb-4'>{product.nomProduit}</Card.Title>
-                                    <Card.Text>
-                                        {product.descriptionProduit}
-                                    </Card.Text>
-                                    </Card.Body>
-                                    <Card.Footer>
-                                    <Card.Text className='text-success mb-0'><span className='text-primary'>Catégorie :</span> {product.categorieProduit}</Card.Text>
-                                    <Card.Text className='text-primary'>Quantité disponible : <span className='text-success'>{product.stockProduit}{product.uniteProduit}</span></Card.Text>
-                                    </Card.Footer>
-                                    <Card.Footer className='text-center'>
-                                    <small className="text-lg">{product.prixProduit} Ar/{product.uniteProduit}</small>
-                                    </Card.Footer>
-                                </Card>
-                            )}
+                                {sessionStorage.getItem("typeUser") === "CLIENT" ? (
+                                    <Card className="flex-fill card-flyer unselectable" style={{marginTop : "20px", marginBottom : "20px"}}>
+                                        <Card.Img className='image-box undragable' variant="top" 
+                                        src={images.find(image => image.categorieProduit === product.categorieProduit)?.src} />
+                                        <Card.Body>
+                                        <Card.Title className='text-black initialism mb-4'>{product.nomProduit}</Card.Title>
+                                        <Card.Text>
+                                            {product.descriptionProduit}
+                                        </Card.Text>
+                                        </Card.Body>
+                                        <Card.Footer>
+                                        <Card.Text className='text-info mb-0'><span className='text-primary'>Catégorie :</span> {product.categorieProduit}</Card.Text>
+                                        <Card.Text className='text-primary'>Quantité disponible : <span className='text-info'>{product.stockProduit}{product.uniteProduit}</span></Card.Text>
+                                        </Card.Footer>
+                                        <Card.Footer className='text-center'>
+                                        <small className="text-lg">{product.prixProduit} Ar/{product.uniteProduit}</small>
+                                        </Card.Footer>
+                                        <Card.Footer className='text-center'>
+                                        <Button className="primary w-100 d-flex align-items-center flex-column" onClick={() => redirect(product.idProduit, product.nomProduit, product.prixProduit)}>+ Ajouter au panier</Button>
+                                        </Card.Footer>                                       
+                                    </Card>
+                                ) : sessionStorage.getItem("typeUser") === "COOPERATIVE" ? (
+                                    <Card className="flex-fill card-flyer unselectable" style={{marginTop : "20px", marginBottom : "20px"}}>
+                                        <Card.Img className='image-box undragable' variant="top" 
+                                        src={images.find(image => image.categorieProduit === product.categorieProduit)?.src} />
+                                        <Card.Body>
+                                        <Card.Title className='text-black initialism mb-4'>{product.nomProduit}</Card.Title>
+                                        <Card.Text>
+                                            {product.descriptionProduit}
+                                        </Card.Text>
+                                        </Card.Body>
+                                        <Card.Footer>
+                                        <Card.Text className='text-info mb-0'><span className='text-primary'>Catégorie :</span> {product.categorieProduit}</Card.Text>
+                                        <Card.Text className='text-primary'>Quantité disponible : <span className='text-info'>{product.stockProduit}{product.uniteProduit}</span></Card.Text>
+                                        </Card.Footer>
+                                        <Card.Footer className='text-center'>
+                                        <small className="text-lg">{product.prixProduit} Ar/{product.uniteProduit}</small>
+                                        </Card.Footer>
+                                    </Card>
+                                ) : sessionStorage.getItem("typeUser") === "AGRICULTEUR" ? (
+                                    <Card className="flex-fill card-flyer unselectable" style={{marginTop : "20px", marginBottom : "20px"}}>
+                                        <Card.Img className='image-box undragable' variant="top" 
+                                        src={images.find(image => image.categorieProduit === product.categorieProduit)?.src} />
+                                        <Card.Body>
+                                        <Card.Title className='text-black initialism mb-4'>{product.nomProduit}</Card.Title>
+                                        <Card.Text>
+                                            {product.descriptionProduit}
+                                        </Card.Text>
+                                        </Card.Body>
+                                        <Card.Footer>
+                                        <Card.Text className='text-info mb-0'><span className='text-primary'>Catégorie :</span> {product.categorieProduit}</Card.Text>
+                                        <Card.Text className='text-primary'>Quantité disponible : <span className='text-info'>{product.stockProduit}{product.uniteProduit}</span></Card.Text>
+                                        </Card.Footer>
+                                        <Card.Footer className='text-center'>
+                                        <small className="text-lg">{product.prixProduit} Ar/{product.uniteProduit}</small>
+                                        </Card.Footer>
+                                    </Card>
+                                ) : (
+                                    <Card className="flex-fill card-flyer unselectable" style={{marginTop : "20px", marginBottom : "20px"}}>
+                                        <Card.Img className='image-box undragable' variant="top" 
+                                        src={images.find(image => image.categorieProduit === product.categorieProduit)?.src} />
+                                        <Card.Body>
+                                        <Card.Title className='text-black initialism mb-4'>{product.nomProduit}</Card.Title>
+                                        <Card.Text>
+                                            {product.descriptionProduit}
+                                        </Card.Text>
+                                        </Card.Body>
+                                        <Card.Footer>
+                                        <Card.Text className='text-info mb-0'><span className='text-primary'>Catégorie :</span> {product.categorieProduit}</Card.Text>
+                                        <Card.Text className='text-primary'>Quantité disponible : <span className='text-info'>{product.stockProduit}{product.uniteProduit}</span></Card.Text>
+                                        </Card.Footer>
+                                        <Card.Footer className='text-center'>
+                                        <small className="text-lg">{product.prixProduit} Ar/{product.uniteProduit}</small>
+                                        </Card.Footer>
+                                        <Card.Footer className='text-center'>
+                                        <Button className="primary w-100 d-flex align-items-center flex-column" onClick={needLogin}>+ Ajouter au panier</Button>
+                                        </Card.Footer>                                       
+                                    </Card>
+                                )}
                             </Col>
                             </div>
                         );
                     })}
-                </Row><br/>
-                <h1 style={{textAlign : "center"}}>Produits arômatiques</h1>
-                <Row lg={4}>
+                </Carousel><br/>
+                <h1>Produits arômatiques</h1>
+                <Carousel responsive={responsive}
+                ssr={true}
+                containerClass="carousel-container"
+                removeArrowOnDeviceType={["tablet", "mobile"]}>
                     {produit &&
                         produit
                         .filter((product) => product.stockProduit !== 0 && product.categorieProduit === "Produit arômatique")
@@ -335,51 +573,90 @@ function Product() {
                         return (
                             <div className='container-sm' key={product.idProduit}>
                             <Col className="d-flex">
-                            {sessionStorage.getItem("typeUser") == "CLIENT" ? (
-                                <Card className="flex-fill card-flyer" style={{marginTop : "20px"}}>
-                                    <Card.Img className='image-box' variant="top" 
-                                    src={images.find(image => image.categorieProduit === product.categorieProduit)?.src} />
-                                    <Card.Body>
-                                    <Card.Title className='text-black initialism mb-4'>{product.nomProduit}</Card.Title>
-                                    <Card.Text>
-                                        {product.descriptionProduit}
-                                    </Card.Text>
-                                    </Card.Body>
-                                    <Card.Footer>
-                                    <Card.Text className='text-success mb-0'><span className='text-primary'>Catégorie :</span> {product.categorieProduit}</Card.Text>
-                                    <Card.Text className='text-primary'>Quantité disponible : <span className='text-success'>{product.stockProduit}{product.uniteProduit}</span></Card.Text>
-                                    </Card.Footer>
-                                    <Card.Footer className='text-center'>
-                                    <small className="text-lg">{product.prixProduit} Ar/{product.uniteProduit}</small>
-                                    </Card.Footer>
-                                    <Card.Footer className='text-center'>
-                                    <Button className="primary w-100 d-flex align-items-center flex-column" onClick={() => handleShow(product)}>+ Ajouter au panier</Button>
-                                    </Card.Footer>
-                                </Card>
-                            ) : (
-                                <Card className="flex-fill card-flyer" style={{marginTop : "20px"}}>
-                                    <Card.Img className='image-box' variant="top" 
-                                    src={images.find(image => image.categorieProduit === product.categorieProduit)?.src} />
-                                    <Card.Body>
-                                    <Card.Title className='text-black initialism mb-4'>{product.nomProduit}</Card.Title>
-                                    <Card.Text>
-                                        {product.descriptionProduit}
-                                    </Card.Text>
-                                    </Card.Body>
-                                    <Card.Footer>
-                                    <Card.Text className='text-success mb-0'><span className='text-primary'>Catégorie :</span> {product.categorieProduit}</Card.Text>
-                                    <Card.Text className='text-primary'>Quantité disponible : <span className='text-success'>{product.stockProduit}{product.uniteProduit}</span></Card.Text>
-                                    </Card.Footer>
-                                    <Card.Footer className='text-center'>
-                                    <small className="text-lg">{product.prixProduit} Ar/{product.uniteProduit}</small>
-                                    </Card.Footer>
-                                </Card>
-                            )}
+                                {sessionStorage.getItem("typeUser") === "CLIENT" ? (
+                                    <Card className="flex-fill card-flyer unselectable" style={{marginTop : "20px", marginBottom : "20px"}}>
+                                        <Card.Img className='image-box undragable' variant="top" 
+                                        src={images.find(image => image.categorieProduit === product.categorieProduit)?.src} />
+                                        <Card.Body>
+                                        <Card.Title className='text-black initialism mb-4'>{product.nomProduit}</Card.Title>
+                                        <Card.Text>
+                                            {product.descriptionProduit}
+                                        </Card.Text>
+                                        </Card.Body>
+                                        <Card.Footer>
+                                        <Card.Text className='text-info mb-0'><span className='text-primary'>Catégorie :</span> {product.categorieProduit}</Card.Text>
+                                        <Card.Text className='text-primary'>Quantité disponible : <span className='text-info'>{product.stockProduit}{product.uniteProduit}</span></Card.Text>
+                                        </Card.Footer>
+                                        <Card.Footer className='text-center'>
+                                        <small className="text-lg">{product.prixProduit} Ar/{product.uniteProduit}</small>
+                                        </Card.Footer>
+                                        <Card.Footer className='text-center'>
+                                        <Button className="primary w-100 d-flex align-items-center flex-column" onClick={() => redirect(product.idProduit, product.nomProduit, product.prixProduit)}>+ Ajouter au panier</Button>
+                                        </Card.Footer>                                       
+                                    </Card>
+                                ) : sessionStorage.getItem("typeUser") === "COOPERATIVE" ? (
+                                    <Card className="flex-fill card-flyer unselectable" style={{marginTop : "20px", marginBottom : "20px"}}>
+                                        <Card.Img className='image-box undragable' variant="top" 
+                                        src={images.find(image => image.categorieProduit === product.categorieProduit)?.src} />
+                                        <Card.Body>
+                                        <Card.Title className='text-black initialism mb-4'>{product.nomProduit}</Card.Title>
+                                        <Card.Text>
+                                            {product.descriptionProduit}
+                                        </Card.Text>
+                                        </Card.Body>
+                                        <Card.Footer>
+                                        <Card.Text className='text-info mb-0'><span className='text-primary'>Catégorie :</span> {product.categorieProduit}</Card.Text>
+                                        <Card.Text className='text-primary'>Quantité disponible : <span className='text-info'>{product.stockProduit}{product.uniteProduit}</span></Card.Text>
+                                        </Card.Footer>
+                                        <Card.Footer className='text-center'>
+                                        <small className="text-lg">{product.prixProduit} Ar/{product.uniteProduit}</small>
+                                        </Card.Footer>
+                                    </Card>
+                                ) : sessionStorage.getItem("typeUser") === "AGRICULTEUR" ? (
+                                    <Card className="flex-fill card-flyer unselectable" style={{marginTop : "20px", marginBottom : "20px"}}>
+                                        <Card.Img className='image-box undragable' variant="top" 
+                                        src={images.find(image => image.categorieProduit === product.categorieProduit)?.src} />
+                                        <Card.Body>
+                                        <Card.Title className='text-black initialism mb-4'>{product.nomProduit}</Card.Title>
+                                        <Card.Text>
+                                            {product.descriptionProduit}
+                                        </Card.Text>
+                                        </Card.Body>
+                                        <Card.Footer>
+                                        <Card.Text className='text-info mb-0'><span className='text-primary'>Catégorie :</span> {product.categorieProduit}</Card.Text>
+                                        <Card.Text className='text-primary'>Quantité disponible : <span className='text-info'>{product.stockProduit}{product.uniteProduit}</span></Card.Text>
+                                        </Card.Footer>
+                                        <Card.Footer className='text-center'>
+                                        <small className="text-lg">{product.prixProduit} Ar/{product.uniteProduit}</small>
+                                        </Card.Footer>
+                                    </Card>
+                                ) : (
+                                    <Card className="flex-fill card-flyer unselectable" style={{marginTop : "20px", marginBottom : "20px"}}>
+                                        <Card.Img className='image-box undragable' variant="top" 
+                                        src={images.find(image => image.categorieProduit === product.categorieProduit)?.src} />
+                                        <Card.Body>
+                                        <Card.Title className='text-black initialism mb-4'>{product.nomProduit}</Card.Title>
+                                        <Card.Text>
+                                            {product.descriptionProduit}
+                                        </Card.Text>
+                                        </Card.Body>
+                                        <Card.Footer>
+                                        <Card.Text className='text-info mb-0'><span className='text-primary'>Catégorie :</span> {product.categorieProduit}</Card.Text>
+                                        <Card.Text className='text-primary'>Quantité disponible : <span className='text-info'>{product.stockProduit}{product.uniteProduit}</span></Card.Text>
+                                        </Card.Footer>
+                                        <Card.Footer className='text-center'>
+                                        <small className="text-lg">{product.prixProduit} Ar/{product.uniteProduit}</small>
+                                        </Card.Footer>
+                                        <Card.Footer className='text-center'>
+                                        <Button className="primary w-100 d-flex align-items-center flex-column" onClick={needLogin}>+ Ajouter au panier</Button>
+                                        </Card.Footer>                                       
+                                    </Card>
+                                )}
                             </Col>
                             </div>
                         );
                     })}
-                </Row><br/>
+                </Carousel><br/>
             </div>
             <Routes>
                 <Route path='/produits' element={<Product/>}/>

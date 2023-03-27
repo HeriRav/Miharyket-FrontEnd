@@ -126,18 +126,6 @@ function Dashboard() {
                     <i className="fas fa-fw fa-shopping-bag"></i>
                     <span>Approvisionnement</span>
                 </Link>
-                <div id="collapsePages" className="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-                    <div className="bg-white py-2 collapse-inner rounded">
-                        <h6 className="collapse-header">Login Screens:</h6>
-                        <a className="collapse-item" href="login.html">Login</a>
-                        <a className="collapse-item" href="register.html">Register</a>
-                        <a className="collapse-item" href="forgot-password.html">Forgot Password</a>
-                        <div className="collapse-divider"></div>
-                        <h6 className="collapse-header">Other Pages:</h6>
-                        <a className="collapse-item" href="404.html">404 Page</a>
-                        <a className="collapse-item" href="blank.html">Blank Page</a>
-                    </div>
-                </div>
             </li>
            
             
@@ -245,8 +233,8 @@ function Dashboard() {
                                 </h6>
                                 <a className="dropdown-item d-flex align-items-center" href="#">
                                     <div className="dropdown-list-image mr-3">
-                                        <img className="rounded-circle" src="img/undraw_profile_1.svg"
-                                            alt="..."/>
+                                        {/* <img className="rounded-circle" src="img/undraw_profile_1.svg"
+                                            alt="..."/> */}
                                         <div className="status-indicator bg-success"></div>
                                     </div>
                                     <div className="font-weight-bold">
@@ -257,8 +245,8 @@ function Dashboard() {
                                 </a>
                                 <a className="dropdown-item d-flex align-items-center" href="#">
                                     <div className="dropdown-list-image mr-3">
-                                        <img className="rounded-circle" src="img/undraw_profile_2.svg"
-                                            alt="..."/>
+                                        {/* <img className="rounded-circle" src="img/undraw_profile_2.svg"
+                                            alt="..."/> */}
                                         <div className="status-indicator"></div>
                                     </div>
                                     <div>
@@ -269,8 +257,8 @@ function Dashboard() {
                                 </a>
                                 <a className="dropdown-item d-flex align-items-center" href="#">
                                     <div className="dropdown-list-image mr-3">
-                                        <img className="rounded-circle" src="img/undraw_profile_3.svg"
-                                            alt="..."/>
+                                        {/* <img className="rounded-circle" src="img/undraw_profile_3.svg"
+                                            alt="..."/> */}
                                         <div className="status-indicator bg-warning"></div>
                                     </div>
                                     <div>
