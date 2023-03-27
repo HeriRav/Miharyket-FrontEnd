@@ -20,6 +20,7 @@ import UserList from './components/UserList'
 import Product from './pages/Product'
 import Contact from './pages/Contact'
 import Cart from './pages/Cart'
+import Portefeuille from './pages/Agriculteur/Portefeuille'
 
 // Fonction de vérification de l'authentification de l'utilisateur
 const isAuthenticated = () => {
@@ -50,6 +51,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       <Route path='/dashboard' element={isAuthenticated() ? <DashboardAdmin /> : <Navigate to='/authentification/login' />} />
       <Route path='/listProduit' element={isAuthenticated() ? <ListProduit /> : <Navigate to='/authentification/login' />} />
       <Route path='/listAgriculteurs' element={isAuthenticated() ? <ListAgriculteur /> : <Navigate to='/authentification/login' />} />
+      <Route path='/portefeuille' element={isAuthenticated() ? <Portefeuille /> : <Navigate to='/authentification/login' />} />
       <Route path='/ajoutProduit' element={isAuthenticated() ? <AjoutProduit /> : <Navigate to='/authentification/login' />} />
       <Route path='/dashboard-coop' element={isAuthenticated() ? <DashboardCooperative /> : <Navigate to='/authentification/login' />} />
       <Route path='/dashboard-aggro' element={isAuthenticated() ? <DashboardAgriculteur /> : <Navigate to='/authentification/login' />} />
