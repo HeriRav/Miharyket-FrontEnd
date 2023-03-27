@@ -251,8 +251,8 @@ function Home() {
                                         </Card.Text>
                                         </Card.Body>
                                         <Card.Footer>
-                                        <Card.Text className='text-success mb-0'><span className='text-primary'>Catégorie :</span> {product.categorieProduit}</Card.Text>
-                                        <Card.Text className='text-primary'>Quantité disponible : <span className='text-success'>{product.stockProduit}{product.uniteProduit}</span></Card.Text>
+                                        <Card.Text className='text-info mb-0'><span className='text-primary'>Catégorie :</span> {product.categorieProduit}</Card.Text>
+                                        <Card.Text className='text-primary'>Quantité disponible : <span className='text-info'>{product.stockProduit}{product.uniteProduit}</span></Card.Text>
                                         </Card.Footer>
                                         <Card.Footer className='text-center'>
                                         <small className="text-lg">{product.prixProduit} Ar/{product.uniteProduit}</small>
@@ -262,7 +262,7 @@ function Home() {
                                         </Card.Footer>                                       
                                     </Card>
                                 ) : sessionStorage.getItem("typeUser") === "COOPERATIVE" ? (
-                                    <Card className="flex-fill card-flyer" style={{marginTop : "20px"}}  key={product.idProduit}>
+                                    <Card className="flex-fill card-flyer" style={{marginTop : "20px", marginBottom : "20px"}}>
                                         <Card.Img className='image-box' variant="top" 
                                         src={images.find(image => image.categorieProduit === product.categorieProduit)?.src} />
                                         <Card.Body>
@@ -272,15 +272,15 @@ function Home() {
                                         </Card.Text>
                                         </Card.Body>
                                         <Card.Footer>
-                                        <Card.Text className='text-success mb-0'><span className='text-primary'>Catégorie :</span> {product.categorieProduit}</Card.Text>
-                                        <Card.Text className='text-primary'>Quantité disponible : <span className='text-success'>{product.stockProduit}{product.uniteProduit}</span></Card.Text>
+                                        <Card.Text className='text-info mb-0'><span className='text-primary'>Catégorie :</span> {product.categorieProduit}</Card.Text>
+                                        <Card.Text className='text-primary'>Quantité disponible : <span className='text-info'>{product.stockProduit}{product.uniteProduit}</span></Card.Text>
                                         </Card.Footer>
                                         <Card.Footer className='text-center'>
                                         <small className="text-lg">{product.prixProduit} Ar/{product.uniteProduit}</small>
                                         </Card.Footer>
                                     </Card>
                                 ) : sessionStorage.getItem("typeUser") === "AGRICULTEUR" ? (
-                                    <Card className="flex-fill card-flyer" style={{marginTop : "20px"}}  key={product.idProduit}>
+                                    <Card className="flex-fill card-flyer" style={{marginTop : "20px", marginBottom : "20px"}}>
                                         <Card.Img className='image-box' variant="top" 
                                         src={images.find(image => image.categorieProduit === product.categorieProduit)?.src} />
                                         <Card.Body>
@@ -290,15 +290,15 @@ function Home() {
                                         </Card.Text>
                                         </Card.Body>
                                         <Card.Footer>
-                                        <Card.Text className='text-success mb-0'><span className='text-primary'>Catégorie :</span> {product.categorieProduit}</Card.Text>
-                                        <Card.Text className='text-primary'>Quantité disponible : <span className='text-success'>{product.stockProduit}{product.uniteProduit}</span></Card.Text>
+                                        <Card.Text className='text-info mb-0'><span className='text-primary'>Catégorie :</span> {product.categorieProduit}</Card.Text>
+                                        <Card.Text className='text-primary'>Quantité disponible : <span className='text-info'>{product.stockProduit}{product.uniteProduit}</span></Card.Text>
                                         </Card.Footer>
                                         <Card.Footer className='text-center'>
                                         <small className="text-lg">{product.prixProduit} Ar/{product.uniteProduit}</small>
                                         </Card.Footer>
                                     </Card>
                                 ) : (
-                                    <Card className="flex-fill card-flyer" style={{marginTop : "20px"}}>
+                                    <Card className="flex-fill card-flyer" style={{marginTop : "20px", marginBottom : "20px"}}>
                                         <Card.Img className='image-box' variant="top" 
                                         src={images.find(image => image.categorieProduit === product.categorieProduit)?.src} />
                                         <Card.Body>
@@ -308,8 +308,8 @@ function Home() {
                                         </Card.Text>
                                         </Card.Body>
                                         <Card.Footer>
-                                        <Card.Text className='text-success mb-0'><span className='text-primary'>Catégorie :</span> {product.categorieProduit}</Card.Text>
-                                        <Card.Text className='text-primary'>Quantité disponible : <span className='text-success'>{product.stockProduit}{product.uniteProduit}</span></Card.Text>
+                                        <Card.Text className='text-info mb-0'><span className='text-primary'>Catégorie :</span> {product.categorieProduit}</Card.Text>
+                                        <Card.Text className='text-primary'>Quantité disponible : <span className='text-info'>{product.stockProduit}{product.uniteProduit}</span></Card.Text>
                                         </Card.Footer>
                                         <Card.Footer className='text-center'>
                                         <small className="text-lg">{product.prixProduit} Ar/{product.uniteProduit}</small>
