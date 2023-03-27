@@ -1,4 +1,4 @@
-import { Link, Route, Routes, useNavigate } from 'react-router-dom';
+    import { Link, Route, Routes, useNavigate } from 'react-router-dom';
 //import '../css/register-style.css'
 import React from 'react';
 import { useState } from 'react';
@@ -88,6 +88,18 @@ function Dashboard() {
                         <h6 className="collapse-header">Other Pages:</h6>
                         <a className="collapse-item" href="404.html">404 Page</a>
                         <a className="collapse-item" href="blank.html">Blank Page</a>
+                    </div>
+                </div>
+            </li>
+            <li className="nav-item">
+                <Link className="nav-link" to="/portefeuille" onClick={handleMenu4Click}
+                    aria-expanded="true" aria-controls="collapsePages">
+                    <i class="fa-solid fa-wallet"></i>
+                    <span>Portefeuille</span>
+                </Link>
+                <div id="collapsePages" className="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                    <div className="bg-white py-2 collapse-inner rounded">
+                        
                     </div>
                 </div>
             </li>

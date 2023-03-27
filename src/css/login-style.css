@@ -108,6 +108,7 @@ Link {
   -moz-transition: all .9s ease;
   -o-transition: all .9s ease;
   -ms-transition: all .9s ease;
+  transition: all .9s ease;
 }
 
 .card-flyer .image-box {
@@ -115,6 +116,7 @@ Link {
   -moz-transition: all .9s ease;
   -o-transition: all .9s ease;
   -ms-transition: all .9s ease;
+  transition: all .9s ease;
 }
 
 .card-flyer:hover {
@@ -126,10 +128,10 @@ Link {
   -o-transition: all 0.2s ease-in;
   transition: all 0.2s ease-in;
   margin-top: 50px;
-  -webkit-transform: scale(1.15);
-  -moz-transform: scale(1.15);
-  -ms-transform: scale(1.15);
-  -o-transform: scale(1.15);
+  -webkit-transform: scale(1.02);
+  -moz-transform: scale(1.02);
+  -ms-transform: scale(1.02);
+  -o-transform: scale(1.02);
   transform: scale(1.02);
 }
 
@@ -172,4 +174,81 @@ Link {
   .side {
     margin-left: 14rem;
   }
+}
+
+.unselectable {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.undragable {
+  /* user-drag: none;  */
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-drag: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+}
+
+.card-counter{
+  box-shadow: 2px 2px 10px #DADADA;
+  margin: 5px;
+  padding: 20px 10px;
+  background-color: #fff;
+  height: 100px;
+  border-radius: 5px;
+  transition: .3s linear all;
+}
+
+.card-counter:hover{
+  box-shadow: 4px 4px 20px #DADADA;
+  transition: .3s linear all;
+}
+
+.card-counter.primary{
+  background-color: #8bc34a;
+  color: #FFF;
+}
+
+.card-counter.danger{
+  background-color: #f23a2e;
+  color: #FFF;
+}  
+
+.card-counter.warning{
+  background-color: #ffa139;
+  color: #FFF;
+}  
+
+.card-counter.info{
+  background-color: #17a2b8;
+  color: #FFF;
+}  
+
+.card-counter i{
+  font-size: 5em;
+  opacity: 0.2;
+}
+
+.card-counter .count-numbers{
+  position: absolute;
+  right: 35px;
+  top: 20px;
+  font-size: 32px;
+  display: block;
+}
+
+.card-counter .count-name{
+  position: absolute;
+  right: 35px;
+  top: 65px;
+  font-style: italic;
+  text-transform: capitalize;
+  opacity: 0.5;
+  display: block;
+  font-size: 18px;
 }
