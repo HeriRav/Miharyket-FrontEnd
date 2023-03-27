@@ -1,6 +1,5 @@
 import { Link, Route, Routes, useNavigate } from 'react-router-dom';
 import Login from './Login';
-import axios from 'axios';
 import React, { useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
@@ -12,7 +11,6 @@ function Register_coop() {
     const [statCoop, setStat] = useState('')
     const [responsableCoop, setResp] = useState('')
     const [email, setEmail] = useState('')
-    const [photo, setPhoto] = useState('')
     const [telephoneUtilisateur, setPhone] = useState('')
     const [mdpUtilisateur, setPass] = useState('')
     const [confirmMdp, setConfirm] =useState('')
@@ -22,21 +20,9 @@ function Register_coop() {
     const handleClick = async (e) => {
         e.preventDefault()
         if (validate()) {
-            const formData = new FormData();
-    formData.append('photo', photo);
-    formData.append('nomUtilisateur', nomUtilisateur);
-    formData.append('login', email);
-    formData.append('email', email);
-    formData.append('nifCoop', nifCoop);
-    formData.append('statCoop', statCoop);
-    formData.append('responsableCoop', responsableCoop);
-    formData.append('adresseUtilisateur', adresseUtilisateur);
-    formData.append('telephoneUtilisateur', telephoneUtilisateur);
-    formData.append('mdpUtilisateur', mdpUtilisateur);
-    formData.append('typeUtilisateur', typeUtilisateur);
-            
-    axios.post("http://localhost:8085/api/utilisateurs/ajout",formData, {
-                 headers:{'Content-Type': 'multipart/form-data'}
+            const user = {nomUtilisateur, login : email, nifCoop, statCoop, responsableCoop, adresseUtilisateur, email, telephoneUtilisateur, mdpUtilisateur, typeUtilisateur}
+            fetch("http://localhost:8085/api/utilisateurs/ajout", {
+                method:"POST", headers:{"Content-Type" : "application/json"}, body:JSON.stringify(user)
             }).then(() => {
                 toast.success('Votre compte a été enregistré avec succès')
                 setTimeout(() => {
@@ -111,11 +97,6 @@ function Register_coop() {
         }
         return result
     }
-    const handlePhototChange = event => {
-        setPhoto(event.target.files[0]);
-        setPhoto(URL.createObjectURL(event.target.files[0]));
-    };
-    
 
     const navigate = useNavigate()
     const refresh = () => {
@@ -172,27 +153,6 @@ function Register_coop() {
                                         <label style={{marginRight : "auto", fontSize : "16px", color : "black"}}>Nom du responsable</label>
                                         <input type="text" id="registerResp" className="form-control" required="required"
                                         value={responsableCoop} onChange={(e) => {setResp(e.target.value)}} placeholder='Le nom de votre responsable'/>
-                                        </div>
-                                        <div className="form-outline mb-4">
-                                        <label style={{marginRight : "auto", fontSize : "16px", color : "black"}}>Photo de profil</label>
-                                        <input
-          type="file"
-          id="photoUtilisateur"
-          name="photoUtilisateur"
-          onChange={handlePhototChange}
-          required
-        />
-        {photo && (
-                      <img
-                        src={photo}
-                        alt="selected"
-                        style={{
-                          maxWidth: "100px",
-                          maxHeight: "100px",
-                          marginLeft: "10px",
-                        }}
-                      />
-                    )}
                                         </div>
 
                                         <div className="row mb-4">
