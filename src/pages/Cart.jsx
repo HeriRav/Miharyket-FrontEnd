@@ -127,6 +127,7 @@ function Cart() {
     localStorage.removeItem(nom);
     const nouveauPanier = produit.filter((panier) => panier.id !== id);
     setProd(nouveauPanier);
+    window.location.reload(true)
   };
   return (
     <>
