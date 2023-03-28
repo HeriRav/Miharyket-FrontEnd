@@ -88,69 +88,8 @@ function Home() {
   const [categorie, setCategorie] = useState("");
   const [resultats, setResultats] = useState([]);
   const [stockProduit, setStock] = useState("");
-  const [idCommande, setIdCommande] = useState("");
-  const [dateCommande, setDate] = useState("");
-  const [refCommande, setRefCommande] = useState("");
-  const [statutCommande, setStatut] = useState("en cours");
   const [prixProduit, setPrix] = useState("");
   const [quantite, setQuantite] = useState("");
-  const idClient = sessionStorage.getItem("id");
-
-  // date
-  const options = { year: "numeric", month: "2-digit", day: "2-digit" };
-  const date = new Date()
-    .toLocaleDateString("fr-FR", options)
-    .split("/")
-    .reverse()
-    .join("-");
-
-  // Fonction pour générer une référence unique de commande
-  function genererReferenceCommande(nombreDeCommandes) {
-    // Convertir le nombre de commandes en chaîne de caractères et ajouter des zéros au début si nécessaire
-    let numeroDeCommande = (nombreDeCommandes + 1).toString().padStart(3, "0");
-    // Retourner la référence de commande formatée
-    return "C-" + numeroDeCommande;
-  }
-
-  const ajoutPanier = (event) => {
-    event.preventDefault();
-    const nouvelleCommande = {
-      utilisateur: { id: idClient },
-      dateCommande: date,
-      refCommande: genererReferenceCommande(5),
-      statutCommande: statutCommande,
-    };
-
-    fetch("http://localhost:8085/commandes/ajout", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(nouvelleCommande),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        // Récupération de l'ID de la commande générée
-        const idCommande = data.id;
-        // Création d'un objet ligne de commande
-        // const ligneCommande = {
-        //     commande: idCommande,
-        //     prixUnitaire: prixProduit,
-        //     quantiteApprovisionnement: quantite,
-        //     produit : {idProduit: idProduit},
-        // };
-        // console.log(ligneCommande);
-        // fetch("http://localhost:8085/ligne-commande/ajout", {
-        //     method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(ligneCommande)
-        // }) .then(response => response.json())
-        // .then(data => {
-        //     toast.success('Ce produit a été ajouté au panier')
-        // }).catch((error) => {
-        //     toast.error('Création échouée : ' + err.message)
-        // });
-      })
-      .catch((error) => {
-        toast.error("Création échouée : " + err.message);
-      });
-  };
 
   function handleChange(e, index) {
     const newPanier = [...panier];
