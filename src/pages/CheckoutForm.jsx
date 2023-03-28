@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import axios from "axios";
-import visa from '../images/visa.png';
+
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 
 const CheckoutForm = () => {
@@ -54,6 +56,7 @@ const CheckoutForm = () => {
         if (response.data.success) {
           setMessage("Paiement réussi");
           setSuccess(true);
+          toast.success("Paiement réussi, Merci pour votre achat");
         }
       } catch (error) {
         setMessage("Erreur : ", error);
@@ -81,7 +84,7 @@ const CheckoutForm = () => {
             <br/>
             <CardElement
               options={{ hidePostalCode: true }}
-              style={({ width: "100%" }, { marginTop: "50px" })}
+              style={({ width: "100%" }, { marginTop: "70px" })}
             />
           </div>
         </fieldset>
@@ -91,12 +94,13 @@ const CheckoutForm = () => {
           disabled={isLoading}
           id="submit"
           className="btn btn-primary"
-          style={{ marginTop: "-30px", width: "100%" }}
+          style={{ marginTop: "30px", width: "100%" }}
         >
           <span id="button-text">
             {isLoading ? <div className="spinner" id="spinner"></div> : "Payer"}
           </span>
         </button>
+        
         {message && <div id="payment-message">{message}</div>}
       </form>  
     </div>
