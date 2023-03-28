@@ -4,7 +4,7 @@ import { useEffect } from "react";
 function StatCooperative() {
   const [count, setCount] = useState([]);
 
-  const [counter, setCounter] = useState(null)
+  const [counter, setCounter] = useState(3)
 
   const id = sessionStorage.getItem("idCoop");
 
@@ -17,14 +17,14 @@ function StatCooperative() {
     .catch(err => console.log(err))
   }, [])
 
-  useEffect(() => {
-    async function countAggro() {
-      const response = await fetch(`http://localhost:8085/api/utilisateurs/cooperatives/${id}/agriculteurs`)
-      const data = await response.json();
-      setCounter(data.counter);
-    }
-    countAggro()
-  }, [])
+  // useEffect(() => {
+  //   async function countAggro() {
+  //     const response = await fetch(`http://localhost:8085/api/utilisateurs/cooperatives/${id}/agriculteurs`)
+  //     const data = await response.json();
+  //     setCounter(data.counter);
+  //   }
+  //   countAggro()
+  // }, [])
 
   return (
       <div>
