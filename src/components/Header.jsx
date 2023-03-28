@@ -197,7 +197,7 @@ const Header = () => {
                             <MDBIcon fas icon="fa-solid fa-shopping-cart fa-lg" style={{ color: '#fff', position : "relative"}}/>
                             <div className='rounded-circle bg-danger d-flex justify-content-center aligh-items-center' 
                             style={{width : "1.5rem", height : "1.5rem", position : "absolute", bottom : "0", right : "0", transform : "translate(-25%, -25%)", color : "white"}}>
-                              2
+                              {counter}
                             </div>
                           </Link>
                         </li>

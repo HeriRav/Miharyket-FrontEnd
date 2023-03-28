@@ -8,6 +8,8 @@ import DashboardFooter from '../Cooperative/DashboardFooter'
 import StatCooperative from './StatAgriculteur';
 import ApprovisionnementProduitAgriculteur from './ApprovisionnementProduitAgriculteur';
 import ProduitsList from '../../components/ProduitsList';
+import StatAgriculteur from './StatAgriculteur';
+import Portefeuille from './Portefeuille';
 
 function Dashboard() {
     //localStorage.setItem("produitCooperative", produitCooperative);
@@ -92,9 +94,9 @@ function Dashboard() {
                 </div>
             </li>
             <li className="nav-item">
-                <Link className="nav-link" to="/portefeuille" onClick={handleMenu4Click}
+                <Link className="nav-link" to="/dashboard-aggro" onClick={handleMenu3Click}
                     aria-expanded="true" aria-controls="collapsePages">
-                    <i class="fa-solid fa-wallet"></i>
+                    <i class="fa fa-wallet"></i>
                     <span>Portefeuille</span>
                 </Link>
                 <div id="collapsePages" className="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
@@ -287,10 +289,11 @@ function Dashboard() {
 
                 </nav>
                 <div className="container-fluid">
-                {activeMenu === 0 && <StatCooperative />}
+                {activeMenu === 0 && <StatAgriculteur />}
                
                 {activeMenu === 4 && <ApprovisionnementProduitAgriculteur/>}
-               
+                {activeMenu === 3 && <Portefeuille/>}
+                
                 <DashboardFooter></DashboardFooter>
                 </div>
             
