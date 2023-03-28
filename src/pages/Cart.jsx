@@ -47,6 +47,7 @@ function Cart() {
 
   function handleOpenModal() {
     setShowModal(true);
+    localStorage.setItem('paie', total)
   }
 
   function handleCloseModal() {
@@ -112,7 +113,7 @@ function Cart() {
     setTotal(newTotal);
   
     // Mettre à jour le message d'erreur en utilisant la fonction setErrorMessage
-    setErrorMessage(errorMessage);
+    // setErrorMessage(errorMessage);
     {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
   }
   
@@ -156,7 +157,7 @@ function Cart() {
           produit.map((panier) => {
             return (
            
-              <MDBContainer className="py-1 h-100">
+              <MDBContainer className="py-1 h-100" key={panier.idProduit}>
                 <MDBRow className="justify-content-center align-items-center h-100">
                   <MDBCol md="10">
                     <MDBCard className="rounded-3 mb-4">
@@ -256,7 +257,7 @@ function Cart() {
                             key={produit.id}
                           >
                             <a
-                              href="#!"
+                            style={{cursor : "pointer"}}
                               className="text-danger"
                               onClick={() => {
                                 Swal.fire({
@@ -334,8 +335,8 @@ function Cart() {
             },
           }}
         >
-          <div class="modal-header">
-            <div class="row justify-content-left">
+          <div className="modal-header">
+            <div className="row justify-content-left">
               <img
                 src={visa}
                 alt="visa"
@@ -343,12 +344,12 @@ function Cart() {
                 style={{ width: "20%" }}
               />
 
-              <h1 class="md-5 mt-4 ml-5"> PAIEMENT</h1>
+              <h1 className="md-5 mt-4 ml-5"> PAIEMENT</h1>
             </div>
 
             <button
               type="button"
-              class="btn-close"
+              className="btn-close"
               aria-label="Close"
               onClick={handleCloseModal}
             ></button>
