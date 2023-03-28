@@ -81,7 +81,7 @@ const CheckoutForm = () => {
             <br/>
             <CardElement
               options={{ hidePostalCode: true }}
-              style={({ width: "100%" }, { marginTop: "50px" })}
+              style={({ width: "100%" }, { marginTop: "70px" })}
             />
           </div>
         </fieldset>
@@ -91,12 +91,13 @@ const CheckoutForm = () => {
           disabled={isLoading}
           id="submit"
           className="btn btn-primary"
-          style={{ marginTop: "-30px", width: "100%" }}
+          style={{ marginTop: "30px", width: "100%" }}
         >
           <span id="button-text">
             {isLoading ? <div className="spinner" id="spinner"></div> : "Payer"}
           </span>
         </button>
+        
         {message && <div id="payment-message">{message}</div>}
       </form>  
     </div>

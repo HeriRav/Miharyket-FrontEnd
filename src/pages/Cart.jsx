@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { createContext, useContext, useEffect, useState } from "react";
 import visa from "../images/visa.png";
+
 import {
   MDBBtn,
   MDBCard,
@@ -39,7 +40,7 @@ const images = [
 function Cart() {
   const [max, setMax] = useState([]);
   const [produit, setProd] = useState([]);
-  const [grandTotal, setGrandTotal] = useState(0);
+  //const [grandTotal, setGrandTotal] = useState(0);
   const [total, setTotal] = useState(0);
   const [totalProduit, setTotalProduit] = useState([]);
   const [showModal, setShowModal] = useState(false); // déplacer ici
@@ -58,7 +59,7 @@ function Cart() {
       .then((response) => response.json())
       .then((data) => {
         let total = 0;
-        let grandTotal = 0;
+        
         let a = [];
         for (let i = 0; i < data.length; i++) {
           if (localStorage.getItem(data[i].nomProduit) == null) continue;
@@ -90,24 +91,33 @@ function Cart() {
   }
 
   function handlePriceUpdate(pr, value) {
+    // Convertir la valeur en nombre et vérifier si elle dépasse la quantité disponible
+    const newValue = parseInt(value, 10);
+    const limitedValue = newValue > pr.stock ? pr.stock : newValue;
+  
+    // Vérifier si la quantité dépasse la quantité disponible et définir le message d'erreur en conséquence
+    const errorMessage = newValue > pr.stock ? `Quantité maximale disponible: \${pr.stock}` : "";
+  
     const updatedItems = produit.map((item) => {
       if (item.id === pr.id) {
-        // console.log(item.price * value)
-        return { ...item, total: item.price * value };
+        return { ...item, total: item.price * limitedValue };
       } else {
         return item;
       }
     });
     setProd(updatedItems);
-    // setTotal(grandTotal);
-    const newTotal = Object.values(updatedItems).reduce(
-      (acc, p) => acc + p.price * value,
-      0
-    );
+  
+    // Mettez à jour le montant total en utilisant la fonction setTotal
+    const newTotal = updatedItems.reduce((acc, p) => acc + p.total, 0);
     setTotal(newTotal);
-    setGrandTotal(newTotal + grandTotal);
-    console.log(total);
+  
+    // Mettre à jour le message d'erreur en utilisant la fonction setErrorMessage
+    setErrorMessage(errorMessage);
+    {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
   }
+  
+  
+  
 
   produit.sort((a, b) => b.idProduit - a.idProduit);
 
@@ -137,17 +147,19 @@ function Cart() {
             </div>
           </div>
         </div>
+        
       </div>
 
       <section className="h-100" style={{ backgroundColor: "#eee" }}>
         {produit &&
           produit.map((panier) => {
             return (
-              <MDBContainer className="py-5 h-100">
+           
+              <MDBContainer className="py-1 h-100">
                 <MDBRow className="justify-content-center align-items-center h-100">
                   <MDBCol md="10">
                     <MDBCard className="rounded-3 mb-4">
-                      <MDBCardBody className="p-4">
+                      <MDBCardBody className="p-1">
                         <MDBRow className="justify-content-between align-items-center">
                           <MDBCol md="2" lg="2" xl="2">
                             <MDBCardImage
@@ -175,6 +187,7 @@ function Cart() {
                                 Quantité disponible:{" "}
                               </span>
                               {panier.stock} {panier.unit}
+                              
                             </p>
                           </MDBCol>
 
@@ -227,11 +240,12 @@ function Cart() {
                               <MDBIcon fas icon="plus" />
                             </MDBBtn> */}
                           </MDBCol>
-                          <MDBCol md="3" lg="2" xl="2" className="offset-lg-1">
-                            prix total:
+                          <MDBCol md="1" lg="2" xl="2" className="offset-lg-1">
+                            Prix total par produit:
                             <MDBTypography tag="h5" className="mb-0">
                               {panier.total} Ar
                             </MDBTypography>
+                            
                           </MDBCol>
                           <MDBCol
                             md="1"
@@ -272,21 +286,21 @@ function Cart() {
             );
           })}
 
-        <MDBContainer className="py-5 h-100">
+        <MDBContainer className="py-1 h-100">
           <MDBRow className="justify-content-center align-items-center h-100">
             <MDBCol md="10">
-              <MDBCard className="rounded-3 mb-4">
+              <MDBCard className="rounded-3 mb-1">
                 <div className="justify-content-center align-items-center h-100">
                   <div
                     style={{
                       display: "flex",
                       justifyContent: "space-between",
                       alignItems: "center",
-                      width: "100%",
+                      width: "95%",
                     }}
                   >
-                    <p style={{ margin: "0" }}>Prix total :</p>
-                    <p style={{ margin: "0" }}>{grandTotal} Ar</p>
+                    <p style={{ margin: "0" }}>Prix total à payer :</p>
+                    <p style={{ margin: "0" }}>{total} Ar</p>
                   </div>
                 </div>
 
@@ -296,8 +310,9 @@ function Cart() {
                   variant="primary"
                   className="btn btn-success btn-lg gradient-custom-4 px-5 text-white"
                 >
-                  Payer
+                  Paiement
                 </button>
+                
               </MDBCard>
             </MDBCol>
           </MDBRow>
@@ -337,7 +352,7 @@ function Cart() {
               onClick={handleCloseModal}
             ></button>
           </div>
-          <p>Prix à payer : {grandTotal} Ar</p>
+          <p>Prix à payer : {total} Ar</p>
 
           <Elements stripe={stripePromise}>
             <CheckoutForm />

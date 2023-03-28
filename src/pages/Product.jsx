@@ -7,6 +7,8 @@ import { useEffect, useState } from "react";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { Link, Route, Routes, useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function Product() {
   const [produit, setProd] = useState([]);
@@ -33,12 +35,14 @@ function Product() {
   ];
 
   const redirect = (id, nom, stock, price, unit, category) => {
+    
     /*
             1. créer une variable dans le localstorage
             2. envoyer l'id du produit, le prix unitaire et la quantité par défaut (1) dans localstorage
             3. mettre à jour le nombre d'article sélectionné (badge de notification)
         */
     if (localStorage.getItem(nom) == null) {
+      toast.success("Ajout réussi");
       localStorage.setItem(
         nom,
         JSON.stringify({
@@ -50,7 +54,9 @@ function Product() {
           unit: unit,
           category: category,
         })
+        
       );
+      
     } else {
       let item = JSON.parse(localStorage.getItem(nom));
       item.quantity++;
@@ -97,6 +103,7 @@ function Product() {
   return (
     <div>
       <title>Mihary'ket - Nos produits</title>
+      <ToastContainer />
       <div
         className="intro-section site-blocks-cover innerpage"
         style={{ backgroundImage: "url('/src/images/hero_2.jpg')" }}
@@ -158,6 +165,7 @@ function Product() {
               .map((product) => {
                 return (
                   <div className="container-sm" key={product.idProduit}>
+                  
                     <Col className="d-flex">
                       {sessionStorage.getItem("typeUser") === "CLIENT" ? (
                         <Card
@@ -210,7 +218,9 @@ function Product() {
                                   product.stockProduit,
                                   product.uniteProduit,
                                   product.categorieProduit
+                                
                                 )
+
                               }
                             >
                               + Ajouter au panier
