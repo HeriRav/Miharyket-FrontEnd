@@ -35,9 +35,10 @@ function ApprovisionnementProduitAgriculteur() {
       const res = await axios.post('http://localhost:8085/approvisionnements/add', appro);
       setAppros([...appros, res.data]);
       setFilteredAppros([...filteredAppros, res.data]);
+      console.log("Envoyer au back appros "+appros);
       setShowModal(false);
     } catch (error) {
-      console.error(error);
+      console.log(error);
     }
   };
 
@@ -47,10 +48,11 @@ function ApprovisionnementProduitAgriculteur() {
     const approvisionnement = {
       produit: { idProduit: produit },
       quantiteApprovisionnement,
-      utilisateur : user,
+      utilisateur : JSON.parse(user),
       prixUnitaire,
+      dateApprovisionnement: new Date().toISOString()
     };
-
+    
     handleAddAppro(approvisionnement);
   };
 
@@ -63,7 +65,7 @@ function ApprovisionnementProduitAgriculteur() {
           <Modal.Title>Ajouter un approvisionnement</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form onSubmit={handleSubmit}>
+          <Form>
             <Form.Group controlId="formProduit">
               <Form.Label>Nom du produit</Form.Label>
               <Form.Control as="select" value={produit} onChange={e => setProduit(e.target.value)}>
@@ -90,7 +92,7 @@ function ApprovisionnementProduitAgriculteur() {
         </Modal.Body>
         <Modal.Footer>
         <Col>
-        <Button type="submit" onClick={() => setShowModal(false)} block >Enregistrer</Button>
+        <Button type="submit" onClick={handleSubmit} block >Enregistrer</Button>
       </Col>
         
         </Modal.Footer>

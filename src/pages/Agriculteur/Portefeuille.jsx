@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import '../../css/dashboardCooperative.css'
 
 const Portefeuille = () => {
   const [balance, setBalance] = useState(0);
