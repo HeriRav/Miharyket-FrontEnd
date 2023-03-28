@@ -15,19 +15,33 @@ import {
 } from "mdb-react-ui-kit";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
-import Swal from "sweetalert2";
+// import Swal from "sweetalert2";
 import CheckoutForm from "./CheckoutForm";
+import Swal from "sweetalert2";
 import Modal from "react-modal";
 
 const public_key =
-"pk_test_51MqBM9AD78j1yqjLvHmPakZ9UxZpLY4n6QBID2WuUc6sojf67NW3Laoleg4BY26UP6KczNOsBjphJ3TTpOG0Sl6000xE6dgNzI";
+  "pk_test_51MqBM9AD78j1yqjLvHmPakZ9UxZpLY4n6QBID2WuUc6sojf67NW3Laoleg4BY26UP6KczNOsBjphJ3TTpOG0Sl6000xE6dgNzI";
 const stripePromise = loadStripe(public_key);
+const map1 = new Map();
+const images = [
+  { categorieProduit: "Viande", src: "/src/images/meat.jpg" },
+  { categorieProduit: "Légume", src: "/src/images/organic-vegetable.jpg" },
+  { categorieProduit: "Fruit", src: "/src/images/organic-fruit.jpg" },
+  { categorieProduit: "Produit laitier", src: "/src/images/dairy-product.jpg" },
+  { categorieProduit: "Céréale", src: "/src/images/cereal.jpg" },
+  {
+    categorieProduit: "Produit arômatique",
+    src: "/src/images/aromatic-product.jpg",
+  },
+];
 
 function Cart() {
   const [max, setMax] = useState([]);
   const [produit, setProd] = useState([]);
-
+  const [grandTotal, setGrandTotal] = useState(0);
   const [total, setTotal] = useState(0);
+  const [totalProduit, setTotalProduit] = useState([]);
   const [showModal, setShowModal] = useState(false); // déplacer ici
 
   function handleOpenModal() {
@@ -43,37 +57,64 @@ function Cart() {
     fetch("http://localhost:8085/produits/list")
       .then((response) => response.json())
       .then((data) => {
+        let total = 0;
+        let grandTotal = 0;
         let a = [];
         for (let i = 0; i < data.length; i++) {
           if (localStorage.getItem(data[i].nomProduit) == null) continue;
 
           const item = JSON.parse(localStorage.getItem(data[i].nomProduit));
           item.quantité = 1; // initialiser la quantité à 1
+          item.total = item.price;
+          total += item.total;
           a.push(item);
         }
         setProd(a);
+        setTotal(total);
       })
       .catch((err) => console.log(err));
   }, []);
 
   function handleQuantityChange(idProduit, value) {
-    const newProduit = [...produit];
-    const index = newProduit.findIndex((p) => p.idProduit === idProduit);
-    newProduit[index].quantité = value;
+    // const newProduit = [...produit];
+    // const index = newProduit.findIndex((p) => p.idProduit === idProduit);
+    // console.log(index);
+    // newProduit[index].quantité = value;
+    // setProd(newProduit);
+    // // Mettre à jour le prix total
+    // const newTotal = newProduit.reduce(
+    //   (acc, p) => acc + p.price * p.quantité,
+    //   0
+    // );
+    // setTotal(newTotal);
+  }
 
-    setProd(newProduit);
-
-    // Mettre à jour le prix total
-    const newTotal = newProduit.reduce(
-      (acc, p) => acc + p.price * p.quantité,
+  function handlePriceUpdate(pr, value) {
+    const updatedItems = produit.map((item) => {
+      if (item.id === pr.id) {
+        // console.log(item.price * value)
+        return { ...item, total: item.price * value };
+      } else {
+        return item;
+      }
+    });
+    setProd(updatedItems);
+    // setTotal(grandTotal);
+    const newTotal = Object.values(updatedItems).reduce(
+      (acc, p) => acc + p.price * value,
       0
     );
     setTotal(newTotal);
+    setGrandTotal(newTotal + grandTotal);
+    console.log(total);
   }
 
   produit.sort((a, b) => b.idProduit - a.idProduit);
 
-  const supprimerProduit = (id) => {
+  const supprimerProduit = (id, nom) => {
+    const select = localStorage.getItem(nom);
+    console.log(select);
+    localStorage.removeItem(nom);
     const nouveauPanier = produit.filter((panier) => panier.id !== id);
     setProd(nouveauPanier);
   };
@@ -112,56 +153,68 @@ function Cart() {
                             <MDBCardImage
                               className="rounded-3"
                               fluid
-                              src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-shopping-carts/img1.webp"
+                              src={
+                                images.find(
+                                  (image) =>
+                                    image.categorieProduit === panier.category
+                                )?.src
+                              }
                               alt="Cotton T-shirt"
                             />
                           </MDBCol>
-                          <MDBCol md="3" lg="3" xl="3">
-                          <p className="lead fw-normal mb-2">{panier.nom}</p>
+                          <MDBCol md="4" lg="4" xl="4">
+                            <p className="lead fw-normal mb-2">{panier.nom}</p>
                             <p>
-                            <span className="text-muted">Prix par unité : </span>
-                            {panier.price} Ar
-                            <br />
-                            <br />
-                              <span className="text-muted">Quantité disponible: </span>
-                              
-                            
+                              <span className="text-muted">
+                                Prix par unité :{" "}
+                              </span>
+                              {panier.price} Ar
+                              <br />
+                              <br />
+                              <span className="text-muted">
+                                Quantité disponible:{" "}
+                              </span>
+                              {panier.stock} {panier.unit}
                             </p>
                           </MDBCol>
+
                           <MDBCol
                             md="3"
                             lg="3"
                             xl="2"
                             className="d-flex align-items-center justify-content-around"
                           >
-                            <MDBBtn
+                            {/* <MDBBtn
                               color="link"
                               className="px-2"
-                              onClick={() =>
-                                handleQuantityChange(
-                                  panier.idProduit,
-                                  panier.quantité - 1
-                                )
-                              }
-                            >
-                              <MDBIcon fas icon="minus" />
-                            </MDBBtn>
+                              // onClick={() =>
+                              //   handleQuantityChange(
+                              //     panier.idProduit,
+                              //     panier.quantité - 1
+                              //   )
+                              // }
+                            > */}
+                            {/* <MDBIcon fas icon="minus" /> */}
+                            {/* </MDBBtn> */}
 
                             <MDBInput
                               min={1}
-                              max={max}
+                              // max={max}
                               type="number"
                               size="sm"
-                              value={panier.quantité}
                               onChange={(e) =>
-                                handleQuantityChange(
-                                  panier.idProduit,
-                                  parseInt(e.target.value)
-                                )
+                                handlePriceUpdate(panier, e.target.value)
                               }
+                              //value={panier.quantité}
+                              // onChange={(e) =>
+                              //   handleQuantityChange(
+                              //     panier.idProduit,
+                              //     parseInt(e.target.value)
+                              //   )s
+                              // }
                             />
 
-                            <MDBBtn
+                            {/* <MDBBtn
                               color="link"
                               className="px-2"
                               onClick={() =>
@@ -172,12 +225,12 @@ function Cart() {
                               }
                             >
                               <MDBIcon fas icon="plus" />
-                            </MDBBtn>
+                            </MDBBtn> */}
                           </MDBCol>
                           <MDBCol md="3" lg="2" xl="2" className="offset-lg-1">
-                          prix total:
+                            prix total:
                             <MDBTypography tag="h5" className="mb-0">
-                            {total} Ar
+                              {panier.total} Ar
                             </MDBTypography>
                           </MDBCol>
                           <MDBCol
@@ -196,13 +249,13 @@ function Cart() {
                                     "Êtes-vous sûr de vouloir supprimer ce produit?",
                                   icon: "warning",
                                   showCancelButton: true,
-                                  confirmButtonColor: "#d33",
-                                  cancelButtonColor: "#3085d6",
+                                  confirmButtonColor: "#8bc34a",
+                                  cancelButtonColor: "#999DA0",
                                   confirmButtonText: "Oui, supprimer!",
                                   cancelButtonText: "Annuler",
                                 }).then((result) => {
                                   if (result.isConfirmed) {
-                                    supprimerProduit(panier.id);
+                                    supprimerProduit(panier.id, panier.nom);
                                   }
                                 });
                               }}
@@ -223,13 +276,19 @@ function Cart() {
           <MDBRow className="justify-content-center align-items-center h-100">
             <MDBCol md="10">
               <MDBCard className="rounded-3 mb-4">
-              <div className="justify-content-center align-items-center h-100">
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
-                  <p style={{ margin: "0" }}>Prix total :</p>
-                  <p style={{ margin: "0" }}>{total} Ar</p>
+                <div className="justify-content-center align-items-center h-100">
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      width: "100%",
+                    }}
+                  >
+                    <p style={{ margin: "0" }}>Prix total :</p>
+                    <p style={{ margin: "0" }}>{grandTotal} Ar</p>
+                  </div>
                 </div>
-              </div>
-
 
                 <br />
                 <button
@@ -251,8 +310,10 @@ function Cart() {
               backgroundColor: "rgba(0, 0, 0, 0.5)",
             },
             content: {
-              width: "30%",
-              height: "50%",
+              width: "90%",
+              height: "auto",
+              maxWidth: "600px",
+              maxHeight: "80%",
               margin: "auto",
             },
           }}
@@ -268,21 +329,19 @@ function Cart() {
 
               <h1 class="md-5 mt-4 ml-5"> PAIEMENT</h1>
             </div>
-            
+
             <button
               type="button"
               class="btn-close"
               aria-label="Close"
               onClick={handleCloseModal}
             ></button>
-            
           </div>
-          <p >Prix à payer : {total} Ar</p>
-                
+          <p>Prix à payer : {grandTotal} Ar</p>
+
           <Elements stripe={stripePromise}>
             <CheckoutForm />
           </Elements>
-
         </Modal>
       </section>
     </>
