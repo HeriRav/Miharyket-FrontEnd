@@ -197,7 +197,7 @@ function Home() {
 
     setCount(count + 1);
     localStorage.setItem("nb_article", count);
-  };
+ 
 
   const needLogin = () => {
     navigate("/authentification");
