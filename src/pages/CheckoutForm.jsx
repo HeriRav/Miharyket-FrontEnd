@@ -1,9 +1,7 @@
 import React, { useState } from "react";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
-import axios from "axios";
-
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+// import axios from "axios";
+import visa from '../images/visa.png';
 
 
 const CheckoutForm = () => {
@@ -21,46 +19,45 @@ const CheckoutForm = () => {
       card: elements.getElement(CardElement),
     });
 
+    // date
+    const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+    const date = new Date().toLocaleDateString('fr-FR', options).split('/').reverse().join('-');
+
     if (!error) {
       try {
         const { id } = paymentMethod;
         console.log("Réussi. Token généré : ", id);
-        const response = await axios.post(
-          "http://localhost:8085/paiements/valider",
-          {
-            montantPaye: 1000,
-            motifPaiement: "Support de formation",
+        // const response = await axios.post(
+        //   "http://localhost:8085/paiements/valider",
+        //   {
+        //     datePaiement: date,
+        //     modePaiement: "visa",
+        //     montantPaiement: 5000,
+        //     statutPaiement: "Payé",
+        //     idCommande : 1,          
+        //     idStripe: id,
+        //   }         
+        // );
+
+        fetch("http://localhost:8085/paiements/valider", {
+          method:"POST", headers:{"Content-Type" : "application/json"}, body:JSON.stringify({
+            datePaiement: date,
+            modePaiement: "visa",
+            montantPaiement: localStorage.getItem(totalPrix),
             statutPaiement: "Payé",
-            typePaiement: "carte bancaire",
-            utilisateur: {
-              idUtilisateur: 2,
-              nomUtilisateur: "Charlie",
-              photoProfil: null,
-              nif: 20,
-              stat: 21,
-              adresse: "Analakely",
-              telephone: "034",
-              email: "456@gmail.com",
-              motdepasseUtilisateur: "456",
-              typeUtilisateur: "Financeur",
-              statutUtilisateur: "Enregistré",
-              publications: [],
-              messages: [],
-              recommandations: [],
-              paiements: [],
-              secteurActivites: [],
-            },
-            idStripe: id,
-          }
-        );
-        if (response.data.success) {
-          setMessage("Paiement réussi");
-          setSuccess(true);
-          toast.success("Paiement réussi, Merci pour votre achat");
+            idCommande: 1,
+            idStripe: id
+          })
+        }).then(() => console.log("ok"));
+      
+      // if (response.data.success) {
+      //     setMessage("Paiement réussi");
+      //     setSuccess(true);
+      //   }
+
+        } catch (error) {
+          console.log("Erreur : ", error.message);
         }
-      } catch (error) {
-        setMessage("Erreur : ", error);
-      }
     } else {
       setMessage("tsy mety");
     }
