@@ -20,6 +20,7 @@ function ApprovisionnementHistorique({ approvisionnements }) {
     setFilteredAppros(filtered);
   };
   const handleSearchChange = (event) => {
+    event.preventDefault();
     const searchValue = event.target.value.toLowerCase();
     const filtered = approvisionnements.filter((appro) => {
       const nomProduit = appro.produit.nomProduit.toLowerCase();
@@ -33,7 +34,7 @@ function ApprovisionnementHistorique({ approvisionnements }) {
     <div>
       <h3 className='mt-4'>Historique des approvisionnements</h3>
       <Form className="mb-3">
-        <Form.Control type="text" placeholder="Rechercher" onChange={handleInputChange} />
+        <Form.Control type="text" placeholder="Rechercher" onChange={handleSearchChange} />
       </Form>
       <Table striped bordered hover>
         <thead>

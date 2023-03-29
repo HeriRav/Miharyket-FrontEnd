@@ -179,21 +179,26 @@ function Home() {
             1. créer une variable dans le localstorage
             2. envoyer l'id du produit, le prix unitaire et la quantité par défaut (1) dans localstorage
             3. mettre à jour le nombre d'article sélectionné (badge de notification)
-        */            
-            if(localStorage.getItem(nom) == null) {                
-                localStorage.setItem(nom,  JSON.stringify({nom: nom, id: id, price: price, quantity: 1,}) );           
-            }
-            else {                
-                let item = JSON.parse(localStorage.getItem(nom)); 
-                item.quantity++;
+        */
+    if (localStorage.getItem(nom) == null) {
+      localStorage.setItem(
+        nom,
+        JSON.stringify({
+          nom: nom,
+          id: id,
+          stock: stock,
+          price: price,
+          quantity: 1,
+          unit: unit,
+          category: category,
+        })
+      );
+    } else {
+      let item = JSON.parse(localStorage.getItem(nom));
+      item.quantity++;
 
-                localStorage.setItem(nom,  JSON.stringify(item) );           
-            }            
-           
-            setCount(count + 1)
-            localStorage.setItem("nb_article", count);
+      localStorage.setItem(nom, JSON.stringify(item));
     }
-        
 
     setCount(count + 1);
     localStorage.setItem("nb_article", count);
