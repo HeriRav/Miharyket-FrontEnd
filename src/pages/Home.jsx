@@ -297,11 +297,11 @@ function Home() {
                       ) : sessionStorage.getItem("typeUser") ===
                         "COOPERATIVE" ? (
                         <Card
-                          className="flex-fill card-flyer"
+                          className="flex-fill card-flyer unselectable"
                           style={{ marginTop: "20px", marginBottom: "20px" }}
                         >
                           <Card.Img
-                            className="image-box"
+                            className="image-box undragable"
                             variant="top"
                             src={
                               images.find(
@@ -339,11 +339,11 @@ function Home() {
                       ) : sessionStorage.getItem("typeUser") ===
                         "AGRICULTEUR" ? (
                         <Card
-                          className="flex-fill card-flyer"
+                          className="flex-fill card-flyer unselectable"
                           style={{ marginTop: "20px", marginBottom: "20px" }}
                         >
                           <Card.Img
-                            className="image-box"
+                            className="image-box undragable"
                             variant="top"
                             src={
                               images.find(
@@ -380,11 +380,11 @@ function Home() {
                         </Card>
                       ) : (
                         <Card
-                          className="flex-fill card-flyer"
+                          className="flex-fill card-flyer unselectable"
                           style={{ marginTop: "20px", marginBottom: "20px" }}
                         >
                           <Card.Img
-                            className="image-box"
+                            className="image-box undragable"
                             variant="top"
                             src={
                               images.find(
