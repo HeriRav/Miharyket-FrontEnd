@@ -88,69 +88,8 @@ function Home() {
   const [categorie, setCategorie] = useState("");
   const [resultats, setResultats] = useState([]);
   const [stockProduit, setStock] = useState("");
-  const [idCommande, setIdCommande] = useState("");
-  const [dateCommande, setDate] = useState("");
-  const [refCommande, setRefCommande] = useState("");
-  const [statutCommande, setStatut] = useState("en cours");
   const [prixProduit, setPrix] = useState("");
   const [quantite, setQuantite] = useState("");
-  const idClient = sessionStorage.getItem("id");
-
-  // date
-  const options = { year: "numeric", month: "2-digit", day: "2-digit" };
-  const date = new Date()
-    .toLocaleDateString("fr-FR", options)
-    .split("/")
-    .reverse()
-    .join("-");
-
-  // Fonction pour générer une référence unique de commande
-  function genererReferenceCommande(nombreDeCommandes) {
-    // Convertir le nombre de commandes en chaîne de caractères et ajouter des zéros au début si nécessaire
-    let numeroDeCommande = (nombreDeCommandes + 1).toString().padStart(3, "0");
-    // Retourner la référence de commande formatée
-    return "C-" + numeroDeCommande;
-  }
-
-  const ajoutPanier = (event) => {
-    event.preventDefault();
-    const nouvelleCommande = {
-      utilisateur: { id: idClient },
-      dateCommande: date,
-      refCommande: genererReferenceCommande(5),
-      statutCommande: statutCommande,
-    };
-
-    fetch("http://localhost:8085/commandes/ajout", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(nouvelleCommande),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        // Récupération de l'ID de la commande générée
-        const idCommande = data.id;
-        // Création d'un objet ligne de commande
-        // const ligneCommande = {
-        //     commande: idCommande,
-        //     prixUnitaire: prixProduit,
-        //     quantiteApprovisionnement: quantite,
-        //     produit : {idProduit: idProduit},
-        // };
-        // console.log(ligneCommande);
-        // fetch("http://localhost:8085/ligne-commande/ajout", {
-        //     method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(ligneCommande)
-        // }) .then(response => response.json())
-        // .then(data => {
-        //     toast.success('Ce produit a été ajouté au panier')
-        // }).catch((error) => {
-        //     toast.error('Création échouée : ' + err.message)
-        // });
-      })
-      .catch((error) => {
-        toast.error("Création échouée : " + err.message);
-      });
-  };
 
   function handleChange(e, index) {
     const newPanier = [...panier];
@@ -179,21 +118,26 @@ function Home() {
             1. créer une variable dans le localstorage
             2. envoyer l'id du produit, le prix unitaire et la quantité par défaut (1) dans localstorage
             3. mettre à jour le nombre d'article sélectionné (badge de notification)
-        */            
-            if(localStorage.getItem(nom) == null) {                
-                localStorage.setItem(nom,  JSON.stringify({nom: nom, id: id, price: price, quantity: 1,}) );           
-            }
-            else {                
-                let item = JSON.parse(localStorage.getItem(nom)); 
-                item.quantity++;
+        */
+    if (localStorage.getItem(nom) == null) {
+      localStorage.setItem(
+        nom,
+        JSON.stringify({
+          nom: nom,
+          id: id,
+          stock: stock,
+          price: price,
+          quantity: 1,
+          unit: unit,
+          category: category,
+        })
+      );
+    } else {
+      let item = JSON.parse(localStorage.getItem(nom));
+      item.quantity++;
 
-                localStorage.setItem(nom,  JSON.stringify(item) );           
-            }            
-           
-            setCount(count + 1)
-            localStorage.setItem("nb_article", count);
+      localStorage.setItem(nom, JSON.stringify(item));
     }
-        
 
     setCount(count + 1);
     localStorage.setItem("nb_article", count);
@@ -353,11 +297,11 @@ function Home() {
                       ) : sessionStorage.getItem("typeUser") ===
                         "COOPERATIVE" ? (
                         <Card
-                          className="flex-fill card-flyer"
+                          className="flex-fill card-flyer unselectable"
                           style={{ marginTop: "20px", marginBottom: "20px" }}
                         >
                           <Card.Img
-                            className="image-box"
+                            className="image-box undragable"
                             variant="top"
                             src={
                               images.find(
@@ -395,11 +339,11 @@ function Home() {
                       ) : sessionStorage.getItem("typeUser") ===
                         "AGRICULTEUR" ? (
                         <Card
-                          className="flex-fill card-flyer"
+                          className="flex-fill card-flyer unselectable"
                           style={{ marginTop: "20px", marginBottom: "20px" }}
                         >
                           <Card.Img
-                            className="image-box"
+                            className="image-box undragable"
                             variant="top"
                             src={
                               images.find(
@@ -436,11 +380,11 @@ function Home() {
                         </Card>
                       ) : (
                         <Card
-                          className="flex-fill card-flyer"
+                          className="flex-fill card-flyer unselectable"
                           style={{ marginTop: "20px", marginBottom: "20px" }}
                         >
                           <Card.Img
-                            className="image-box"
+                            className="image-box undragable"
                             variant="top"
                             src={
                               images.find(

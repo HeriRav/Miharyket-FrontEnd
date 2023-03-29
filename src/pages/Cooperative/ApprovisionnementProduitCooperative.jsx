@@ -55,6 +55,7 @@ const handleSubmit = event => {
     .catch(error => {
       console.log(error);
     });
+    setShowModal(false);
 };
 const date = Date.now();
 const id = sessionStorage.getItem("idCoop");
@@ -105,7 +106,7 @@ return (
               <img src={iconProduct} alt="Mihary" className="img-fluid" />
             </div>
           </h2>
-          <Form onSubmit={handleSubmit}>
+          <Form>
             <Row className="mb-3">
               <Col xs={12} sm={6} md={6}>
               <Form.Label className="mt-3">Nom du produit</Form.Label>
@@ -208,7 +209,7 @@ return (
         </Modal.Body>
         <Modal.Footer>
         <Col>
-        <Button variant="primary" type="submit" block  onClick={() => setShowModal(false)} >
+        <Button variant="primary" type="submit" block  onClick={handleSubmit} >
           Ajouter
         </Button>
       </Col>

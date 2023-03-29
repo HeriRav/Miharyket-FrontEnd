@@ -3,12 +3,28 @@ import { useEffect } from "react";
 
 function StatCooperative() {
   const [count, setCount] = useState([]);
+
+  const [counter, setCounter] = useState(3)
+
+  const id = sessionStorage.getItem("idCoop");
+
+  const idUser = sessionStorage.getItem("idUser");
+
   useEffect(() => {
     fetch('http://localhost:8085/produits/count')
     .then(response => response.json())
     .then(data => setCount(data))
     .catch(err => console.log(err))
   }, [])
+
+  // useEffect(() => {
+  //   async function countAggro() {
+  //     const response = await fetch(`http://localhost:8085/api/utilisateurs/cooperatives/${id}/agriculteurs`)
+  //     const data = await response.json();
+  //     setCounter(data.counter);
+  //   }
+  //   countAggro()
+  // }, [])
 
   return (
       <div>
@@ -25,7 +41,7 @@ function StatCooperative() {
           <div className="col-md-3">
             <div className="card-counter danger">
               <i className="fa fa-users"></i>
-              <span className="count-numbers">3</span>
+              <span className="count-numbers">{counter}</span>
               <span className="count-name">Agriculteurs</span>
             </div>
           </div>
