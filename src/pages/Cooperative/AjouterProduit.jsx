@@ -234,6 +234,8 @@ function AjouterProduit() {
     setShowModal(true);
   };
 
+  const keys = ["nomProduit", "categorieProduit", "uniteProduit"]
+
   return (
     <div className="mt-5 mb-5 text-black">
       <h1 className="text-center mt-5">Detail produits</h1>
@@ -285,7 +287,12 @@ function AjouterProduit() {
               </tr>
             </MDBTableHead>
             <MDBTableBody>
-              {resultats.map((resultat, index) => (
+              {resultats
+              // .filter(produit => produit.nomProduit.toLowerCase().includes(recherche) ||
+              // produit.categorieProduit.toLowerCase().includes(recherche) ||
+              // produit.uniteProduit.toLowerCase().includes(recherche))
+              .filter(produit => keys.some(key => produit[key].toLowerCase().includes(recherche)))
+              .map((resultat, index) => (
                 <tr key={index}>
                   <td className="align-middle">{resultat.nomProduit}</td>
                   <td className="align-middle">{resultat.categorieProduit}</td>
