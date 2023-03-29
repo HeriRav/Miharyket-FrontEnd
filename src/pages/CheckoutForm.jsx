@@ -27,20 +27,6 @@ const CheckoutForm = () => {
       try {
         const { id } = paymentMethod;
         console.log("Réussi. Token généré : ", id);
-        // const response = await axios.post(
-        //   "http://localhost:8085/paiements/valider",
-        //   {
-        //     datePaiement: date,
-        //     modePaiement: "visa",
-        //     montantPaiement: 5000,
-        //     statutPaiement: "Payé",
-        //     idCommande : 1,          
-        //     idStripe: id,
-        //   }         
-        // );
-
-        const price = localStorage.getItem('paie')
-        const user = sessionStorage.getItem('idUser')
         fetch("http://localhost:8085/paiements/valider", {
           method:"POST", headers:{"Content-Type" : "application/json"}, body:JSON.stringify({
             datePaiement: date,
