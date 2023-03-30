@@ -10,6 +10,8 @@ const CheckoutForm = () => {
   const [success, setSuccess] = useState(false);
   const [message, setMessage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [idCommande, setIdCommande]= useState(localStorage.getItem("idCommande"))
+  const [panier, setPanier]= useState(localStorage.getItem("panier"));
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -27,22 +29,20 @@ const CheckoutForm = () => {
       try {
         const { id } = paymentMethod;
         console.log("Réussi. Token généré : ", id);
-        fetch("http://localhost:8085/paiements/valider", {
+        const price = localStorage.getItem('paie')
+        const user = sessionStorage.getItem('idUser')
+
+         fetch("http://localhost:8085/paiements/valider", {
           method:"POST", headers:{"Content-Type" : "application/json"}, body:JSON.stringify({
             datePaiement: date,
             modePaiement: "visa",
             montantPaiement: price,
             statutPaiement: "Payé",
-            idCommande: 8,
-            idStripe: id
+            idCommande: localStorage.getItem("idCommande"),
+            idStripe: id,
+            panier: localStorage.getItem("panier")
           })
         }).then(() => console.log("ok"));
-      
-      // if (response.data.success) {
-      //     setMessage("Paiement réussi");
-      //     setSuccess(true); localStorage.getItem(totalPrix)
-      //   }
-
         } catch (error) {
           console.log("Erreur : ", error.message);
         }

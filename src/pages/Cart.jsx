@@ -51,6 +51,14 @@ function Cart() {
   const [statutCommande, setStatut] = useState("en cours");
   const [idClient, setIdClient] = useState(sessionStorage.getItem('user'))
   
+  const [idProduit, setIdProduit] = useState("");
+  const [nomProduit, setProduit] = useState("");
+  const [unite, setUnite] = useState("");
+  const [description, setDescription] = useState("");
+  const [categorie, setCategorie] = useState("");
+  const [prixProduit, setPrix] = useState("");
+  const [quantite, setQuantite] = useState("");
+
   // date
   const options = { year: "numeric", month: "2-digit", day: "2-digit" };
   const date = new Date()
@@ -85,24 +93,8 @@ function Cart() {
       .then((response) => response.json())
       .then((data) => {
         // Récupération de l'ID de la commande générée
-        const idCommande = data.id;
-        handleOpenModal()
-        // Création d'un objet ligne de commande
-        // const ligneCommande = {
-        //     commande: idCommande,
-        //     prixUnitaire: prixProduit,
-        //     quantiteApprovisionnement: quantite,
-        //     produit : {idProduit: idProduit},
-        // };
-        // console.log(ligneCommande);
-        // fetch("http://localhost:8085/ligne-commande/ajout", {
-        //     method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(ligneCommande)
-        // }) .then(response => response.json())
-        // .then(data => {
-        //     toast.success('Ce produit a été ajouté au panier')
-        // }).catch((error) => {
-        //     toast.error('Création échouée : ' + err.message)
-        // });
+        handleOpenModal();
+        localStorage.setItem("idCommande", data.idCommande) 
       })
       .catch((error) => {
         toast.error("Création échouée : " + err.message);
@@ -130,6 +122,9 @@ function Cart() {
           if (localStorage.getItem(data[i].nomProduit) == null) continue;
 
           const item = JSON.parse(localStorage.getItem(data[i].nomProduit));
+          /*productsToCheck : {
+            {nomProduit: "Ananas", prix: 5000, quantite: 5}, {nomProduit: "Lait", prix: 3200, quantite: 1}, 
+          }*/
           item.quantité = 1; // initialiser la quantité à 1
           item.total = item.price;
           total += item.total;
@@ -137,6 +132,7 @@ function Cart() {
         }
         setProd(a);
         setTotal(total);
+        localStorage.setItem("panier", JSON.stringify(a));
       })
       .catch((err) => console.log(err));
   }, []);
@@ -159,13 +155,13 @@ function Cart() {
     // Convertir la valeur en nombre et vérifier si elle dépasse la quantité disponible
     const newValue = parseInt(value, 10);
     const limitedValue = newValue > pr.stock ? pr.stock : newValue;
-  
+
     // Vérifier si la quantité dépasse la quantité disponible et définir le message d'erreur en conséquence
     const errorMessage = newValue > pr.stock ? `Quantité maximale disponible: \${pr.stock}` : "";
   
     const updatedItems = produit.map((item) => {
       if (item.id === pr.id) {
-        return { ...item, total: item.price * limitedValue };
+        return { ...item, total: item.price * limitedValue, quantite: limitedValue };
       } else {
         return item;
       }
