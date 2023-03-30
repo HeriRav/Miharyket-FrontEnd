@@ -3,11 +3,18 @@ import axios from "axios";
 import ApprovisionnementHistogramme from "./ApprovisionnementHistogramme";
 import Histogramme from "./Histogram";
 import DonutChart from "./DonutChart";
+import ApprovisionnementComboChart from "../ApprovisionnementComboChart";
+import ComboChart from "../ComboChart";
+import Appros from "./Appros";
 
 function StatAgriculteur() {
 
   const [userId, setUserId] = useState(null);
   const [produitId, setProduitId] = useState(null);
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [users, setUsers] = useState([]);
+  const [selectedUser, setSelectedUser] = useState("");
 
   const handleUserChange = (event) => {
     setUserId(event.target.value);
@@ -43,6 +50,10 @@ function StatAgriculteur() {
 
   const countProduit = appros.length;
   const count = produits.length;
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    // Faire quelque chose avec les dates et l'utilisateur sélectionnés (par exemple, appeler une fonction pour effectuer une requête API)
+  }
 
   return (
     <div>
@@ -82,7 +93,7 @@ function StatAgriculteur() {
         </div>
       </div><br />
       <div className="row">
-        <div className="col-xl-8 col-lg-7">
+        <div className="col-xl col-lg-9">
           {/* Area Chart */}
           <div className="card shadow mb-4">
             <div className="card-header py-3">
@@ -100,42 +111,43 @@ function StatAgriculteur() {
           {/* Bar Chart */}
           <div className="card shadow mb-4">
             <div className="card-header py-3">
-              <h6 className="m-0 font-weight-bold text-primary">Bar Chart</h6>
+              <h6 className="m-0 font-weight-bold text-primary">Mes approvisionnements</h6>
             </div>
             <div className="card-body">
               <div className="chart-bar">
-                <canvas id="myBarChart" />
+                <ComboChart userId={idAgriculteur} />
               </div>
               <hr />
-              Styling for the bar chart can be found in the
-              <code>/js/demo/chart-bar-demo.js</code> file.
+
+              <code></code>
             </div>
           </div>
         </div>
         {/* Donut Chart */}
-        <div className="col-xl-4 col-lg-5">
+        <div className="col-xl- col-lg">
           <div className="card shadow mb-4">
             {/* Card Header - Dropdown */}
             <div className="card-header py-3">
-              <h6 className="m-0 font-weight-bold text-primary">Résumé des ventes</h6>
+              <h6 className="m-0 font-weight-bold text-primary">Résumé de mes approvisionnements</h6>
             </div>
             {/* Card Body */}
             <div className="card-body">
               <div className="chart-pie pt-4">
                 <div>
-                  <label className="form-label">
-                    Sélectionnez un produit :
-                    <select className="form-select" value={produitId} onChange={handleProduitChange}>
-                      {produits.map(produit => (
-                        <option key={produit.idProduit} value={produit.idProduit}>
-                          {produit.nomProduit}
-                        </option>
-                      ))}
-                      {/* Ajoutez autant d'options que nécessaire */}
-                    </select>
-                  </label>
-                  <br />
-                  {idCoop && produitId && <DonutChart userId={idCoop} produitId={produitId} />}
+                  <form onSubmit={handleFormSubmit}>
+                    <label htmlFor="startDate">Date de début :</label>
+                    <input type="date" id="startDate" name="startDate" value={startDate} onChange={e => setStartDate(e.target.value)} />
+                    
+                    <label htmlFor="endDate">Date de fin :</label> <span/>
+                    <input type="date" id="endDate" name="endDate" value={endDate} onChange={e => setEndDate(e.target.value)} />
+
+                   
+
+                    {/* <button type="submit">Afficher le graphique</button> */}
+                  </form>
+
+                  {startDate && endDate &&                     <Appros userId={idAgriculteur} startDate={startDate} endDate={endDate} />
+                  }
                 </div>
               </div>
               <hr />
