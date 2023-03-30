@@ -241,17 +241,14 @@ function Home() {
                           className="flex-fill card-flyer unselectable"
                           style={{ marginTop: "20px", marginBottom: "20px" }}
                         >
+                          {product.photoProduit && (
                           <Card.Img
                             className="image-box undragable"
-                            variant="top"
-                            src={
-                              images.find(
-                                (image) =>
-                                  image.categorieProduit ===
-                                  product.categorieProduit
-                              )?.src
-                            }
+                            width={"100px"}
+                              src={`data:image/jpeg;base64,${product.photoProduit}`}
+                              alt={product.nomProduit}
                           />
+                          )}
                           <Card.Body>
                             <Card.Title className="text-black initialism mb-4">
                               {product.nomProduit}
