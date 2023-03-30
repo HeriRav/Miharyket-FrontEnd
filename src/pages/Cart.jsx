@@ -242,7 +242,7 @@ function Cart() {
                               <span className="text-muted">
                                 Prix par unité :{" "}
                               </span>
-                              {panier.price} Ar
+                              MGA {panier.price}
                               <br />
                               <br />
                               <span className="text-muted">
@@ -304,8 +304,8 @@ function Cart() {
                           </MDBCol>
                           <MDBCol md="1" lg="2" xl="2" className="offset-lg-1">
                             Prix total par produit:
-                            <MDBTypography tag="h5" className="mb-0">
-                              {panier.total} Ar
+                            <MDBTypography tag="p" className="mb-0">
+                              MGA {panier.total} 
                             </MDBTypography>
                             
                           </MDBCol>
@@ -361,8 +361,8 @@ function Cart() {
                       width: "95%",
                     }}
                   >
-                    <p style={{ margin: "0" }}>Prix total à payer :</p>
-                    <p style={{ margin: "0" }}>{total} Ar</p>
+                    <h5 style={{ margin: "0" }}>Prix total à payer :</h5>
+                    <h5 style={{ margin: "0" }}>MGA {total}</h5>
                   </div>
                 </div>
 
@@ -404,7 +404,7 @@ function Cart() {
                 style={{ width: "20%" }}
               />
 
-              <h1 className="md-5 mt-4 ml-5"> PAIEMENT</h1>
+              <h1 className="md-5 mt-4 ml-5 text-warning"> PAIEMENT</h1>
             </div>
 
             <button
@@ -414,7 +414,7 @@ function Cart() {
               onClick={handleCloseModal}
             ></button>
           </div>
-          <p>Prix à payer : {total} Ar</p>
+          <h3 className="text-center mt-2" style={{color:"darkblue"}}>Montant à payer : MGA {total}</h3>
 
           <Elements stripe={stripePromise}>
             <CheckoutForm />
