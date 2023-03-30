@@ -101,6 +101,7 @@ return (
     <br />
     <h3 className="mt-1">Historique des activités des agriculteurs</h3>
 
+
     <ApprovisionnementHistorique approvisionnements={appros} />
     <br />
     
