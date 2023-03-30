@@ -28,7 +28,6 @@ function AjouterProduit() {
   const [showModal, setShowModal] = useState(false);
   const [createModal, setCreateModal] = useState(false);
   const [showApproDetails, setShowApproDetails] = useState(false);
-  const [showTransaction, setShowTransaction] = useState(false);
   const [prix, setPrix] = useState(0);
   const [nouveauPrix, setNouveauPrix] = useState("");
   const idCoop = sessionStorage.getItem("idCoop");
@@ -41,7 +40,6 @@ function AjouterProduit() {
   const [resultats, setResultats] = useState([]);
   const [recherche, setRecherche] = useState("");
   const [detailAppro, setDetailAppro] = useState([]);
-  const [detailTransaction, setDetailTransaction] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [productsPerPage] = useState(5);
   const [stockProduit, setStock] = useState("");
@@ -120,36 +118,6 @@ function AjouterProduit() {
         console.log(error);
       });
   }
-
-  // function handleClickTransaction(userId, idProduit) {
-
-  //   axios
-  //     .get(
-  //       `http://localhost:8085/commandes/${userId}/${idProduit}`
-  //     )
-  //     .then((response) => {
-  //       setDetailTransaction(response.data);
-  //       console.log(detailTransaction);
-  //       console.log(userId);
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-      
-  // }
-function handleClickTransaction(userId, idProduit) {
-  fetch(`http://localhost:8085/commandes/${userId}/${idProduit}`)
-    .then(response => response.json())
-    .then(data => {
-      setDetailTransaction(data);
-      console.log(detailTransaction);
-      console.log(userId);
-    })
-    .catch(error => {
-      console.log(error);
-    });
-}
-
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -266,8 +234,6 @@ function handleClickTransaction(userId, idProduit) {
     setShowModal(true);
   };
 
-  const keys = ["nomProduit", "categorieProduit", "uniteProduit"]
-
   return (
     <div className="mt-5 mb-5 text-black">
       <h1 className="text-center mt-5">Detail produits</h1>
@@ -313,18 +279,13 @@ function handleClickTransaction(userId, idProduit) {
                 <th>Catégorie</th>
                 <th>Prix actuel</th>
                 <th>Stock</th>
-                <th className="w-25">Photo</th>
+                <th>Photo</th>
                 <th>Unité</th>
-                <th className="w-5">Actions</th>
+                <th>Actions</th>
               </tr>
             </MDBTableHead>
             <MDBTableBody>
-              {resultats
-              // .filter(produit => produit.nomProduit.toLowerCase().includes(recherche) ||
-              // produit.categorieProduit.toLowerCase().includes(recherche) ||
-              // produit.uniteProduit.toLowerCase().includes(recherche))
-              .filter(produit => keys.some(key => produit[key].toLowerCase().includes(recherche)))
-              .map((resultat, index) => (
+              {resultats.map((resultat, index) => (
                 <tr key={index}>
                   <td className="align-middle">{resultat.nomProduit}</td>
                   <td className="align-middle">{resultat.categorieProduit}</td>
@@ -371,25 +332,7 @@ function handleClickTransaction(userId, idProduit) {
                         // getIdProduit();
                       }}
                     >
-                      <i className="fa fa-shopping-basket"></i>
-                    </button>
-                    <button
-                      className="btn btn-link"
-                      onClick={() => {
-                        setShowTransaction(true);
-                        console.log(idCoop);
-                        handleClickTransaction(idCoop, resultat.idProduit);
-                        console.log("idProdGip"+resultat.idProduit);
-                        // setPrix(resultat.prixProduit);
-                        // setIdProduit(resultat.idProduit);
-                        // setCategorie(resultat.categorieProduit);
-                        setProduit(resultat.nomProduit);
-                        // setStock(resultat.stockProduit)
-                        setUnite(resultat.uniteProduit);
-                        // getIdProduit();
-                      }}
-                    >
-                      <i className="fa fa-eye"></i>
+                      <i className="fa fa-eye "></i>
                     </button>
                   </td>
                 </tr>
@@ -584,7 +527,6 @@ function handleClickTransaction(userId, idProduit) {
               </tr>
             </thead>
             <tbody>
-            
               {detailAppro.map((detailAppro) => (
                 <tr key={detailAppro.idApprovisionnement}>
                   <td>{detailAppro.dateApprovisionnement}</td>
@@ -603,56 +545,6 @@ function handleClickTransaction(userId, idProduit) {
             variant="secondary"
             onClick={() => {
               setShowApproDetails(false);
-              setPrix("");
-              setNouveauPrix("");
-            }}
-          >
-            Fermer
-          </Button>
-        </Modal.Footer>
-      </Modal>
-
-
-      <Modal
-        className="modal-dialog modal-lg"
-        show={showTransaction}
-        onHide={() => setShowTransaction(false)}
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>Détail Transaction {produit}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <table
-            className="table table-striped table-bordered"
-            style={{ width: "100%" }}
-          >
-            <thead>
-              <tr>
-                <th>Client</th>
-                <th>Date</th>
-                <th>Quantité</th>
-                <th>Prix total</th>
-              </tr>
-            </thead>
-            <tbody>
-        {detailTransaction.map((row, index) => (
-          <tr key={index}>
-        
-          <td>{row[0]}</td>
-          <td>{row[1]}</td>
-          <td>{row[2]} {unite}</td>
-          <td>{row[3]} Ar</td>
-          </tr>
-        ))}
-      </tbody>
-
-          </table>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button
-            variant="secondary"
-            onClick={() => {
-              setShowTransaction(false);
               setPrix("");
               setNouveauPrix("");
             }}

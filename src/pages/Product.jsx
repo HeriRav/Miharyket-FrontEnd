@@ -9,6 +9,7 @@ import "react-multi-carousel/lib/styles.css";
 import { Link, Route, Routes, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Component } from "react";
 
 function Product() {
   const [produit, setProd] = useState([]);
@@ -100,6 +101,15 @@ function Product() {
 
   produit.sort((a, b) => b.idProduit - a.idProduit);
 
+  const filterProduct = (cat) => {
+    console.log(cat)
+    const updateProduct = produit.filter((categorieProd) => {
+      return categorieProd.categorieProduit === cat
+    })
+
+    setProd(updateProduct)
+  }
+
   return (
     <div>
       <title>Mihary'ket - Nos produits</title>
@@ -126,25 +136,25 @@ function Product() {
           className="text-center"
           style={{ backgroundColor: "#dbdbdb", padding: "25px" }}
         >
-          <button className="btn-dark text-white p-1 px-2 mx-5 btn fw-bold">
-            Fruit
+          <button className="btn-dark text-white p-1 px-2 mx-5 btn fw-bold" onClick={() => filterProduct('Fruit')}>
+            Fruits
           </button>
-          <button className="btn-dark text-white p-1 px-2 mx-5 btn fw-bold">
-            Végétale
+          <button className="btn-dark text-white p-1 px-2 mx-5 btn fw-bold" onClick={() => filterProduct('Légume')}>
+            Légumes
           </button>
-          <button className="btn-dark text-white p-1 px-2 mx-5 btn fw-bold">
-            Viande
+          <button className="btn-dark text-white p-1 px-2 mx-5 btn fw-bold" onClick={() => filterProduct('Viande')}>
+            Viandes
           </button>
-          <button className="btn-dark text-white p-1 px-2 mx-5 btn fw-bold">
-            Céréale
+          <button className="btn-dark text-white p-1 px-2 mx-5 btn fw-bold" onClick={() => filterProduct('Céréale')}>
+            Céréales
           </button>
-          <button className="btn-dark text-white p-1 px-2 mx-5 btn fw-bold">
-            Produit laitier
+          <button className="btn-dark text-white p-1 px-2 mx-5 btn fw-bold" onClick={() => filterProduct('Produit laitier')}>
+            Produits laitiers
           </button>
-          <button className="btn-dark text-white p-1 px-2 mx-5 btn fw-bold">
-            Produit arômatique
+          <button className="btn-dark text-white p-1 px-2 mx-5 btn fw-bold" onClick={() => filterProduct('Produit arômatique')}>
+            Produits arômatiques
           </button>
-          <button className="btn-dark text-white p-1 px-2 mx-5 btn fw-bold">
+          <button className="btn-dark text-white p-1 px-2 mx-5 btn fw-bold" onClick={() => setProd(produit)}>
             Tous
           </button>
         </div>

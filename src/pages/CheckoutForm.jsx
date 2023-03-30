@@ -1,9 +1,7 @@
 import React, { useState } from "react";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
-import axios from "axios";
-
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+// import axios from "axios";
+import visa from '../images/visa.png';
 
 
 const CheckoutForm = () => {
@@ -12,6 +10,8 @@ const CheckoutForm = () => {
   const [success, setSuccess] = useState(false);
   const [message, setMessage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [idCommande, setIdCommande]= useState(localStorage.getItem("idCommande"))
+  const [panier, setPanier]= useState(localStorage.getItem("panier"));
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -21,46 +21,31 @@ const CheckoutForm = () => {
       card: elements.getElement(CardElement),
     });
 
+    // date
+    const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+    const date = new Date().toLocaleDateString('fr-FR', options).split('/').reverse().join('-');
+
     if (!error) {
       try {
         const { id } = paymentMethod;
         console.log("Réussi. Token généré : ", id);
-        const response = await axios.post(
-          "http://localhost:8085/paiements/valider",
-          {
-            montantPaye: 1000,
-            motifPaiement: "Support de formation",
+        const price = localStorage.getItem('paie')
+        const user = sessionStorage.getItem('idUser')
+
+         fetch("http://localhost:8085/paiements/valider", {
+          method:"POST", headers:{"Content-Type" : "application/json"}, body:JSON.stringify({
+            datePaiement: date,
+            modePaiement: "visa",
+            montantPaiement: price,
             statutPaiement: "Payé",
-            typePaiement: "carte bancaire",
-            utilisateur: {
-              idUtilisateur: 2,
-              nomUtilisateur: "Charlie",
-              photoProfil: null,
-              nif: 20,
-              stat: 21,
-              adresse: "Analakely",
-              telephone: "034",
-              email: "456@gmail.com",
-              motdepasseUtilisateur: "456",
-              typeUtilisateur: "Financeur",
-              statutUtilisateur: "Enregistré",
-              publications: [],
-              messages: [],
-              recommandations: [],
-              paiements: [],
-              secteurActivites: [],
-            },
+            idCommande: localStorage.getItem("idCommande"),
             idStripe: id,
-          }
-        );
-        if (response.data.success) {
-          setMessage("Paiement réussi");
-          setSuccess(true);
-          toast.success("Paiement réussi, Merci pour votre achat");
+            panier: localStorage.getItem("panier")
+          })
+        }).then(() => console.log("ok"));
+        } catch (error) {
+          console.log("Erreur : ", error.message);
         }
-      } catch (error) {
-        setMessage("Erreur : ", error);
-      }
     } else {
       setMessage("tsy mety");
     }
@@ -69,47 +54,42 @@ const CheckoutForm = () => {
 
   return (
     <>
-
-<div class="container">
-  <div class="row justify-content-right">
-    <div class="col-md-12">
-      <form onSubmit={handleSubmit} className="payment-form">
-      <br/>
-        <fieldset className="FormGroup">
-          <div className="FormRow">
-           <br/>      
-            <h5 >
-            Déscription de la carte : 
-            </h5>
+      <div className="container">
+        <div className="row justify-content-right">
+          <div className="col-md-12">
+            <form onSubmit={handleSubmit} className="payment-form">
             <br/>
-            <CardElement
-              options={{ hidePostalCode: true }}
-              style={({ width: "100%" }, { marginTop: "70px" })}
-            />
+              <fieldset className="FormGroup">
+                <div className="FormRow">
+                <br/>      
+                  <h5 >
+                  Déscription de la carte : 
+                  </h5>
+                  <br/>
+                  <CardElement
+                    options={{ hidePostalCode: true }}
+                    style={({ width: "100%" }, { marginTop: "70px" })}
+                  />
+                </div>
+              </fieldset>
+              <br/>
+              <br/>
+              <button
+                disabled={isLoading}
+                id="submit"
+                className="btn btn-primary"
+                style={{ marginTop: "30px", width: "100%" }}
+              >
+                <span id="button-text">
+                  {isLoading ? <div className="spinner" id="spinner"></div> : "Payer"}
+                </span>
+              </button>
+              
+              {message && <div id="payment-message">{message}</div>}
+            </form>  
           </div>
-        </fieldset>
-        <br/>
-        <br/>
-        <button
-          disabled={isLoading}
-          id="submit"
-          className="btn btn-primary"
-          style={{ marginTop: "30px", width: "100%" }}
-        >
-          <span id="button-text">
-            {isLoading ? <div className="spinner" id="spinner"></div> : "Payer"}
-          </span>
-        </button>
-        
-        {message && <div id="payment-message">{message}</div>}
-      </form>  
-    </div>
-  </div>
-</div>
-
-
-
-      
+        </div>
+      </div>
     </>
   );
 };
