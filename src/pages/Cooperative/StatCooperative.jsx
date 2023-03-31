@@ -1,17 +1,23 @@
-import { useState } from "react";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import ChartAgri from "./ChartAgri";
 import Histogram from "../Agriculteur/Histogram";
 import HistoAppro from "./HistoAppro";
 import HistoChart from "./HistoChart";
+import SoldeUtilisateur from "../SoldeUtilisateur";
 
 function StatCooperative() {
   const [count, setCount] = useState([]);
+
+  let [counter, setCounter] = useState(0)
+
   const idCoop = sessionStorage.getItem("idCoop");
+
+  const idUser = sessionStorage.getItem("idUser");
+
   useEffect(() => {
-    fetch('http://localhost:8085/produits/count')
+    fetch(`http://localhost:8085/produits/reference/${idCoop}`)
       .then(response => response.json())
-      .then(data => setCount(data))
+      .then(data => setCounter = data.length)
       .catch(err => console.log(err))
   }, [])
   const [startDate, setStartDate] = useState("");
@@ -25,11 +31,13 @@ function StatCooperative() {
       .then(response => response.json())
       .then(data => setUsers(data));
   }, []);
-
+  const nombreAgriculteur = users.length;
   const handleFormSubmit = (e) => {
     e.preventDefault();
     // Faire quelque chose avec les dates et l'utilisateur sélectionnés (par exemple, appeler une fonction pour effectuer une requête API)
   }
+
+  
 
   return (
     <div>
@@ -38,7 +46,7 @@ function StatCooperative() {
           <div className="col-md-3">
             <div className="card-counter primary">
               <i className="fa fa-shopping-cart"></i>
-              <span className="count-numbers">{count}</span>
+              <span className="count-numbers">{counter}</span>
               <span className="count-name">Produits</span>
             </div>
           </div>
@@ -46,7 +54,7 @@ function StatCooperative() {
           <div className="col-md-3">
             <div className="card-counter danger">
               <i className="fa fa-users"></i>
-              <span className="count-numbers">3</span>
+              <span className="count-numbers">{nombreAgriculteur}</span>
               <span className="count-name">Agriculteurs</span>
             </div>
           </div>
@@ -54,7 +62,7 @@ function StatCooperative() {
           <div className="col-md-3">
             <div className="card-counter warning">
               <i className="fa fa-wallet"></i>
-              <span className="count-numbers">0</span>
+              <span className="count-numbers"><SoldeUtilisateur/></span>
               <span className="count-name">Solde(Ar)</span>
             </div>
           </div>

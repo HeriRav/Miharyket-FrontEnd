@@ -21,7 +21,7 @@ function Histogram(props) {
       width={'100%'}
       height={'400px'}
       chartType="ColumnChart"
-      loader={<div>Loading Chart</div>}
+      loader={<div>Chargement...</div>}
       data={data}
       options={{
         title: 'Quantités de produits',

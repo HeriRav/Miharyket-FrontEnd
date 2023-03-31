@@ -7,6 +7,9 @@ import { useEffect, useState } from "react";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { Link, Route, Routes, useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { Component } from "react";
 
 function Product() {
   const [produit, setProd] = useState([]);
@@ -33,12 +36,14 @@ function Product() {
   ];
 
   const redirect = (id, nom, stock, price, unit, category) => {
+    
     /*
             1. créer une variable dans le localstorage
             2. envoyer l'id du produit, le prix unitaire et la quantité par défaut (1) dans localstorage
             3. mettre à jour le nombre d'article sélectionné (badge de notification)
         */
     if (localStorage.getItem(nom) == null) {
+      toast.success("Ajout réussi");
       localStorage.setItem(
         nom,
         JSON.stringify({
@@ -50,7 +55,9 @@ function Product() {
           unit: unit,
           category: category,
         })
+        
       );
+      
     } else {
       let item = JSON.parse(localStorage.getItem(nom));
       item.quantity++;
@@ -94,9 +101,19 @@ function Product() {
 
   produit.sort((a, b) => b.idProduit - a.idProduit);
 
+  const filterProduct = (cat) => {
+    console.log(cat)
+    const updateProduct = produit.filter((categorieProd) => {
+      return categorieProd.categorieProduit === cat
+    })
+
+    setProd(updateProduct)
+  }
+
   return (
     <div>
       <title>Mihary'ket - Nos produits</title>
+      <ToastContainer />
       <div
         className="intro-section site-blocks-cover innerpage"
         style={{ backgroundImage: "url('/src/images/hero_2.jpg')" }}
@@ -119,25 +136,25 @@ function Product() {
           className="text-center"
           style={{ backgroundColor: "#dbdbdb", padding: "25px" }}
         >
-          <button className="btn-dark text-white p-1 px-2 mx-5 btn fw-bold">
-            Fruit
+          <button className="btn-dark text-white p-1 px-2 mx-5 btn fw-bold" onClick={() => filterProduct('Fruit')}>
+            Fruits
           </button>
-          <button className="btn-dark text-white p-1 px-2 mx-5 btn fw-bold">
-            Végétale
+          <button className="btn-dark text-white p-1 px-2 mx-5 btn fw-bold" onClick={() => filterProduct('Légume')}>
+            Légumes
           </button>
-          <button className="btn-dark text-white p-1 px-2 mx-5 btn fw-bold">
-            Viande
+          <button className="btn-dark text-white p-1 px-2 mx-5 btn fw-bold" onClick={() => filterProduct('Viande')}>
+            Viandes
           </button>
-          <button className="btn-dark text-white p-1 px-2 mx-5 btn fw-bold">
-            Céréale
+          <button className="btn-dark text-white p-1 px-2 mx-5 btn fw-bold" onClick={() => filterProduct('Céréale')}>
+            Céréales
           </button>
-          <button className="btn-dark text-white p-1 px-2 mx-5 btn fw-bold">
-            Produit laitier
+          <button className="btn-dark text-white p-1 px-2 mx-5 btn fw-bold" onClick={() => filterProduct('Produit laitier')}>
+            Produits laitiers
           </button>
-          <button className="btn-dark text-white p-1 px-2 mx-5 btn fw-bold">
-            Produit arômatique
+          <button className="btn-dark text-white p-1 px-2 mx-5 btn fw-bold" onClick={() => filterProduct('Produit arômatique')}>
+            Produits arômatiques
           </button>
-          <button className="btn-dark text-white p-1 px-2 mx-5 btn fw-bold">
+          <button className="btn-dark text-white p-1 px-2 mx-5 btn fw-bold" onClick={() => setProd(produit)}>
             Tous
           </button>
         </div>
@@ -158,6 +175,7 @@ function Product() {
               .map((product) => {
                 return (
                   <div className="container-sm" key={product.idProduit}>
+                  
                     <Col className="d-flex">
                       {sessionStorage.getItem("typeUser") === "CLIENT" ? (
                         <Card
@@ -210,7 +228,9 @@ function Product() {
                                   product.stockProduit,
                                   product.uniteProduit,
                                   product.categorieProduit
+                                
                                 )
+
                               }
                             >
                               + Ajouter au panier

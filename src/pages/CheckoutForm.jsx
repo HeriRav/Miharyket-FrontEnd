@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 // import axios from "axios";
 import visa from '../images/visa.png';
+import { ToastContainer, toast } from "react-toastify";
+
 
 
 const CheckoutForm = () => {
@@ -10,6 +12,8 @@ const CheckoutForm = () => {
   const [success, setSuccess] = useState(false);
   const [message, setMessage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [idCommande, setIdCommande]= useState(localStorage.getItem("idCommande"))
+  const [panier, setPanier]= useState(localStorage.getItem("panier"));
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -27,85 +31,66 @@ const CheckoutForm = () => {
       try {
         const { id } = paymentMethod;
         console.log("Réussi. Token généré : ", id);
-        // const response = await axios.post(
-        //   "http://localhost:8085/paiements/valider",
-        //   {
-        //     datePaiement: date,
-        //     modePaiement: "visa",
-        //     montantPaiement: 5000,
-        //     statutPaiement: "Payé",
-        //     idCommande : 1,          
-        //     idStripe: id,
-        //   }         
-        // );
+        const price = localStorage.getItem('paie')
+        const user = sessionStorage.getItem('idUser')
 
-        fetch("http://localhost:8085/paiements/valider", {
+         fetch("http://localhost:8085/paiements/valider", {
           method:"POST", headers:{"Content-Type" : "application/json"}, body:JSON.stringify({
             datePaiement: date,
             modePaiement: "visa",
-            montantPaiement: localStorage.getItem(totalPrix),
+            montantPaiement: price,
             statutPaiement: "Payé",
-            idCommande: 1,
-            idStripe: id
+            idCommande: localStorage.getItem("idCommande"),
+            idStripe: id,
+            panier: localStorage.getItem("panier")
           })
-        }).then(() => console.log("ok"));
-      
-      // if (response.data.success) {
-      //     setMessage("Paiement réussi");
-      //     setSuccess(true);
-      //   }
-
+        }).then(() => toast.success("Paiement effectué, merci!"));
         } catch (error) {
           console.log("Erreur : ", error.message);
         }
     } else {
-      setMessage("tsy mety");
+      toast.warning("Le paiement n'a pas été effectué");
     }
     setIsLoading(false);
   };
 
   return (
     <>
-
-<div class="container">
-  <div class="row justify-content-right">
-    <div class="col-md-12">
-      <form onSubmit={handleSubmit} className="payment-form">
-      <br/>
-        <fieldset className="FormGroup">
-          <div className="FormRow">
-           <br/>      
-            <h5 >
-            Déscription de la carte : 
-            </h5>
+      <div className="container">
+        <div className="row justify-content-right">
+          <div className="col-md-12">
+            <form onSubmit={handleSubmit} className="payment-form">
             <br/>
-            <CardElement
-              options={{ hidePostalCode: true }}
-              style={({ width: "100%" }, { marginTop: "50px" })}
-            />
+              <fieldset className="FormGroup">
+                <div className="FormRow">
+                <br/>      
+                  <h5 className="" style={{fontWeight:"bold"}}>
+                  Déscription de la carte : 
+                  </h5>
+                  <br/>
+                  <CardElement
+                    options={{ hidePostalCode: true }}
+                    style={({ width: "100%" }, { marginTop: "70px" })}
+                  />
+                </div>
+              </fieldset>
+              <br/>
+              <br/>
+              <button
+                disabled={isLoading}
+                id="submit"
+                className="btn btn-primary"
+                style={{ marginTop: "30px", width: "100%" }}
+              >
+                <span id="button-text">
+                  {isLoading ? <div className="spinner" id="spinner"></div> : "Payer"}
+                </span>
+              </button>
+              <ToastContainer position="bottom-center" autoClose={2000}/>
+            </form>  
           </div>
-        </fieldset>
-        <br/>
-        <br/>
-        <button
-          disabled={isLoading}
-          id="submit"
-          className="btn btn-primary"
-          style={{ marginTop: "-30px", width: "100%" }}
-        >
-          <span id="button-text">
-            {isLoading ? <div className="spinner" id="spinner"></div> : "Payer"}
-          </span>
-        </button>
-        {message && <div id="payment-message">{message}</div>}
-      </form>  
-    </div>
-  </div>
-</div>
-
-
-
-      
+        </div>
+      </div>
     </>
   );
 };

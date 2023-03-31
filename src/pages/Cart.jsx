@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { createContext, useContext, useEffect, useState } from "react";
 import visa from "../images/visa.png";
+
 import {
   MDBBtn,
   MDBCard,
@@ -39,13 +40,70 @@ const images = [
 function Cart() {
   const [max, setMax] = useState([]);
   const [produit, setProd] = useState([]);
-  const [grandTotal, setGrandTotal] = useState(0);
+  //const [grandTotal, setGrandTotal] = useState(0);
   const [total, setTotal] = useState(0);
   const [totalProduit, setTotalProduit] = useState([]);
   const [showModal, setShowModal] = useState(false); // déplacer ici
 
+  const [idCommande, setIdCommande] = useState("");
+  const [dateCommande, setDate] = useState("");
+  const [refCommande, setRefCommande] = useState("");
+  const [statutCommande, setStatut] = useState("en cours");
+  const [idClient, setIdClient] = useState(sessionStorage.getItem('user'))
+  
+  const [idProduit, setIdProduit] = useState("");
+  const [nomProduit, setProduit] = useState("");
+  const [unite, setUnite] = useState("");
+  const [description, setDescription] = useState("");
+  const [categorie, setCategorie] = useState("");
+  const [prixProduit, setPrix] = useState("");
+  const [quantite, setQuantite] = useState("");
+
+  // date
+  const options = { year: "numeric", month: "2-digit", day: "2-digit" };
+  const date = new Date()
+    .toLocaleDateString("fr-FR", options)
+    .split("/")
+    .reverse()
+    .join("-");
+
+  // Fonction pour générer une référence unique de commande
+  function genererReferenceCommande(nombreDeCommandes) {
+    // Convertir le nombre de commandes en chaîne de caractères et ajouter des zéros au début si nécessaire
+    let numeroDeCommande = (nombreDeCommandes + 1).toString().padStart(3, "0");
+    // Retourner la référence de commande formatée
+    return "C-" + numeroDeCommande;
+  }
+  
+  const ajoutPanier = (event) => {
+    event.preventDefault();
+    const tmpID = JSON.parse(idClient).id
+    const nouvelleCommande = {
+      utilisateur : {id : tmpID},
+      dateCommande : date,
+      refCommande : genererReferenceCommande(1),
+      statutCommande : statutCommande
+    }
+
+    fetch("http://localhost:8085/commandes/ajout", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(nouvelleCommande),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        // Récupération de l'ID de la commande générée
+        handleOpenModal();
+        localStorage.setItem("idCommande", data.idCommande) 
+      })
+      .catch((error) => {
+        toast.error("Création échouée : " + err.message);
+      });
+  };
+
   function handleOpenModal() {
     setShowModal(true);
+    localStorage.setItem('paie', total)
   }
 
   function handleCloseModal() {
@@ -58,12 +116,15 @@ function Cart() {
       .then((response) => response.json())
       .then((data) => {
         let total = 0;
-        let grandTotal = 0;
+        
         let a = [];
         for (let i = 0; i < data.length; i++) {
           if (localStorage.getItem(data[i].nomProduit) == null) continue;
 
           const item = JSON.parse(localStorage.getItem(data[i].nomProduit));
+          /*productsToCheck : {
+            {nomProduit: "Ananas", prix: 5000, quantite: 5}, {nomProduit: "Lait", prix: 3200, quantite: 1}, 
+          }*/
           item.quantité = 1; // initialiser la quantité à 1
           item.total = item.price;
           total += item.total;
@@ -71,6 +132,7 @@ function Cart() {
         }
         setProd(a);
         setTotal(total);
+        localStorage.setItem("panier", JSON.stringify(a));
       })
       .catch((err) => console.log(err));
   }, []);
@@ -90,24 +152,33 @@ function Cart() {
   }
 
   function handlePriceUpdate(pr, value) {
+    // Convertir la valeur en nombre et vérifier si elle dépasse la quantité disponible
+    const newValue = parseInt(value, 10);
+    const limitedValue = newValue > pr.stock ? pr.stock : newValue;
+
+    // Vérifier si la quantité dépasse la quantité disponible et définir le message d'erreur en conséquence
+    const errorMessage = newValue > pr.stock ? `Quantité maximale disponible: \${pr.stock}` : "";
+  
     const updatedItems = produit.map((item) => {
       if (item.id === pr.id) {
-        // console.log(item.price * value)
-        return { ...item, total: item.price * value };
+        return { ...item, total: item.price * limitedValue, quantite: limitedValue };
       } else {
         return item;
       }
     });
     setProd(updatedItems);
-    // setTotal(grandTotal);
-    const newTotal = Object.values(updatedItems).reduce(
-      (acc, p) => acc + p.price * value,
-      0
-    );
+  
+    // Mettez à jour le montant total en utilisant la fonction setTotal
+    const newTotal = updatedItems.reduce((acc, p) => acc + p.total, 0);
     setTotal(newTotal);
-    setGrandTotal(newTotal + grandTotal);
-    console.log(total);
+  
+    // Mettre à jour le message d'erreur en utilisant la fonction setErrorMessage
+    // setErrorMessage(errorMessage);
+    {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
   }
+  
+  
+  
 
   produit.sort((a, b) => b.idProduit - a.idProduit);
 
@@ -117,6 +188,7 @@ function Cart() {
     localStorage.removeItem(nom);
     const nouveauPanier = produit.filter((panier) => panier.id !== id);
     setProd(nouveauPanier);
+    window.location.reload(true)
   };
   return (
     <>
@@ -137,17 +209,19 @@ function Cart() {
             </div>
           </div>
         </div>
+        
       </div>
 
       <section className="h-100" style={{ backgroundColor: "#eee" }}>
         {produit &&
           produit.map((panier) => {
             return (
-              <MDBContainer className="py-5 h-100">
+           
+              <MDBContainer className="py-1 h-100" key={panier.idProduit}>
                 <MDBRow className="justify-content-center align-items-center h-100">
                   <MDBCol md="10">
                     <MDBCard className="rounded-3 mb-4">
-                      <MDBCardBody className="p-4">
+                      <MDBCardBody className="p-1">
                         <MDBRow className="justify-content-between align-items-center">
                           <MDBCol md="2" lg="2" xl="2">
                             <MDBCardImage
@@ -168,13 +242,14 @@ function Cart() {
                               <span className="text-muted">
                                 Prix par unité :{" "}
                               </span>
-                              {panier.price} Ar
+                              MGA {panier.price}
                               <br />
                               <br />
                               <span className="text-muted">
                                 Quantité disponible:{" "}
                               </span>
                               {panier.stock} {panier.unit}
+                              
                             </p>
                           </MDBCol>
 
@@ -227,11 +302,12 @@ function Cart() {
                               <MDBIcon fas icon="plus" />
                             </MDBBtn> */}
                           </MDBCol>
-                          <MDBCol md="3" lg="2" xl="2" className="offset-lg-1">
-                            prix total:
-                            <MDBTypography tag="h5" className="mb-0">
-                              {panier.total} Ar
+                          <MDBCol md="1" lg="2" xl="2" className="offset-lg-1">
+                            Prix total par produit:
+                            <MDBTypography tag="p" className="mb-0">
+                              MGA {panier.total} 
                             </MDBTypography>
+                            
                           </MDBCol>
                           <MDBCol
                             md="1"
@@ -241,7 +317,7 @@ function Cart() {
                             key={produit.id}
                           >
                             <a
-                              href="#!"
+                            style={{cursor : "pointer"}}
                               className="text-danger"
                               onClick={() => {
                                 Swal.fire({
@@ -272,32 +348,33 @@ function Cart() {
             );
           })}
 
-        <MDBContainer className="py-5 h-100">
+        <MDBContainer className="py-1 h-100">
           <MDBRow className="justify-content-center align-items-center h-100">
             <MDBCol md="10">
-              <MDBCard className="rounded-3 mb-4">
+              <MDBCard className="rounded-3 mb-1">
                 <div className="justify-content-center align-items-center h-100">
                   <div
                     style={{
                       display: "flex",
                       justifyContent: "space-between",
                       alignItems: "center",
-                      width: "100%",
+                      width: "95%",
                     }}
                   >
-                    <p style={{ margin: "0" }}>Prix total :</p>
-                    <p style={{ margin: "0" }}>{grandTotal} Ar</p>
+                    <h5 style={{ margin: "0" }}>Prix total à payer :</h5>
+                    <h5 style={{ margin: "0" }}>MGA {total}</h5>
                   </div>
                 </div>
 
                 <br />
                 <button
-                  onClick={handleOpenModal}
+                  onClick={ajoutPanier}
                   variant="primary"
                   className="btn btn-success btn-lg gradient-custom-4 px-5 text-white"
                 >
-                  Payer
+                  Paiement
                 </button>
+                
               </MDBCard>
             </MDBCol>
           </MDBRow>
@@ -318,8 +395,8 @@ function Cart() {
             },
           }}
         >
-          <div class="modal-header">
-            <div class="row justify-content-left">
+          <div className="modal-header">
+            <div className="row justify-content-left">
               <img
                 src={visa}
                 alt="visa"
@@ -327,17 +404,17 @@ function Cart() {
                 style={{ width: "20%" }}
               />
 
-              <h1 class="md-5 mt-4 ml-5"> PAIEMENT</h1>
+              <h1 className="md-5 mt-4 ml-5 text-warning"> PAIEMENT</h1>
             </div>
 
             <button
               type="button"
-              class="btn-close"
+              className="btn-close"
               aria-label="Close"
               onClick={handleCloseModal}
             ></button>
           </div>
-          <p>Prix à payer : {grandTotal} Ar</p>
+          <h3 className="text-center mt-2" style={{color:"darkblue"}}>Montant à payer : MGA {total}</h3>
 
           <Elements stripe={stripePromise}>
             <CheckoutForm />
