@@ -338,16 +338,11 @@ function Home() {
                         >
                           <Card.Img
                             className="image-box undragable"
-                            variant="top"
-                            src={
-                              images.find(
-                                (image) =>
-                                  image.categorieProduit ===
-                                  product.categorieProduit
-                              )?.src
-                            }
+                            width={"100px"} style={{maxWidth:"500px", maxHeight:"200px"}}
+                              src={`data:image/jpeg;base64,${product.photoProduit}`}
+                              alt={product.nomProduit}
                           />
-                          <Card.Body>
+                          <Card.Body className="p-3">
                             <Card.Title className="text-black initialism mb-4">
                               {product.nomProduit}
                             </Card.Title>
@@ -379,16 +374,11 @@ function Home() {
                         >
                           <Card.Img
                             className="image-box undragable"
-                            variant="top"
-                            src={
-                              images.find(
-                                (image) =>
-                                  image.categorieProduit ===
-                                  product.categorieProduit
-                              )?.src
-                            }
+                            width={"100px"} style={{maxWidth:"500px", maxHeight:"200px"}}
+                              src={`data:image/jpeg;base64,${product.photoProduit}`}
+                              alt={product.nomProduit}
                           />
-                          <Card.Body>
+                          <Card.Body className="p-3">
                             <Card.Title className="text-black initialism mb-4">
                               {product.nomProduit}
                             </Card.Title>

@@ -143,7 +143,7 @@ function Register_coop() {
                                             <div className="col-md-6">
                                                 <div className="form-outline">
                                                 <label style={{marginRight : "auto", fontSize : "16px", color : "black"}}>Numéro statistique</label>
-                                                <input type="text" id="registerStat" className="form-control" required="required" maxLength={17}
+                                                <input type="text" id="registerStat" className="form-control" required="required" maxLength={21}
                                                 value={statCoop} onChange={(e) => {setStat(e.target.value)}} placeholder='Votre STAT'/>
                                                 </div>
                                             </div>
