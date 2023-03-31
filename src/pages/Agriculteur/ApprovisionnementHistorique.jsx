@@ -20,6 +20,7 @@ function ApprovisionnementHistorique({ approvisionnements }) {
     setFilteredAppros(filtered);
   };
   const handleSearchChange = (event) => {
+    event.preventDefault();
     const searchValue = event.target.value.toLowerCase();
     const filtered = approvisionnements.filter((appro) => {
       const nomProduit = appro.produit.nomProduit.toLowerCase();

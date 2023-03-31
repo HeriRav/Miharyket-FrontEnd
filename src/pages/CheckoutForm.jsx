@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 // import axios from "axios";
 import visa from '../images/visa.png';
+import { ToastContainer, toast } from "react-toastify";
+
 
 
 const CheckoutForm = () => {
@@ -42,12 +44,12 @@ const CheckoutForm = () => {
             idStripe: id,
             panier: localStorage.getItem("panier")
           })
-        }).then(() => console.log("ok"));
+        }).then(() => toast.success("Paiement effectué, merci!"));
         } catch (error) {
           console.log("Erreur : ", error.message);
         }
     } else {
-      setMessage("tsy mety");
+      toast.warning("Le paiement n'a pas été effectué");
     }
     setIsLoading(false);
   };
@@ -62,7 +64,7 @@ const CheckoutForm = () => {
               <fieldset className="FormGroup">
                 <div className="FormRow">
                 <br/>      
-                  <h5 >
+                  <h5 className="" style={{fontWeight:"bold"}}>
                   Déscription de la carte : 
                   </h5>
                   <br/>
@@ -84,8 +86,7 @@ const CheckoutForm = () => {
                   {isLoading ? <div className="spinner" id="spinner"></div> : "Payer"}
                 </span>
               </button>
-              
-              {message && <div id="payment-message">{message}</div>}
+              <ToastContainer position="bottom-center" autoClose={2000}/>
             </form>  
           </div>
         </div>
