@@ -172,7 +172,7 @@ function ApprovisionnementProduitCooperative() {
                     onChange={handleInputChange}
                   >
                     <option value="">Sélectionnez une unité</option>
-                    <option value="litre">Litre</option>
+                    <option value="l">Litre</option>
                     <option value="kg">Kilogramme</option>
                   </Form.Control>
                 </Form.Group>

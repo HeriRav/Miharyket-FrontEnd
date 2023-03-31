@@ -323,7 +323,7 @@ function handleClickTransaction(userId, idProduit) {
               // .filter(produit => produit.nomProduit.toLowerCase().includes(recherche) ||
               // produit.categorieProduit.toLowerCase().includes(recherche) ||
               // produit.uniteProduit.toLowerCase().includes(recherche))
-              .filter(produit => keys.some(key => produit[key].toLowerCase().includes(recherche)))
+              .filter(produit => keys.some(key => produit[key]?.toLowerCase().includes(recherche)))
               .map((resultat, index) => (
                 <tr key={index}>
                   <td className="align-middle">{resultat.nomProduit}</td>
@@ -428,6 +428,8 @@ function handleClickTransaction(userId, idProduit) {
                     <option value="Légume">Légume</option>
                     <option value="Fruit">Fruit</option>
                     <option value="Viande">Viande</option>
+                    <option value="Poisson">Poisson et fruit de mer</option>
+                    <option value="Graine">Graine</option>
                     <option value="Produit laitier">Produit laitier</option>
                     <option value="Céréale">Céréale</option>
                     <option value="Produit arômatique">
