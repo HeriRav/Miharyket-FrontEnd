@@ -78,7 +78,7 @@ console.error('Error:', error);
 
 return (
 <Container className='mt-5 mb-5'>
-<h1 className='text-center'>Approvisionnement</h1>
+<h1 className='text-center text-black'>Approvisionnement</h1>
 <h2 className='text-center'>
 <div className='sidebar-brand-icon'>
 <img src={iconProduct} alt='Mihary' className='img-fluid' />
@@ -86,7 +86,7 @@ return (
 </h2>
 
 
-  <h3 className='mt-4'>Historique des approvisionnements</h3>
+  <h3 className='mt-4 text-black'>Historique des approvisionnements</h3>
 
   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
  
@@ -169,7 +169,7 @@ return (
                 </Form.Group>
               </Col>
     
-              <Col xs={12} sm={6} md={6}>
+              {/* <Col xs={12} sm={6} md={6}>
                 <Form.Group controlId="unite">
                   <Form.Label className="mt-4">Unité</Form.Label>
                   <Form.Control
@@ -180,11 +180,11 @@ return (
                     onChange={handleInputChange}
                   >
                     <option value="">Sélectionnez une unité</option>
-                    <option value="litre">Litre</option>
+                    <option value="l">Litre</option>
                     <option value="kg">Kilogramme</option>
                   </Form.Control>
                 </Form.Group>
-              </Col>
+              </Col> */}
     
               <Form.Group as={Col} md={6} controlId="prix">
                 <Form.Label className="mt-4">Prix en Ar/Unité</Form.Label>
@@ -220,7 +220,7 @@ return (
       <ApprovisionnementHistorique approvisionnements={appros} />
 
 
-          </Container>
-          );
-          }
-          export default ApprovisionnementProduitCooperative;
+</Container>
+);
+}
+export default ApprovisionnementProduitCooperative;
