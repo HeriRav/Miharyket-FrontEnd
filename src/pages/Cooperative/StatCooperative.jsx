@@ -1,39 +1,52 @@
-import { useState } from "react";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
+import ChartAgri from "./ChartAgri";
+import Histogram from "../Agriculteur/Histogram";
+import HistoAppro from "./HistoAppro";
+import HistoChart from "./HistoChart";
+import SoldeUtilisateur from "../SoldeUtilisateur";
 
 function StatCooperative() {
   const [count, setCount] = useState([]);
 
-  const [counter, setCounter] = useState(3)
+  let [counter, setCounter] = useState(0)
 
-  const id = sessionStorage.getItem("idCoop");
+  const idCoop = sessionStorage.getItem("idCoop");
 
   const idUser = sessionStorage.getItem("idUser");
 
   useEffect(() => {
-    fetch('http://localhost:8085/produits/count')
-    .then(response => response.json())
-    .then(data => setCount(data))
-    .catch(err => console.log(err))
+    fetch(`http://localhost:8085/produits/reference/${idCoop}`)
+      .then(response => response.json())
+      .then(data => setCounter = data.length)
+      .catch(err => console.log(err))
   }, [])
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [users, setUsers] = useState([]);
+  const [selectedUser, setSelectedUser] = useState("");
+  
 
-  // useEffect(() => {
-  //   async function countAggro() {
-  //     const response = await fetch(`http://localhost:8085/api/utilisateurs/cooperatives/${id}/agriculteurs`)
-  //     const data = await response.json();
-  //     setCounter(data.counter);
-  //   }
-  //   countAggro()
-  // }, [])
+  useEffect(() => {
+    fetch(`http://localhost:8085/api/utilisateurs/cooperatives/${idCoop}/agriculteurs`)
+      .then(response => response.json())
+      .then(data => setUsers(data));
+  }, []);
+  const nombreAgriculteur = users.length;
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    // Faire quelque chose avec les dates et l'utilisateur sélectionnés (par exemple, appeler une fonction pour effectuer une requête API)
+  }
+
+  
 
   return (
-      <div>
+    <div>
       <div className="container">
         <div className="row">
           <div className="col-md-3">
             <div className="card-counter primary">
               <i className="fa fa-shopping-cart"></i>
-              <span className="count-numbers">{count}</span>
+              <span className="count-numbers">{counter}</span>
               <span className="count-name">Produits</span>
             </div>
           </div>
@@ -41,7 +54,7 @@ function StatCooperative() {
           <div className="col-md-3">
             <div className="card-counter danger">
               <i className="fa fa-users"></i>
-              <span className="count-numbers">{counter}</span>
+              <span className="count-numbers">{nombreAgriculteur}</span>
               <span className="count-name">Agriculteurs</span>
             </div>
           </div>
@@ -49,7 +62,7 @@ function StatCooperative() {
           <div className="col-md-3">
             <div className="card-counter warning">
               <i className="fa fa-wallet"></i>
-              <span className="count-numbers">0</span>
+              <span className="count-numbers"><SoldeUtilisateur/></span>
               <span className="count-name">Solde(Ar)</span>
             </div>
           </div>
@@ -62,60 +75,63 @@ function StatCooperative() {
             </div>
           </div>
         </div>
-      </div><br/>
+      </div><br />
       <div className="row">
-        <div className="col-xl-8 col-lg-7">
+        <div className="col-xl col-lg-7">
           {/* Area Chart */}
           <div className="card shadow mb-4">
             <div className="card-header py-3">
-              <h6 className="m-0 font-weight-bold text-primary">Area Chart</h6>
+              <h6 className="m-0 font-weight-bold text-primary">Stock de la cooperative</h6>
             </div>
             <div className="card-body">
               <div className="chart-area">
-                <canvas id="myAreaChart" />
+                <Histogram endpoint={"http://localhost:8085/produits/reference/" + idCoop} />
               </div>
               <hr />
-              Styling for the area chart can be found in the
-              <code>/js/demo/chart-area-demo.js</code> file.
+
+              <code></code>
             </div>
           </div>
           {/* Bar Chart */}
           <div className="card shadow mb-4">
             <div className="card-header py-3">
-              <h6 className="m-0 font-weight-bold text-primary">Bar Chart</h6>
+              <h6 className="m-0 font-weight-bold text-primary">Liste approvisionnement par agriculteur</h6>
             </div>
             <div className="card-body">
-              <div className="chart-bar">
-                <canvas id="myBarChart" />
-              </div>
-              <hr />
-              Styling for the bar chart can be found in the
-              <code>/js/demo/chart-bar-demo.js</code> file.
+            <form onSubmit={handleFormSubmit}>
+        <label htmlFor="startDate">Date de début :</label>
+        <input type="date" id="startDate" name="startDate" value={startDate} onChange={e => setStartDate(e.target.value)} />
+
+        <label htmlFor="endDate">Date de fin :</label>
+        <input type="date" id="endDate" name="endDate" value={endDate} onChange={e => setEndDate(e.target.value)} />
+
+        <label htmlFor="user">Utilisateur :</label>
+        <select id="user" name="user" value={selectedUser} onChange={e => setSelectedUser(e.target.value)}>
+          <option value="">Sélectionnez un utilisateur</option>
+          {users.map(user => (
+            <option key={user.id} value={user.id}>{user.nomUtilisateur}</option>
+          ))}
+        </select>
+
+        {/* <button type="submit">Afficher le graphique</button> */}
+      </form>
+
+      {startDate && endDate && selectedUser &&
+        <>
+          <HistoChart userId={selectedUser} startDate={startDate} endDate={endDate} />
+          {/* <HistoAppro userId={selectedUser} startDate={startDate} endDate={endDate} /> */}
+        </>
+      }
+    
             </div>
           </div>
         </div>
         {/* Donut Chart */}
-        <div className="col-xl-4 col-lg-5">
-          <div className="card shadow mb-4">
-            {/* Card Header - Dropdown */}
-            <div className="card-header py-3">
-              <h6 className="m-0 font-weight-bold text-primary">Donut Chart</h6>
-            </div>
-            {/* Card Body */}
-            <div className="card-body">
-              <div className="chart-pie pt-4">
-                <canvas id="myPieChart" />
-              </div>
-              <hr />
-              Styling for the donut chart can be found in the
-              <code>/js/demo/chart-pie-demo.js</code> file.
-            </div>
-          </div>
-        </div>
+        
       </div>
     </div>
-      
-    );
-  }
-  export default StatCooperative;
+
+  );
+}
+export default StatCooperative;
 

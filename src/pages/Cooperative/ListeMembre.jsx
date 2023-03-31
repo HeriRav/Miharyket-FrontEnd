@@ -1,101 +1,88 @@
-import React, { useState,useEffect } from 'react';
-import { Button, Modal, Table } from 'react-bootstrap';
-import { Navigate } from 'react-router-dom';
-import { ToastContainer, toast } from 'react-toastify';import 'react-toastify/dist/ReactToastify.css'
+import React, { useState, useEffect } from 'react';
+import { Button, Modal } from 'react-bootstrap';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import MemberTable from './MemberTable';
 
 function ListeMembre() {
-
   const [resultats, setResultats] = useState([]);
-  const [nomUtilisateur, setLName] = useState('')
-  const [cinAgriculteur, setCin] = useState('')
-  const [adresseUtilisateur, setAdress] = useState('')
-  const [email, setEmail] = useState('')
-  const [telephoneUtilisateur, setPhone] = useState('')
-  const [mdpUtilisateur, setPass] = useState('')
-  const [confirmMdp, setConfirm] =useState('')
-  const [typeUtilisateur] = useState('AGRICULTEUR')
-
-  const [members, setMembers] = useState([
-    {
-      nom: nomUtilisateur,
-      cin: cinAgriculteur,
-      adresse: adresseUtilisateur,
-      telephone: telephoneUtilisateur,
-      email: email
-    }
-  ]);
-  const user = sessionStorage.getItem("user");
+  const [nomUtilisateur, setLName] = useState('');
+  const [cinAgriculteur, setCin] = useState('');
+  const [adresseUtilisateur, setAdress] = useState('');
+  const [email, setEmail] = useState('');
+  const [telephoneUtilisateur, setPhone] = useState('');
+  const [mdpUtilisateur, setPass] = useState('');
+  const [confirmMdp, setConfirm] = useState('');
+  const [typeUtilisateur] = useState('AGRICULTEUR');
+  const [members, setMembers] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const user = sessionStorage.getItem('user');
   const reference = JSON.parse(user);
+  const id = sessionStorage.getItem('idCoop');
 
-  const aggro = () => {
-    const id = reference.id;
-    useEffect(() => {
-      fetch(`http://localhost:8085/api/utilisateurs/cooperatives/${id}/agriculteurs`)
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-          return response.json();
-        })
-        .then(data => {
-          setMembers(data);
-        })
-        .catch(error => {
-          console.error('Error:', error);
-        });
-    }, []);
-  }
-  const id = sessionStorage.getItem("idCoop")
   useEffect(() => {
     fetch(`http://localhost:8085/api/utilisateurs/cooperatives/${id}/agriculteurs`)
-      .then(response => {
+      .then((response) => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
         return response.json();
       })
-      .then(data => {
+      .then((data) => {
         setMembers(data);
       })
-      .catch(error => {
+      .catch((error) => {
         console.error('Error:', error);
       });
-  }, []);
-
-  const [showModal, setShowModal] = useState(false);  
+  }, [id]);
 
   const handleInputChange = (event) => {
-    // const { name, value } = event.target;
     setMembers(event.target.value);
   };
 
   const handleAddMember = (e) => {
-    e.preventDefault()
-    const user = sessionStorage.getItem("user")
+    e.preventDefault();
+    const user = sessionStorage.getItem('user');
     if (validate()) {
-      const agriculteur = {nomUtilisateur, login : email, adresseUtilisateur, cinAgriculteur, email, telephoneUtilisateur, mdpUtilisateur, typeUtilisateur,cooperative : {id : id}}
-      fetch("http://localhost:8085/api/utilisateurs/ajout", {
-          method:"POST", headers:{"Content-Type" : "application/json"}, body:JSON.stringify(agriculteur)
-      }).then(() => {
-            toast.success('Le compte a été enregistré avec succès')            
-            //react pour rediriger
-            setTimeout(() => {
-            setShowModal(false)
-              // window.location.reload(true); 
-            }, 3000)                    
-      }).catch((err) => {
-          toast.error('Inscription échouée : ' +err.message)
+      const agriculteur = {
+        nomUtilisateur,
+        login: email,
+        adresseUtilisateur,
+        cinAgriculteur,
+        email,
+        telephoneUtilisateur,
+        mdpUtilisateur,
+        typeUtilisateur,
+        cooperative: { id: id },
+      };
+      fetch('http://localhost:8085/api/utilisateurs/ajout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(agriculteur),
       })
-      setResultats([...resultats, agriculteur])
-      setCin("")
-      setAdress("")
-      setEmail("")
-      setLName("")
-      setPhone("")
+        .then(() => {
+          toast.success('Le compte a été enregistré avec succès');
+          setTimeout(() => {
+            setShowModal(false);
+          }, 3000);
+        })
+        .then(() => {
+          setMembers([...members, agriculteur]); // Add the new member to the state
+          setCin('');
+          setAdress('');
+          setEmail('');
+          setLName('');
+          setPhone('');
+          setPass('');
+          setConfirm('');
+        })
+        .catch((err) => {
+          toast.error('Inscription échouée : ' + err.message);
+        });
     }
   };
-
-  const validate = () => {
+  
+   const validate = () => {
     let result = true
     var validRegex = /^(?=.{1,64}@.{1,255}$)(?=.{1,64}@.{1,255}\..{2,63}$)(?=.{1,254}$)(?=.{1,320}$)[a-zA-Z0-9!#$%&'*+\-/=?^_`{|}~]+(?:\.[a-zA-Z0-9!#$%&'*+\-/=?^_`{|}~]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z]{2,63}$/;
     if (nomUtilisateur === '' || nomUtilisateur === null) {
@@ -143,36 +130,14 @@ function ListeMembre() {
 
   return (
     <div>
-      <h1 className='text-black'>Liste des agriculteurs membres
+      <h1 className="text-black">
+        Liste des agriculteurs membres
         <Button variant="success" onClick={() => setShowModal(true)} className="float-right">
-          <i className='fas fa-plus-circle fa-lg fa-fw mr-2'></i>
+          <i className="fas fa-plus-circle fa-lg fa-fw mr-2"></i>
           Ajouter
         </Button>
       </h1>
-      <div className="table-responsive">
-        <Table striped bordered hover className="text-black text-center">
-          <thead>
-            <tr>
-              <th>Nom</th>
-              <th>CIN</th>
-              <th>Adresse</th>
-              <th>Contact</th>
-              <th>Email</th>
-            </tr>
-          </thead>
-          <tbody>
-            {members.map((member, index) => (
-              <tr key={index}>
-                <td>{member.nomUtilisateur}</td>
-                <td>{member.cinAgriculteur}</td>
-                <td>{member.adresseUtilisateur}</td>
-                <td>{member.telephoneUtilisateur}</td>
-                <td>{member.login}</td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
-      </div>
+      <MemberTable members={members} />
       <Modal show={showModal} onHide={() => setShowModal(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Ajouter un nouvel agriculteur</Modal.Title>
