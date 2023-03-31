@@ -9,6 +9,7 @@ import { UserOutlined } from '@ant-design/icons'
 import Contact from '../pages/Contact'
 import { MDBIcon } from 'mdb-react-ui-kit'
 import Cart from '../pages/Cart'
+import Coop from '../pages/Client/Coop'
 
 const Header = () => {
 
@@ -182,6 +183,10 @@ const Header = () => {
                                   <i className="fas fa-user fa-sm fa-fw mr-2"></i>
                                   Profil
                                 </a>
+                                <Link to="/cooperatives" className="dropdown-item">
+                                  <i className='fas fa-users fa-sm fa-fw mr-2'></i>
+                                  Liste des coopératives
+                                </Link>
                                 <div className="dropdown-divider"></div>
                                 <Link onClick={EndSession} className="dropdown-item">
                                   <i className='fas fa-sign-out-alt fa-sm fa-fw mr-2'></i>
@@ -297,9 +302,10 @@ const Header = () => {
         <Routes>
           <Route index element={<Home />}/>
           <Route path='/a-propos' element={<About />}/>
-          <Route path='/produits' element={<Product/>}/>
-          <Route path='/contact' element={<Contact/>}/>
+          <Route path='/produits' element={<Product />}/>
+          <Route path='/contact' element={<Contact />}/>
           <Route path='/panier' element={isAuthenticated() ? <Cart /> : <Navigate to='/authentification/login' />}/>
+          <Route path='/cooperatives' element={<Coop />}/>
         </Routes>
       </>
   )
