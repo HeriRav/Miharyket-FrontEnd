@@ -81,8 +81,15 @@ function ListeMembre() {
         });
     }
   };
+
+  function handleInput(event) {
+    const input = event.target.value.replace(/\D/g, '').substring(0, 12);
+    const formattedInput = input.replace(/(\d{3})(?=\d)/g, '$1 ');
+
+    setInputValue(formattedInput);
+}
   
-   const validate = () => {
+  const validate = () => {
     let result = true
     var validRegex = /^(?=.{1,64}@.{1,255}$)(?=.{1,64}@.{1,255}\..{2,63}$)(?=.{1,254}$)(?=.{1,320}$)[a-zA-Z0-9!#$%&'*+\-/=?^_`{|}~]+(?:\.[a-zA-Z0-9!#$%&'*+\-/=?^_`{|}~]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z]{2,63}$/;
     if (nomUtilisateur === '' || nomUtilisateur === null) {
