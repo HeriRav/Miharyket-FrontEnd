@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Route, Routes, useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import {
     MDBCard,
@@ -17,17 +17,13 @@ import {
     MDBTypography 
   } from 'mdb-react-ui-kit';
 import { Button, Modal } from "react-bootstrap";
+import Mapping from "../Mapping";
 
 function Coop () {
     const [members, setMembers] = useState([]);
     const [product, setProduct] = useState([])
     const [allProduct, setAllProduct] = useState([])
-    const [showModal, setShowModal] = useState(false);
-    const [shouldDelayEffect, setShouldDelayEffect] = useState(false);
-    const [id, setId] = useState("")
-
-    const users = localStorage.getItem('users')
-    const userId = sessionStorage.getItem('idUser')
+    const navigate = useNavigate()
 
     useEffect(() => {
         fetch(`http://localhost:8085/api/utilisateurs/agriculteurs`)
@@ -45,47 +41,38 @@ function Coop () {
             });
     }, []);
 
-    function handleButtonClick(userId, coopId) {
-        console.log(userId);
-        sessionStorage.setItem("idAggro", userId)
-        sessionStorage.setItem("idCoop", coopId)
-        setShowModal(true)
-        setShouldDelayEffect(true);
+    // useEffect(() => {
+    //     const idAggro = sessionStorage.getItem('idAggro')
+    //     fetch(`http://localhost:8085/approvisionnements/agriculteur/` + idAggro)
+    //     .then((response) => response.json())
+    //     .then((data) => setProduct(data))
+    //     .catch((error) => console.log(error))
+    // },[]);
+
+    // useEffect(() => {
+    //     const idCoop = sessionStorage.getItem('idCoop')
+    //     fetch(`http://localhost:8085/produits/cooperative/${idCoop}`)
+    //     .then((response) => response.json())
+    //     .then((data) => setAllProduct(data))
+    //     .catch((err) => console.log(err));
+    // }, []);
+
+    // const Mapping = () => {
+
+    //     const location = {
+    //         address: 'Antsirabe',
+    //         lat:  -19.873874,
+    //         lng:  47.031963
+    //       } 
+      
+    //     return ( 
+    //         <Map location={location} zoomLevel={15} />
+    //     );
+    // }
+
+    const Mapp = () => {
+        navigate('/map')
     }
-
-    useEffect(() => {
-        const idAggro = sessionStorage.getItem('idAggro')
-        if (shouldDelayEffect) {
-            setTimeout(() => {
-                fetch(`http://localhost:8085/approvisionnements/agriculteur/` + idAggro)
-                .then((response) => response.json())
-                .then((data) => setProduct(data))
-                .catch((error) => console.log(error))
-            }, 100)
-        } else {
-            fetch(`http://localhost:8085/approvisionnements/agriculteur/` + idAggro)
-            .then((response) => response.json())
-            .then((data) => setProduct(data))
-            .catch((error) => console.log(error))
-        }
-    },[shouldDelayEffect]);
-
-    useEffect(() => {
-        const idCoop = sessionStorage.getItem('idCoop')
-        fetch(`http://localhost:8085/produits/reference/${idCoop}`)
-            .then((response) => response.json())
-            .then((data) => setAllProduct(data))
-            .catch((err) => console.log(err));
-    }, []);
-
-    const closeWithSession = () => {
-        setShowModal(false)
-        location.reload(true)
-    }
-
-    const countProduit = product.length;
-
-    const countCoopProduit = allProduct.length;
 
     members.sort((a, b) => b.id - a.id);
 
@@ -111,10 +98,10 @@ function Coop () {
                 </div>
             </div>
 
-            <MDBRow className='row-cols-1 row-cols-md-3 g-4'>
+            <MDBRow className='row-cols-1 row-cols-md-3 g-4 mt-4 mb-4'>
                 {members.map((aggro) => (
                     <MDBCol key={aggro.id}>
-                        <MDBCard className='h-100 text-center'>
+                        <MDBCard className='h-100 text-center' style={{backgroundColor : "#ebebeb"}}>
                         <div className="mt-3 mb-4">
                         <MDBCardImage
                             src='../src/images/user_profile.png'
@@ -123,13 +110,12 @@ function Coop () {
                         />
                         </div>
                         <MDBCardBody>
-                            <MDBCardTitle>{aggro.nomUtilisateur} (<span className="text-warning">{aggro.adresseUtilisateur}</span>)</MDBCardTitle>
-                            <MDBCardTitle>{aggro.telephoneUtilisateur} | <span className="text-info">{aggro.email}</span></MDBCardTitle>
-                            <MDBCardText>
-                            This is a longer card with supporting text below as a natural lead-in to additional content.
-                            This content is a little bit longer.
+                            <MDBCardTitle className="text-black">{aggro.nomUtilisateur} (<span className="text-warning">{aggro.adresseUtilisateur}</span>)</MDBCardTitle>
+                            <MDBCardTitle className="text-info">{aggro.telephoneUtilisateur} <span className="text-black">|</span> {aggro.email}</MDBCardTitle>
+                            <MDBCardText className="text-black mt-4">
+                            "{aggro.prenomUtilisateur}"
                             </MDBCardText>
-                            <div className="justify-content-between d-flex text-center mt-5 mb-2 h-100 w-100">
+                            <div className="justify-content-between d-flex text-center mt-4 mb-2 h-100 w-100">
                                 <div>
                                     <p className="mb-2 h5 text-black">Coopérative</p>
                                     <p className="mb-0 text-info">{aggro.cooperative.nomUtilisateur}</p>
@@ -153,62 +139,67 @@ function Coop () {
                         <MDBCardFooter className="text-center">
                             <Button
                               className="btn-info w-100 d-flex align-items-center flex-column"
-                              onClick={() => handleButtonClick(aggro.id, aggro.cooperative.id)}
+                              onClick={Mapp}
                             >
-                              Voir plus de détails
+                              Voir la localisation
                             </Button>
                         </MDBCardFooter>
                         </MDBCard>
                     </MDBCol>
                 ))}
             </MDBRow>
-            <Modal show={showModal} onHide={() => setShowModal(false)} backdrop="static">
+            {/* <Modal show={showModal} onHide={() => setShowModal(false)} key={getIdAggro}>
                 <Modal.Header>
                     <Modal.Title>Détail profil</Modal.Title>
                     <button type="button" className="btn-close" aria-label="Close" onClick={closeWithSession}></button>
                 </Modal.Header>
-                {product.map((aggro) => (
+                {members.map((aggro) => (
                     <Modal.Body>
-                        <div className="rounded-top text-white d-flex flex-row" style={{ backgroundColor: '#000', height: '200px' }}>
+                        <div className="rounded-top text-white d-flex flex-row" style={{ backgroundColor: '#116530', height: '200px' }}>
                             <div className="ms-4 mt-5 d-flex flex-column" style={{ width: '150px' }}>
                             <MDBCardImage src="../src/images/user_profile.png"
                                 alt="Generic placeholder image" className="mt-4 mb-2 img-thumbnail" fluid style={{ width: '150px', zIndex: '1' }} />
-                            <MDBBtn outline color="dark" style={{height: '36px', overflow: 'visible'}}>
-                                Edit profile
-                            </MDBBtn>
                             </div>
-                            <div className="ms-3" style={{ marginTop: '130px' }}>
-                            <MDBTypography tag="h5">{aggro[3]}</MDBTypography>
-                            <MDBCardText>Agriculteur</MDBCardText>
+                            <div className="ms-3" style={{ marginTop: '110px' }}>
+                            <MDBTypography tag="h5">&nbsp;{aggro.nomUtilisateur}</MDBTypography>&nbsp;({getAdd})
+                            <MDBCardText>&nbsp;Agriculteur</MDBCardText>
+                            </div>
+                        </div>
+                        <div className="p-4 text-black" style={{ backgroundColor: '#f8f9fa', marginBottom : "-55px" }}>
+                            <div className="d-flex justify-content-center text-center py-4">
+                            <div>
+                                <MDBCardText className="mb-1 h5 text-info">{getTel}</MDBCardText>
+                                <MDBCardText className="small text-black mb-0">Numéro de téléphone</MDBCardText>
+                            </div>
+                            <div className="px-3">
+                                <MDBCardText className="mb-1 h5 text-black">|</MDBCardText>
+                            </div>
+                            <div>
+                                <MDBCardText className="mb-1 h5 text-info">{getEmail}</MDBCardText>
+                                <MDBCardText className="small text-black mb-0">Adresse Mail</MDBCardText>
+                            </div>
                             </div>
                         </div>
                         <div className="p-4 text-black" style={{ backgroundColor: '#f8f9fa' }}>
-                            <div className="d-flex justify-content-end text-center py-1">
+                            <div className="d-flex justify-content-center text-center py-4">
                             <div>
                                 <MDBCardText className="mb-1 h5">{countProduit}</MDBCardText>
-                                <MDBCardText className="small text-muted mb-0">Produit(s)</MDBCardText>
+                                <MDBCardText className="small text-muted mb-0">Produit(s) vendu</MDBCardText>
                             </div>
                             <div className="px-3">
                                 <MDBCardText className="mb-1 h5">{countCoopProduit}</MDBCardText>
-                                <MDBCardText className="small text-muted mb-0">Followers</MDBCardText>
-                            </div>
-                            <div>
-                                <MDBCardText className="mb-1 h5">478</MDBCardText>
-                                <MDBCardText className="small text-muted mb-0">Following</MDBCardText>
+                                <MDBCardText className="small text-muted mb-0">Vente De La Cooperative</MDBCardText>
                             </div>
                             </div>
                         </div>
                         <div className="mb-5">
-                            <p className="lead fw-normal mb-1">Phrase d'accroche</p>
                             <div className="p-4" style={{ backgroundColor: '#f8f9fa' }}>
-                                <MDBCardText className="font-italic mb-1">Web Developer</MDBCardText>
-                                <MDBCardText className="font-italic mb-1">Lives in New York</MDBCardText>
-                                <MDBCardText className="font-italic mb-0">Photographer</MDBCardText>
+                                <MDBCardText className="font-italic h4">"{sessionStorage.getItem('descAggro')}"</MDBCardText>
                             </div>
                         </div>
                         <div className="d-flex justify-content-between align-items-center mb-4">
-                            <MDBCardText className="lead fw-normal mb-0">Recent photos</MDBCardText>
-                            <MDBCardText className="mb-0"><a href="#!" className="text-muted">Show all</a></MDBCardText>
+                            <MDBCardText className="lead fw-normal mb-0">Produit(s) récent(s)</MDBCardText>
+                            <MDBCardText className="mb-0"><a href="#!" className="text-muted">Voir tout</a></MDBCardText>
                         </div>
                         <MDBRow className="g-2">
                             <MDBCol className="mb-2">
@@ -221,7 +212,11 @@ function Coop () {
                 <Modal.Footer>
                     <Button variant="secondary" onClick={closeWithSession}>Fermer</Button>
                 </Modal.Footer>
-            </Modal>
+            </Modal> */}
+
+            <Routes>
+                <Route path="/map" element={<Mapping />}/>
+            </Routes>
         </>
     )
 }

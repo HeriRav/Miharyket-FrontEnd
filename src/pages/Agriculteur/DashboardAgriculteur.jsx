@@ -48,6 +48,7 @@ function Dashboard() {
     const change = () => {
         sessionStorage.clear();
         localStorage.clear();
+        window.location.reload(true)
     let path = '/'
     navigate(path)
   }
@@ -284,8 +285,7 @@ function Dashboard() {
                             <a className="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span className="mr-2 d-none d-lg-inline text-gray-600 small">{sessionStorage.getItem("nom")}</span>
-                                <img className="img-profile rounded-circle"
-                                    src="img/undraw_profile.svg"/>
+                                <img src='../src/images/user.png' width={24} height={24} alt='profil'/>
                             </a>
                             <div className="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
                             <a className="dropdown-item" href="#">
@@ -295,7 +295,7 @@ function Dashboard() {
                             
                             
                             <a className="dropdown-item dropdown-item-button" href="#" onClick={change}>
-                                <i className="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                <Link className="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></Link>
                                 Déconnexion
                             </a>
                             </div>

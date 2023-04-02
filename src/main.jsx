@@ -22,6 +22,7 @@ import Contact from './pages/Contact'
 import Cart from './pages/Cart'
 import Portefeuille from './pages/Agriculteur/Portefeuille'
 import Aggro from './pages/Client/Aggro'
+import Mapping from './pages/Mapping'
 
 
 // Fonction de vérification de l'authentification de l'utilisateur
@@ -49,6 +50,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       <Route path='/inscription/*' element={<Register />}/>
       <Route path='/inscription-coop/*' element={<Register_coop />}/>
       <Route path='/inscription-client/*' element={<Register_client />}/>
+      <Route path='/map' element={<Mapping />}/>
 
       {/* Routes protégées */}
       <Route path='/dashboard' element={isAuthenticated() ? <DashboardAdmin /> : <Navigate to='/authentification/login' />} />
