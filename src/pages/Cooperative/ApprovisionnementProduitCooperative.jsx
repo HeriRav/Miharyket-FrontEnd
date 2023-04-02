@@ -7,11 +7,13 @@ import ProduitsList from '../../components/ProduitsList';
 import axios from 'axios';
 import ApprovisionnementHistorique from '../Agriculteur/ApprovisionnementHistorique';
 function ApprovisionnementProduitCooperative() {
-  const [appros,setAppros]=useState([]);
+  const [appros, setAppros] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [produit, setProduit] = useState("");
+  const id = sessionStorage.getItem("idCoop");
   const [agriculteur, setAgriculteur] = useState("");
-  const saveUser =  JSON.parse(sessionStorage.getItem("users"));
+
+  const saveUser = JSON.parse(sessionStorage.getItem("users"));
   const [approvisionnement, setApprovisionnement] = useState({
     utilisateur: '',
     produit: '',
@@ -22,7 +24,7 @@ function ApprovisionnementProduitCooperative() {
   const handleSelectChange = event => {
     const { value } = event.target;
     setApprovisionnement({ ...approvisionnement, produit: { idProduit: value } });
-    };
+  };
   // Récupération de la liste de produits depuis le local storage
   const savedProduits = JSON.parse(sessionStorage.getItem('produits'));
   const initialProduits = savedProduits ? savedProduits : [];
@@ -41,61 +43,62 @@ function ApprovisionnementProduitCooperative() {
     const { name, value } = event.target;
     setApprovisionnement({ ...approvisionnement, [name]: value });
   };
+
   const handleSelectChange1 = event => {
     const { value } = event.target;
     setApprovisionnement({ ...approvisionnement, utilisateur: { id: value } });
-    };
+  };
 
-const handleSubmit = event => {
-  event.preventDefault();
-  axios.post('http://localhost:8085/approvisionnements/add', approvisionnement)
-    .then(response => {
-      console.log(response.data);
-    })
-    .catch(error => {
-      console.log(error);
-    });
+  const handleSubmit = event => {
+    event.preventDefault();
+    axios.post('http://localhost:8085/approvisionnements/add', approvisionnement)
+      .then(response => {
+        console.log(response.data);
+      })
+      .catch(error => {
+        console.log(error);
+      });
     setShowModal(false);
-};
-const date = Date.now();
-const id = sessionStorage.getItem("idCoop");
-const link ="http://localhost:8085/approvisionnements/cooperative/"+id; 
-useEffect(() => {
-fetch(link)
-.then(response => {
-if (!response.ok) {
-  throw new Error('Network response was not ok');
-}
-  return response.json();
-})
-.then(data => {
-  setAppros(data);
-})
-.catch(error => {
-console.error('Error:', error);
-});
-}, []);
+  };
 
-return (
-<Container className='mt-5 mb-5'>
-<h1 className='text-center'>Approvisionnement</h1>
-<h2 className='text-center'>
-<div className='sidebar-brand-icon'>
-<img src={iconProduct} alt='Mihary' className='img-fluid' />
-</div>
-</h2>
+  // Récupération de la liste des approvisionnements depuis l'API
+  useEffect(() => {
+    const link = `http://localhost:8085/approvisionnements/cooperative/${id}`;
+    fetch(link)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        setAppros(data);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  }, []);
+
+  return (
+    <Container className='mt-5 mb-5'>
+      <h1 className='text-center'>Approvisionnement</h1>
+      <h2 className='text-center'>
+        <div className='sidebar-brand-icon'>
+          <img src={iconProduct} alt='Mihary' className='img-fluid' />
+        </div>
+      </h2>
 
 
-  <h3 className='mt-4'>Historique des approvisionnements</h3>
+      <h3 className='mt-4'>Historique des approvisionnements</h3>
 
-  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
- 
-  <Button variant='primary' onClick={() => setShowModal(true)}>
-    Approvisionner
-  </Button>
-</div>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
 
-<Modal show={showModal} onHide={() => setShowModal(false)}>
+        <Button variant='primary' onClick={() => setShowModal(true)}>
+          Approvisionner
+        </Button>
+      </div>
+
+      <Modal show={showModal} onHide={() => setShowModal(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Ajouter un nouvel agriculteur</Modal.Title>
         </Modal.Header>
@@ -109,7 +112,7 @@ return (
           <Form>
             <Row className="mb-3">
               <Col xs={12} sm={6} md={6}>
-              <Form.Label className="mt-3">Nom du produit</Form.Label>
+                <Form.Label className="mt-3">Nom du produit</Form.Label>
                 <Form.Control
                   as="select"
                   value={produit}
@@ -124,26 +127,15 @@ return (
                       {produit.nomProduit}
                     </option>
                   ))}
-                </Form.Control> 
+                </Form.Control>
               </Col>
-    
+
               <Col xs={12} sm={6} md={6}>
-                {/* <Form.Label>Nom de l'agriculteur</Form.Label>
-                <Form.Control
-                  type="text"
-                  name="nomApprovisionnement"
-                  // readOnly
-                  value={
-                    approvisionnement.utilisateur.nomUtilisateur +
-                    " " +
-                    approvisionnement.utilisateur.prenomUtilisateur
-                  }
-                /> */}
                 <Form.Label className="mt-3">Nom de l'agriculteur</Form.Label>
-                <Form.Control 
+                <Form.Control
                   as="select"
                   value={agriculteur}
-                  onChange={handleSelectChange1} 
+                  onChange={handleSelectChange1}
                 >
                   <option value="">Sélectionnez un agriculteur</option>
                   {agriculteurs.map((agriculteur) => (
@@ -154,9 +146,9 @@ return (
                       {agriculteur.nomUtilisateur}
                     </option>
                   ))}
-                  </Form.Control> 
+                </Form.Control>
               </Col>
-    
+
               <Col xs={12} sm={6} md={6}>
                 <Form.Group controlId="quantite">
                   <Form.Label className="mt-4">Quantité</Form.Label>
@@ -168,7 +160,7 @@ return (
                   />
                 </Form.Group>
               </Col>
-    
+
               <Col xs={12} sm={6} md={6}>
                 <Form.Group controlId="unite">
                   <Form.Label className="mt-4">Unité</Form.Label>
@@ -180,12 +172,12 @@ return (
                     onChange={handleInputChange}
                   >
                     <option value="">Sélectionnez une unité</option>
-                    <option value="litre">Litre</option>
+                    <option value="l">Litre</option>
                     <option value="kg">Kilogramme</option>
                   </Form.Control>
                 </Form.Group>
               </Col>
-    
+
               <Form.Group as={Col} md={6} controlId="prix">
                 <Form.Label className="mt-4">Prix en Ar/Unité</Form.Label>
                 <Form.Control
@@ -196,31 +188,31 @@ return (
                   onChange={handleInputChange}
                 />
               </Form.Group>
-    
+
               <Col xs={12} sm={15} md={6}>
-          
+
               </Col>
             </Row>
-    
+
             <Row className="mt-4">
-              
+
             </Row>
           </Form>
         </Modal.Body>
         <Modal.Footer>
-        <Col>
-        <Button variant="primary" type="submit" block  onClick={handleSubmit} >
-          Ajouter
-        </Button>
-      </Col>
-        
+          <Col>
+            <Button variant="primary" type="submit" block onClick={handleSubmit} >
+              Ajouter
+            </Button>
+          </Col>
+
         </Modal.Footer>
       </Modal>
 
       <ApprovisionnementHistorique approvisionnements={appros} />
 
 
-          </Container>
-          );
-          }
-          export default ApprovisionnementProduitCooperative;
+    </Container>
+  );
+}
+export default ApprovisionnementProduitCooperative;

@@ -162,11 +162,7 @@ function Cart() {
 
     const updatedItems = produit.map((item) => {
       if (item.id === pr.id) {
-        return {
-          ...item,
-          total: item.price * limitedValue,
-          quantite: limitedValue,
-        };
+        return { ...item, total: item.price * limitedValue, quantity: newValue };
       } else {
         return item;
       }
@@ -176,7 +172,7 @@ function Cart() {
     // Mettez à jour le montant total en utilisant la fonction setTotal
     const newTotal = updatedItems.reduce((acc, p) => acc + p.total, 0);
     setTotal(newTotal);
-
+    localStorage.setItem("panier", JSON.stringify(updatedItems))
     // Mettre à jour le message d'erreur en utilisant la fonction setErrorMessage
     // setErrorMessage(errorMessage);
     {
