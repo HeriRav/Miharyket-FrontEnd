@@ -1,4 +1,4 @@
-import { Link, Navigate, NavLink, Route, Routes } from 'react-router-dom'
+import { Link, Navigate, NavLink, Route, Routes, useNavigate } from 'react-router-dom'
 import Home from '../pages/Home'
 import About from '../pages/About'
 import { useState, useEffect, useContext } from 'react'
@@ -9,6 +9,7 @@ import { UserOutlined } from '@ant-design/icons'
 import Contact from '../pages/Contact'
 import { MDBIcon } from 'mdb-react-ui-kit'
 import Cart from '../pages/Cart'
+import Aggro from '../pages/Client/Aggro'
 
 const Header = () => {
 
@@ -19,6 +20,8 @@ const Header = () => {
   const nom = sessionStorage.getItem("nom");
   const userEmail = nom +" " + prenom;
 
+  const navigate = useNavigate()
+
   // const util = userEmail.nomUtilisateur
 
   const [email, setEmail] = useState("")
@@ -26,6 +29,7 @@ const Header = () => {
   const EndSession = () => {
     sessionStorage.clear()
     localStorage.clear()
+    navigate("/")
     window.location.reload(true)
   }
 
@@ -182,6 +186,10 @@ const Header = () => {
                                   <i className="fas fa-user fa-sm fa-fw mr-2"></i>
                                   Profil
                                 </a>
+                                <Link to="/agriculteurs" className="dropdown-item">
+                                  <i className='fas fa-users fa-sm fa-fw mr-2'></i>
+                                  Liste des agriculteurs
+                                </Link>
                                 <div className="dropdown-divider"></div>
                                 <Link onClick={EndSession} className="dropdown-item">
                                   <i className='fas fa-sign-out-alt fa-sm fa-fw mr-2'></i>
@@ -297,9 +305,10 @@ const Header = () => {
         <Routes>
           <Route index element={<Home />}/>
           <Route path='/a-propos' element={<About />}/>
-          <Route path='/produits' element={<Product/>}/>
-          <Route path='/contact' element={<Contact/>}/>
+          <Route path='/produits' element={<Product />}/>
+          <Route path='/contact' element={<Contact />}/>
           <Route path='/panier' element={isAuthenticated() ? <Cart /> : <Navigate to='/authentification/login' />}/>
+          <Route path='/agriculteurs' element={<Aggro />}/>
         </Routes>
       </>
   )

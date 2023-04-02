@@ -21,6 +21,7 @@ import Product from './pages/Product'
 import Contact from './pages/Contact'
 import Cart from './pages/Cart'
 import Portefeuille from './pages/Agriculteur/Portefeuille'
+import Aggro from './pages/Client/Aggro'
 
 
 // Fonction de vérification de l'authentification de l'utilisateur
@@ -41,6 +42,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route path='/produits' element={<Product />}/>
         <Route path='/contact' element={<Contact />}/>
         <Route path='/panier' element={isAuthenticated() ? <Cart /> : <Navigate to='/authentification/login' />}/>
+        <Route path='/agriculteurs' element={isAuthenticated() ? <Aggro /> : <Navigate to='/authentification/login' />}/>
       </Route>
 
       <Route path='/authentification/*' element={<Login />}/>

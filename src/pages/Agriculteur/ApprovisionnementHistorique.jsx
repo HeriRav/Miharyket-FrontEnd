@@ -32,11 +32,10 @@ function ApprovisionnementHistorique({ approvisionnements }) {
 
   return (
     <div>
-      <h3 className='mt-4'>Historique des approvisionnements</h3>
-      <Form className="mb-3">
-        <Form.Control type="text" placeholder="Rechercher" onChange={handleSearchChange} />
+      <Form className="mb-3 mt-3">
+        <Form.Control type="text" placeholder="Rechercher" onChange={handleInputChange} />
       </Form>
-      <Table striped bordered hover>
+      <Table striped bordered hover className='text-black text-center'>
         <thead>
         <tr>
           <th>Produit</th>

@@ -392,6 +392,8 @@ function AjouterProduit() {
                     <option value="Légume">Légume</option>
                     <option value="Fruit">Fruit</option>
                     <option value="Viande">Viande</option>
+                    <option value="Poisson">Poisson et fruit de mer</option>
+                    <option value="Graine">Graine</option>
                     <option value="Produit laitier">Produit laitier</option>
                     <option value="Céréale">Céréale</option>
                     <option value="Produit arômatique">

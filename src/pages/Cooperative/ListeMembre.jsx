@@ -81,8 +81,15 @@ function ListeMembre() {
         });
     }
   };
+
+  function handleInput(event) {
+    const input = event.target.value.replace(/\D/g, '').substring(0, 12);
+    const formattedInput = input.replace(/(\d{3})(?=\d)/g, '$1 ');
+
+    setInputValue(formattedInput);
+}
   
-   const validate = () => {
+  const validate = () => {
     let result = true
     var validRegex = /^(?=.{1,64}@.{1,255}$)(?=.{1,64}@.{1,255}\..{2,63}$)(?=.{1,254}$)(?=.{1,320}$)[a-zA-Z0-9!#$%&'*+\-/=?^_`{|}~]+(?:\.[a-zA-Z0-9!#$%&'*+\-/=?^_`{|}~]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z]{2,63}$/;
     if (nomUtilisateur === '' || nomUtilisateur === null) {
@@ -146,13 +153,11 @@ function ListeMembre() {
           <form style={{paddingLeft:"3em", paddingRight:"3em"}}>
             <div className="form-group">
               <label htmlFor="nom" style={{fontSize:"16px", color:"black"}}>Nom :</label>
-              <input required="required" type="text" className="form-control" id="nom" name="nom" value={nomUtilisateur} onChange={(e) => setLName(e.target.value)}  />
+              <input required="required" type="text" className="form-control form-control-sm" id="nom" name="nom" value={nomUtilisateur} onChange={(e) => setLName(e.target.value)}  />
             </div>
             <div className="form-group">
               <label htmlFor="nom"  style={{fontSize:"16px", color:"black"}}>CIN :</label>
-              <input type="text" id="cin" name="cin" className="form-control" required="required" maxLength={12}
-                                                onChange={(e) => {setCin(e.target.value)}} />
-              {/* <input required="required" maxLength={12} type="number" className="form-control form-control-sm" id="cin" name="cin" value={cinAgriculteur} onChange={(e) => setCin(e.target.value)} /> */}
+              <input required="required" maxLength={15} type="text" className="form-control form-control-sm" id="cin" name="cin" value={cinAgriculteur} onChange={(e) => setCin(e.target.value)} />
             </div>
             <div className="form-group">
               <label htmlFor="adresse" style={{fontSize:"16px", color:"black"}}>Adresse :</label>
