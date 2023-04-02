@@ -28,7 +28,7 @@ const Portefeuille = () => {
   return (
     <div>
       <h2>Votre portefeuille</h2>
-      <p>Solde actuel (en Ariary): Ar{balance?balance.toFixed(2):0}</p>
+      <p>Solde actuel (en Ariary): MGA {balance?balance.toFixed(2):0}</p>
       <form onSubmit={handleAddFunds}>
         <label htmlFor="amount">Ajouter des fonds:</label>
         <input type="number" name="amount" step="0.01" />

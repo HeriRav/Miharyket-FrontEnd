@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Table, Form, Button, Modal } from "react-bootstrap";
+import SoldeUtilisateur from "../SoldeUtilisateur";
 
 
 function ApprovisionnementHistorique({ approvisionnements }) {
@@ -90,7 +91,7 @@ localStorage.setItem("approvisionnements", JSON.stringify(updatedAppros));
   return (
     <div>
       <div>
-      <h4>Solde de la coopérative: {soldeCooperative} Ar </h4>
+      <h4>Solde de la coopérative: <SoldeUtilisateur/> Ar </h4>
         <br />     
         {/* Autres éléments JSX pour le paiement */}
       </div>
@@ -102,7 +103,7 @@ localStorage.setItem("approvisionnements", JSON.stringify(updatedAppros));
             <th>Agriculteur</th>
             <th>Produit</th>
             <th>Quantité</th>
-            <th>Prix unitaire</th>
+            <th>Prix unitaire (MGA)</th>
             <th>Date</th>
             <th>Payer</th>
           </tr>

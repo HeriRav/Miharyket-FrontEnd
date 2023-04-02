@@ -23,7 +23,7 @@ function ApprovisionnementProduitAgriculteur() {
       setFilteredAppros(res.data);
     };
     const fetchProduits = async () => {
-      const res = await axios.get('http://localhost:8085/produits/reference/' + idCoop);
+      const res = await axios.get('http://localhost:8085/produits/reference/' + idAgriculteur);
       setProduits(res.data);
     };
     fetchAppros();
@@ -83,7 +83,7 @@ function ApprovisionnementProduitAgriculteur() {
               <Form.Control type="number" value={quantiteApprovisionnement} onChange={e => setQuantiteApprovisionnement(e.target.value)} />
             </Form.Group>
             <Form.Group controlId="formPrixUnitaire">
-              <Form.Label>Prix unitaire</Form.Label>
+              <Form.Label>Prix unitaire (MGA)</Form.Label>
               <Form.Control type="number" step="0.01" value={prixUnitaire} onChange={e => setPrixUnitaire(e.target.value)} />
             </Form.Group>
 

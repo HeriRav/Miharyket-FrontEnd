@@ -52,7 +52,7 @@ const HistoChart = ({ userId, startDate, endDate }) => {
                 chartType="ColumnChart"
                 data={[['Produit', 'Quantité'], ...formattedData]}
                 options={{
-                    title: 'Quantité par produit par agriculteur',
+                    title: 'Approvisionnement par produit par agriculteur',
                     legend: 'none'
                 }}
                 graph_id="ApprovisionnementChart"

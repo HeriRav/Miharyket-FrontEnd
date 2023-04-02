@@ -6,14 +6,14 @@ import ListAgriculteur from '../../components/ListAgriculteur';
 import ProduitsList from '../../components/ProduitsList';
 import axios from 'axios';
 import ApprovisionnementHistorique from '../Agriculteur/ApprovisionnementHistorique';
+import AgriculteurList from './AgriculteurList';
+import ProduitList from './ProduitList';
 function ApprovisionnementProduitCooperative() {
   const [appros, setAppros] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  const [produit, setProduit] = useState("");
   const id = sessionStorage.getItem("idCoop");
-  const [agriculteur, setAgriculteur] = useState("");
-
-  const saveUser = JSON.parse(sessionStorage.getItem("users"));
+  const [selectedAgriculteurId, setSelectedAgriculteurId] = useState(null);
+  const [selectedProduitId, setSelectedProduitId] = useState(null);
   const [approvisionnement, setApprovisionnement] = useState({
     utilisateur: '',
     produit: '',
@@ -21,37 +21,23 @@ function ApprovisionnementProduitCooperative() {
     prixUnitaire: 0.00,
     dateApprovisionnement: new Date().toISOString()
   });
-  const handleSelectChange = event => {
-    const { value } = event.target;
-    setApprovisionnement({ ...approvisionnement, produit: { idProduit: value } });
-  };
-  // Récupération de la liste de produits depuis le local storage
-  const savedProduits = JSON.parse(sessionStorage.getItem('produits'));
-  const initialProduits = savedProduits ? savedProduits : [];
-
-  // Définition de l'état initial en utilisant la liste de produits récupérée
-  const [produits, setProduits] = useState(initialProduits);
-
-  // Récupération de la liste de agriculteurs depuis le local storage
-  const savedAgriculteurs = JSON.parse(sessionStorage.getItem('agriculteurs'));
-  const initialAgriculteurs = savedAgriculteurs ? savedAgriculteurs : [];
-
-  // Définition de l'état initial en utilisant la liste de agriculteurs récupérée
-  const [agriculteurs, setAgriculteurs] = useState(initialAgriculteurs);
+  
+  
 
   const handleInputChange = event => {
     const { name, value } = event.target;
     setApprovisionnement({ ...approvisionnement, [name]: value });
   };
 
-  const handleSelectChange1 = event => {
-    const { value } = event.target;
-    setApprovisionnement({ ...approvisionnement, utilisateur: { id: value } });
-  };
-
   const handleSubmit = event => {
     event.preventDefault();
-    axios.post('http://localhost:8085/approvisionnements/add', approvisionnement)
+    const updatedApprovisionnement = {
+      ...approvisionnement,
+      utilisateur: {id : selectedAgriculteurId},
+      produit: {idProduit : selectedProduitId}
+    };
+    
+    axios.post('http://localhost:8085/approvisionnements/add', updatedApprovisionnement)
       .then(response => {
         console.log(response.data);
       })
@@ -111,42 +97,27 @@ function ApprovisionnementProduitCooperative() {
           </h2>
           <Form>
             <Row className="mb-3">
-              <Col xs={12} sm={6} md={6}>
-                <Form.Label className="mt-3">Nom du produit</Form.Label>
-                <Form.Control
-                  as="select"
-                  value={produit}
-                  onChange={handleSelectChange}
-                >
-                  <option value="">Sélectionnez un produit</option>
-                  {produits.map((produit) => (
-                    <option
-                      key={approvisionnement.produit.idProduit}
-                      value={produit.idProduit}
-                    >
-                      {produit.nomProduit}
-                    </option>
-                  ))}
-                </Form.Control>
+            <Col xs={12} sm={6} md={6}>
+                <Form.Label className="mt-3">Nom de l'agriculteur</Form.Label>
+                <AgriculteurList className="mt-3"
+        cooperativeId={id} // Remplacez par l'ID de la coopérative souhaitée
+        onSelect={setSelectedAgriculteurId}
+      />
               </Col>
 
               <Col xs={12} sm={6} md={6}>
-                <Form.Label className="mt-3">Nom de l'agriculteur</Form.Label>
-                <Form.Control
-                  as="select"
-                  value={agriculteur}
-                  onChange={handleSelectChange1}
-                >
-                  <option value="">Sélectionnez un agriculteur</option>
-                  {agriculteurs.map((agriculteur) => (
-                    <option
-                      key={approvisionnement.utilisateur.id}
-                      value={agriculteur.id}
-                    >
-                      {agriculteur.nomUtilisateur}
-                    </option>
-                  ))}
-                </Form.Control>
+                <Form.Label className="mt-3">Nom du produit</Form.Label>
+                
+      
+      
+                {selectedAgriculteurId && 
+      
+      
+      <ProduitList className="mt-3" agriculteurId={selectedAgriculteurId} onSelect={setSelectedProduitId}/>
+    
+     }
+    
+     
               </Col>
 
               <Col xs={12} sm={6} md={6}>

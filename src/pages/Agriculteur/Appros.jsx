@@ -32,8 +32,8 @@ const Appros = ({ userId, startDate, endDate }) => {
       chartType="PieChart"
       data={[['Produit', 'Quantité'], ...formattedData]}
       options={{
-        title: 'Approvisionnement par produit',
-        pieHole: 0.4,
+        title: '',
+        pieHole: 0.3,
         legend: 'bottom'
       }}
       graph_id="ApprovisionnementChart"

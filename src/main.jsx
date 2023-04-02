@@ -11,7 +11,7 @@ import Home from './pages/Home'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import Register_client from './pages/Register-client'
-import AjoutProduit from './pages/Agriculteur/AjoutProduit'
+import AjoutProduit from './pages/Cooperative/AjouterProduit'
 import ListProduit from './components/ProduitsList'
 import ListAgriculteur from './components/ListAgriculteur'
 import Register_coop from './pages/Register-coop'
@@ -22,6 +22,7 @@ import Contact from './pages/Contact'
 import Cart from './pages/Cart'
 import Portefeuille from './pages/Agriculteur/Portefeuille'
 import Aggro from './pages/Client/Aggro'
+
 
 // Fonction de vérification de l'authentification de l'utilisateur
 const isAuthenticated = () => {
@@ -55,6 +56,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       <Route path='/listAgriculteurs' element={isAuthenticated() ? <ListAgriculteur /> : <Navigate to='/authentification/login' />} />
       <Route path='/portefeuille' element={isAuthenticated() ? <Portefeuille /> : <Navigate to='/authentification/login' />} />
       <Route path='/ajoutProduit' element={isAuthenticated() ? <AjoutProduit /> : <Navigate to='/authentification/login' />} />
+     
       <Route path='/dashboard-coop' element={isAuthenticated() ? <DashboardCooperative /> : <Navigate to='/authentification/login' />} />
       <Route path='/dashboard-aggro' element={isAuthenticated() ? <DashboardAgriculteur /> : <Navigate to='/authentification/login' />} />
       {/* <Route path='*' element={<Error404/>}/> */}

@@ -7,23 +7,24 @@ import SoldeUtilisateur from "../SoldeUtilisateur";
 
 function StatCooperative() {
   const [count, setCount] = useState([]);
-
-  let [counter, setCounter] = useState(0)
-
+  const [produits, setProduits] = useState([]);
+  let [counter, setCounter] = useState(0);
+  const today = new Date();
+  const formattedDate = today.toISOString().substring(0, 10);
   const idCoop = sessionStorage.getItem("idCoop");
 
   const idUser = sessionStorage.getItem("idUser");
 
   useEffect(() => {
-    fetch(`http://localhost:8085/produits/reference/${idCoop}`)
+    fetch(`http://localhost:8085/produits/cooperative/${idCoop}`)
       .then(response => response.json())
-      .then(data => setCounter = data.length)
+      .then(data => setProduits(data))
       .catch(err => console.log(err))
   }, [])
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [startDate, setStartDate] = useState(formattedDate);
+  const [endDate, setEndDate] = useState(formattedDate);
   const [users, setUsers] = useState([]);
-  const [selectedUser, setSelectedUser] = useState("");
+  const [selectedUser, setSelectedUser] = useState(7);
   
 
   useEffect(() => {
@@ -46,7 +47,7 @@ function StatCooperative() {
           <div className="col-md-3">
             <div className="card-counter primary">
               <i className="fa fa-shopping-cart"></i>
-              <span className="count-numbers">{counter}</span>
+              <span className="count-numbers">{produits.length}</span>
               <span className="count-name">Produits</span>
             </div>
           </div>
@@ -62,7 +63,7 @@ function StatCooperative() {
           <div className="col-md-3">
             <div className="card-counter warning">
               <i className="fa fa-wallet"></i>
-              <span className="count-numbers"><SoldeUtilisateur/></span>
+              <span className="count-numbers"><SoldeUtilisateur id={sessionStorage.getItem("idCoop")} /></span>
               <span className="count-name">Solde(Ar)</span>
             </div>
           </div>
@@ -85,7 +86,7 @@ function StatCooperative() {
             </div>
             <div className="card-body">
               <div className="chart-area">
-                <Histogram endpoint={"http://localhost:8085/produits/reference/" + idCoop} />
+                <Histogram endpoint={"http://localhost:8085/produits/cooperative/" + idCoop} />
               </div>
               <hr />
 

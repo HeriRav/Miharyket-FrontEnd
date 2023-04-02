@@ -10,6 +10,7 @@ import ApprovisionnementProduitAgriculteur from './ApprovisionnementProduitAgric
 import ProduitsList from '../../components/ProduitsList';
 import StatAgriculteur from './StatAgriculteur';
 import Portefeuille from './Portefeuille';
+import AjoutProduit from './AjoutProduit';
 
 function Dashboard() {
     //localStorage.setItem("produitCooperative", produitCooperative);
@@ -45,6 +46,8 @@ function Dashboard() {
        //t
     let navigate = useNavigate()
     const change = () => {
+        sessionStorage.clear();
+        localStorage.clear();
     let path = '/'
     navigate(path)
   }
@@ -76,6 +79,19 @@ function Dashboard() {
             <div className="sidebar-heading">
                 Produit
             </div>
+            
+            <li className="nav-item">
+                <Link className="nav-link" to="/dashboard-aggro" onClick={handleMenu1Click}
+                    aria-expanded="true" aria-controls="collapsePages">
+                    <i class="fa fa-list"></i>
+                    <span>Ajout produit</span>
+                </Link>
+                <div id="collapsePages" className="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                    <div className="bg-white py-2 collapse-inner rounded">
+                        
+                    </div>
+                </div>
+            </li>
             <li className="nav-item">
                 <Link className="nav-link" to="/dashboard-aggro" onClick={handleMenu4Click}
                     aria-expanded="true" aria-controls="collapsePages">
@@ -107,7 +123,7 @@ function Dashboard() {
                     </div>
                 </div>
             </li>
-           
+            
             
             <hr className="sidebar-divider d-none d-md-block"/>
             
@@ -267,9 +283,9 @@ function Dashboard() {
                         <li className="nav-item dropdown no-arrow">
                             <a className="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span className="mr-2 d-none d-lg-inline text-gray-600 small">{nom}</span>
-                                <img src='../src/images/user.png' width={24} height={24} alt='profil'/>
-                            </a>
+                                <span className="mr-2 d-none d-lg-inline text-gray-600 small">{sessionStorage.getItem("nom")}</span>
+                                <img className="img-profile rounded-circle"
+                                    src="img/undraw_profile.svg"/>
                             
                             <div className="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
                             <a className="dropdown-item" href="#">
@@ -291,7 +307,7 @@ function Dashboard() {
                 </nav>
                 <div className="container-fluid">
                 {activeMenu === 0 && <StatAgriculteur />}
-               
+                {activeMenu === 1 && <AjoutProduit />}
                 {activeMenu === 4 && <ApprovisionnementProduitAgriculteur/>}
                 {activeMenu === 3 && <Portefeuille/>}
                 
