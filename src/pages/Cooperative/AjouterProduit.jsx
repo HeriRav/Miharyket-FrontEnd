@@ -2,11 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Form, Button, Table } from "react-bootstrap";
 import iconProduct from "../../../farm-products.png";
 import { Modal } from "react-bootstrap";
-
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Navigate, useNavigate } from "react-router-dom";
-
 import axios from "axios";
 import {
   MDBBadge,
@@ -51,11 +48,7 @@ function AjouterProduit() {
   const reference = JSON.parse(user);
 
   const handleSave = () => {
-    // e.preventDefault()
-    // Effectuer une requête HTTP pour mettre à jour le prix dans la base de données
-    // Puis fermer le modal en appelant la fonction onHide
     const currentproduct = new FormData();
-
     currentproduct.append("file", photo);
     currentproduct.append("nomProduit", produit);
     currentproduct.append("prixProduit", prix);
@@ -90,7 +83,6 @@ function AjouterProduit() {
   };
 
   useEffect(() => {
-    const id = parseInt(sessionStorage.getItem("idUser"));
     const lien = "http://localhost:8085/produits/cooperative/" + idCoop;
     fetch(lien)
       .then((response) => {
@@ -193,23 +185,6 @@ function AjouterProduit() {
       setStock("");
       setReferenceProduit("");
     }
-  };
-
-  const getIdProduit = (e) => {
-    e.preventDefault();
-    fetch("http://localhost:8085/produits/" + idProduit)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        setResultats(data);
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
   };
 
   resultats.sort((a, b) => b.idProduit - a.idProduit);
