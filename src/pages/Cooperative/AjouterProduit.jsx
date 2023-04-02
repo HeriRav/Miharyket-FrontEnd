@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Form, Button, Table } from "react-bootstrap";
 import iconProduct from "../../../farm-products.png";
 import { Modal } from "react-bootstrap";
-import { Result } from "antd";
+
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Navigate, useNavigate } from "react-router-dom";
-import StatCooperative from "./StatCooperative";
+
 import axios from "axios";
 import {
   MDBBadge,
@@ -18,9 +18,6 @@ import {
 
 function AjouterProduit() {
   const [photoUrl, setPhotoUrl] = useState("");
-
-  let navigate = useNavigate();
-
   const handlePhotoChange = (e) => {
     setPhoto(e.target.files[0]);
     setPhotoUrl(URL.createObjectURL(e.target.files[0]));
@@ -33,8 +30,12 @@ function AjouterProduit() {
   const [nouveauPrix, setNouveauPrix] = useState("");
   const idCoop = sessionStorage.getItem("idCoop");
   const [idProduit, setIdProduit] = useState("");
+  const [idAgriculteur, setIdAgriculteur] = useState("");
   const [produit, setProduit] = useState("");
   const [unite, setUnite] = useState("");
+  const [agriculteurs, setAgriculteurs] = useState([]);
+  const [agriculteur, setAgriculteur] = useState("");
+  const [referenceProduit, setReferenceProduit] = useState("");
   const [photo, setPhoto] = useState("");
   const [description, setDescription] = useState("");
   const [categorie, setCategorie] = useState("");
@@ -62,7 +63,7 @@ function AjouterProduit() {
     currentproduct.append("uniteProduit", unite);
     currentproduct.append("stockProduit", 0);
     currentproduct.append("descriptionProduit", description);
-    currentproduct.append("referenceProduit", sessionStorage.getItem("idCoop"));
+    currentproduct.append("referenceProduit", referenceProduit);
 
     axios
       .put(`http://localhost:8085/produits/${idProduit}`, currentproduct, {
@@ -90,7 +91,7 @@ function AjouterProduit() {
 
   useEffect(() => {
     const id = parseInt(sessionStorage.getItem("idUser"));
-    const lien = "http://localhost:8085/produits/reference/" + idCoop;
+    const lien = "http://localhost:8085/produits/cooperative/" + idCoop;
     fetch(lien)
       .then((response) => {
         if (!response.ok) {
@@ -104,7 +105,23 @@ function AjouterProduit() {
       .catch((error) => {
         console.error("Error:", error);
       });
+
+    const lienAgriculteurs = `http://localhost:8085/api/utilisateurs/cooperatives/${idCoop}/agriculteurs`;
+    fetch(lienAgriculteurs)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setAgriculteurs(data);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
   }, []);
+
 
   function handleClick(userId, idProduit) {
     axios
@@ -113,42 +130,25 @@ function AjouterProduit() {
       )
       .then((response) => {
         setDetailAppro(response.data);
-        console.log(detailAppro);
-        console.log(userId);
+
       })
       .catch((error) => {
         console.log(error);
       });
   }
 
-  // function handleClickTransaction(userId, idProduit) {
 
-  //   axios
-  //     .get(
-  //       `http://localhost:8085/commandes/${userId}/${idProduit}`
-  //     )
-  //     .then((response) => {
-  //       setDetailTransaction(response.data);
-  //       console.log(detailTransaction);
-  //       console.log(userId);
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-      
-  // }
-function handleClickTransaction(userId, idProduit) {
-  fetch(`http://localhost:8085/commandes/${userId}/${idProduit}`)
-    .then(response => response.json())
-    .then(data => {
-      setDetailTransaction(data);
-      console.log(detailTransaction);
-      console.log(userId);
-    })
-    .catch(error => {
-      console.log(error);
-    });
-}
+  function handleClickTransaction(userId, idProduit) {
+    fetch(`http://localhost:8085/commandes/${userId}/${idProduit}`)
+      .then(response => response.json())
+      .then(data => {
+        setDetailTransaction(data);
+
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }
 
 
   const handleSubmit = (event) => {
@@ -164,7 +164,7 @@ function handleClickTransaction(userId, idProduit) {
       nouveauProduit.append("descriptionProduit", description);
       nouveauProduit.append(
         "referenceProduit",
-        sessionStorage.getItem("idCoop")
+        idAgriculteur
       );
 
       axios
@@ -191,6 +191,7 @@ function handleClickTransaction(userId, idProduit) {
       setPrix("");
       setPhotoUrl("");
       setStock("");
+      setReferenceProduit("");
     }
   };
 
@@ -237,29 +238,6 @@ function handleClickTransaction(userId, idProduit) {
     }
     return result;
   };
-
-  // Filtrer les résultats en fonction de la recherche
-  // const filteredResults = resultats.filter(
-  //   (resultat) =>
-  //     resultat.produit.toLowerCase().includes(recherche.toLowerCase()) ||
-  //     resultat.categorie.toLowerCase().includes(recherche.toLowerCase()) ||
-  //     resultat.description.toLowerCase().includes(recherche.toLowerCase()) ||
-  //     resultat.prix.toLowerCase().includes(recherche.toLowerCase())
-  // );
-
-  // // Obtenir le nombre total de pages
-  // const totalPages = Math.ceil(filteredResults.length / productsPerPage);
-
-  // // Obtenir les résultats pour la page actuelle
-  // const indexOfLastProduct = currentPage * productsPerPage;
-  // const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  // const currentProducts = filteredResults.slice(
-  //   indexOfFirstProduct,
-  //   indexOfLastProduct
-  // );
-
-  // // Fonction pour changer de page
-  // const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const handleModifierPrix = (index) => {
     setIndexSelectionne(index);
@@ -311,89 +289,83 @@ function handleClickTransaction(userId, idProduit) {
               <tr>
                 <th>Nom du produit</th>
                 <th>Catégorie</th>
-                <th>Prix actuel</th>
+                <th>Prix actuel (MGA) </th>
                 <th>Stock</th>
-                <th className="w-25">Photo</th>
                 <th>Unité</th>
+                <th className="w-25">Photo</th>
                 <th className="w-5">Actions</th>
               </tr>
             </MDBTableHead>
             <MDBTableBody>
               {resultats
-              // .filter(produit => produit.nomProduit.toLowerCase().includes(recherche) ||
-              // produit.categorieProduit.toLowerCase().includes(recherche) ||
-              // produit.uniteProduit.toLowerCase().includes(recherche))
-              .filter(produit => keys.some(key => produit[key].toLowerCase().includes(recherche)))
-              .map((resultat, index) => (
-                <tr key={index}>
-                  <td className="align-middle">{resultat.nomProduit}</td>
-                  <td className="align-middle">{resultat.categorieProduit}</td>
-                  <td className="align-middle">{resultat.prixProduit}</td>
-                  <td className="align-middle">{resultat.stockProduit}</td>
-                  <td className="align-middle">
-                    {resultat.photoProduit && (
-                      <img
-                        width={"100px"}
-                        src={`data:image/jpeg;base64,${resultat.photoProduit}`}
-                        alt={resultat.nomProduit}
-                      />
-                    )}
-                  </td>
-                  <td className="align-middle">{resultat.uniteProduit}</td>
-                  <td>
-                    <button
-                      className="btn btn-link"
-                      onClick={() => {
-                        setShowModal(true);
-                        setPrix(resultat.prixProduit);
-                        setIdProduit(resultat.idProduit);
-                        setCategorie(resultat.categorieProduit);
-                        setProduit(resultat.nomProduit);
-                        setStock(resultat.stockProduit);
-                        setUnite(resultat.uniteProduit);
-                        // getIdProduit();
-                      }}
-                    >
-                      <i className="fa fa-edit "></i>
-                    </button>
-                    <button
-                      className="btn btn-link"
-                      onClick={() => {
-                        setShowApproDetails(true);
-                        console.log(idCoop);
-                        handleClick(idCoop, resultat.idProduit);
-                        // setPrix(resultat.prixProduit);
-                        // setIdProduit(resultat.idProduit);
-                        // setCategorie(resultat.categorieProduit);
-                        setProduit(resultat.nomProduit);
-                        // setStock(resultat.stockProduit)
-                        setUnite(resultat.uniteProduit);
-                        // getIdProduit();
-                      }}
-                    >
-                      <i className="fa fa-shopping-basket"></i>
-                    </button>
-                    <button
-                      className="btn btn-link"
-                      onClick={() => {
-                        setShowTransaction(true);
-                        console.log(idCoop);
-                        handleClickTransaction(idCoop, resultat.idProduit);
-                        console.log("idProdGip"+resultat.idProduit);
-                        // setPrix(resultat.prixProduit);
-                        // setIdProduit(resultat.idProduit);
-                        // setCategorie(resultat.categorieProduit);
-                        setProduit(resultat.nomProduit);
-                        // setStock(resultat.stockProduit)
-                        setUnite(resultat.uniteProduit);
-                        // getIdProduit();
-                      }}
-                    >
-                      <i className="fa fa-eye"></i>
-                    </button>
-                  </td>
-                </tr>
-              ))}
+                .filter(produit => keys.some(key => produit[key]?.toLowerCase().includes(recherche)))
+                .map((resultat, index) => (
+                  <tr key={index}>
+                    <td className="align-middle">{resultat.nomProduit}</td>
+                    <td className="align-middle">{resultat.categorieProduit}</td>
+                    <td className="align-middle">{resultat.prixProduit}</td>
+                    <td className="align-middle">{resultat.stockProduit}</td>
+                    <td className="align-middle">{resultat.uniteProduit}</td>
+                    <td className="align-middle">
+                      {resultat.photoProduit && (
+                        <img
+                          width={"100px"}
+                          src={`data:image/jpeg;base64,${resultat.photoProduit}`}
+                          alt={resultat.nomProduit}
+                        />
+                      )}
+                    </td>
+
+                    <td>
+                      <button
+                        className="btn btn-link"
+                        onClick={() => {
+                          setShowModal(true);
+                          setPrix(resultat.prixProduit);
+                          setIdProduit(resultat.idProduit);
+                          setCategorie(resultat.categorieProduit);
+                          setProduit(resultat.nomProduit);
+                          setStock(resultat.stockProduit);
+                          setUnite(resultat.uniteProduit);
+
+                        }}
+                      >
+                        <i className="fa fa-edit "></i>
+                      </button>
+                      <button
+                        className="btn btn-link"
+                        onClick={() => {
+                          setShowApproDetails(true);
+                          console.log(idCoop);
+                          handleClick(idCoop, resultat.idProduit);
+
+                          setProduit(resultat.nomProduit);
+
+                          setUnite(resultat.uniteProduit);
+
+                        }}
+                      >
+                        <i className="fa fa-eye"></i>
+                      </button>
+                      <button
+                        className="btn btn-link"
+                        onClick={() => {
+                          setShowTransaction(true);
+                          console.log(idCoop);
+                          handleClickTransaction(resultat.referenceProduit, resultat.idProduit);
+                          console.log("idProdGip" + resultat.idProduit);
+
+                          setProduit(resultat.nomProduit);
+
+                          setUnite(resultat.uniteProduit);
+
+                        }}
+                      >
+                        <i className="fa fa-shopping-basket"></i>
+                      </button>
+                    </td>
+                  </tr>
+                ))}
             </MDBTableBody>
           </MDBTable>
         </Col>
@@ -408,6 +380,23 @@ function handleClickTransaction(userId, idProduit) {
             <h3 className="mt-4">Ajouter un nouveau produit</h3>
             <Form onSubmit={handleSubmit}>
               <Row className="mt-5">
+                <Form.Group as={Col} sm={12}>
+                  <Form.Label>Agriculteur</Form.Label>
+                  <Form.Control
+                    as="select"
+                    value={idAgriculteur}
+                    onChange={(e) => setIdAgriculteur(e.target.value)}
+                  >
+                    <option value="">Sélectionner un agriculteur</option>
+                    {agriculteurs.map((agriculteur) => (
+                      <option key={agriculteur.id} value={agriculteur.id}>
+                        {agriculteur.nomUtilisateur}
+                      </option>
+                    ))}
+                  </Form.Control>
+                </Form.Group>
+
+
                 <Form.Group as={Col} sm={12} controlId="produit">
                   <Form.Label>Nom du produit</Form.Label>
                   <Form.Control
@@ -437,7 +426,7 @@ function handleClickTransaction(userId, idProduit) {
                 </Form.Group>
 
                 <Form.Group as={Col} sm={12} controlId="prix">
-                  <Form.Label className="mt-4">Prix de vente</Form.Label>
+                  <Form.Label className="mt-4">Prix de vente (MGA)</Form.Label>
                   <Form.Control
                     type="text"
                     value={prix}
@@ -516,7 +505,7 @@ function handleClickTransaction(userId, idProduit) {
                   <label className="mr-2" htmlFor="prixActuel">
                     Prix Actuel:
                   </label>
-                  <span id="prixActuel">{prix}</span>
+                  <span id="prixActuel">{prix} MGA</span>
                 </p>
                 <p>
                   <label className="mr-2" htmlFor="nouveauPrix">
@@ -584,7 +573,7 @@ function handleClickTransaction(userId, idProduit) {
               </tr>
             </thead>
             <tbody>
-            
+
               {detailAppro.map((detailAppro) => (
                 <tr key={detailAppro.idApprovisionnement}>
                   <td>{detailAppro.dateApprovisionnement}</td>
@@ -635,16 +624,16 @@ function handleClickTransaction(userId, idProduit) {
               </tr>
             </thead>
             <tbody>
-        {detailTransaction.map((row, index) => (
-          <tr key={index}>
-        
-          <td>{row[0]}</td>
-          <td>{row[1]}</td>
-          <td>{row[2]} {unite}</td>
-          <td>{row[3]} Ar</td>
-          </tr>
-        ))}
-      </tbody>
+              {detailTransaction.map((row, index) => (
+                <tr key={index}>
+
+                  <td>{row[0]}</td>
+                  <td>{row[1]}</td>
+                  <td>{row[2]} {unite}</td>
+                  <td>{row[3]} MGA</td>
+                </tr>
+              ))}
+            </tbody>
 
           </table>
         </Modal.Body>

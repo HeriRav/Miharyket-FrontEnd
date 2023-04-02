@@ -12,9 +12,9 @@ function ApprovisionnementHistorique({ approvisionnements }) {
   const handleInputChange = event => {
     const keyword = event.target.value;
     const filtered = approvisionnements.filter(appro => {
-      const nomProduit = appro.produit.nomProduit.toLowerCase();
-      const nomAgriculteur = `${appro.utilisateur.nomUtilisateur} ${appro.utilisateur.prenomUtilisateur}`.toLowerCase();
-      const dateAppro = new Date(appro.dateApprovisionnement).toLocaleDateString().toLowerCase();
+      const nomProduit = appro[4].toLowerCase();
+      const nomAgriculteur = appro[3].toLowerCase();
+      const dateAppro = new Date(appro[1]).toLocaleDateString().toLowerCase();
       return nomProduit.includes(keyword.toLowerCase()) || nomAgriculteur.includes(keyword.toLowerCase()) || dateAppro.includes(keyword.toLowerCase());
     });
     setFilteredAppros(filtered);
@@ -23,8 +23,8 @@ function ApprovisionnementHistorique({ approvisionnements }) {
     event.preventDefault();
     const searchValue = event.target.value.toLowerCase();
     const filtered = approvisionnements.filter((appro) => {
-      const nomProduit = appro.produit.nomProduit.toLowerCase();
-      const nomAgriculteur = appro.utilisateur.nomUtilisateur.toLowerCase();
+      const nomProduit = appro[4].toLowerCase();
+      const nomAgriculteur = appro[3].toLowerCase();
       return nomProduit.includes(searchValue) || nomAgriculteur.includes(searchValue);
     });
     setFilteredAppros(filtered);
@@ -41,7 +41,7 @@ function ApprovisionnementHistorique({ approvisionnements }) {
         <tr>
           <th>Produit</th>
           <th>Quantité</th>
-          <th>Prix unitaire</th>
+          <th>Prix unitaire (MGA)</th>
           <th>Agriculteur</th>
           <th>Date</th>
         </tr>
