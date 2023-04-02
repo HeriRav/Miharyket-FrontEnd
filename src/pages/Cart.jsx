@@ -216,95 +216,94 @@ function Cart() {
           produit.map((panier) => {
             return (
               <MDBContainer className="py-1 h-100" key={panier.idProduit}>
-  <MDBRow className="justify-content-center align-items-center h-100">
-    <MDBCol md="10">
-      <MDBCard className="rounded-4 mb-5">
-        <MDBCardBody className="p-1">
-          <MDBRow className="justify-content-between align-items-center">
-            <MDBCol md="3" lg="3" xl="3">
-              <MDBCardImage
-                className="rounded-3"
-                fluid
-                src={
-                  images.find(
-                    (image) =>
-                      image.categorieProduit === panier.category
-                  )?.src
-                }
-                alt="Cotton T-shirt"
-              />
-            </MDBCol>
-            <MDBCol md="4" lg="4" xl="4">
-              <p className="lead fw-bold mb-2">{panier.nom}</p>
-              <p>
-                <span className="text-muted">
-                  Prix par unité :{" "}
-                </span>
-                MGA {panier.price}
-                <br />
-              
-                <span className="text-muted">
-                  Quantité disponible:{" "}
-                </span>
-                {panier.stock} {panier.unit}
-              </p>
-                    <MDBRow className ="md-1">
-                    <MDBCol >
-                    <span className="text-muted">Quantité à acheter: </span> 
-                    </MDBCol >
-                    <MDBCol  xl="4" >
-                    <MDBInput
-                          min={1}
-                          type="number"
-                          size="sm"
-                          onChange={(e) =>
-                            handlePriceUpdate(panier, e.target.value)
-                          }
-                        />
-                      
-                        </MDBCol>
+                <MDBRow className="justify-content-center align-items-center h-100">
+                  <MDBCol md="10">
+                    <MDBCard className="rounded-4 mb-5">
+                      <MDBCardBody className="p-1">
+                        <MDBRow className="justify-content-between align-items-center">
+                          <MDBCol md="3" lg="3" xl="3">
+                            <MDBCardImage
+                              className="rounded-3"
+                              fluid
+                              src={
+                                images.find(
+                                  (image) =>
+                                    image.categorieProduit === panier.category
+                                )?.src
+                              }
+                              alt="Cotton T-shirt"
+                            />
+                          </MDBCol>
+                          <MDBCol md="4" lg="4" xl="4">
+                            <p className="lead fw-bold mb-2">{panier.nom}</p>
+                            <p>
+                              <span className="text-muted">
+                                Prix par unité :{" "}
+                              </span>
+                              MGA {panier.price}
+                              <br />
+                            
+                              <span className="text-muted">
+                                Quantité disponible:{" "}
+                              </span>
+                              {panier.stock} {panier.unit}
+                            </p>
+                            <MDBRow className ="md-1">
+                            <MDBCol >
+                            <span className="text-muted">Quantité à acheter: </span> 
+                            </MDBCol >
+                            <MDBCol  xl="4" >
+                            <MDBInput
+                                  min={1}
+                                  type="number"
+                                  size="sm"
+                                  onChange={(e) =>
+                                    handlePriceUpdate(panier, e.target.value)
+                                  }
+                                />
+                            </MDBCol>
+                            </MDBRow>
+                          </MDBCol>
+                          
+                          <MDBCol md="3" lg="3" xl="4">
+                            <p>Prix total par produit: MGA {panier.total}</p>
+                          </MDBCol>
+                          <MDBCol
+                            md="1"
+                            lg="1"
+                            xl="1"
+                            className="text-end"
+                            key={produit.id}
+                          >
+                            <a
+                              style={{ cursor: "pointer" }}
+                              className="text-danger"
+                              onClick={() => {
+                                Swal.fire({
+                                  title:
+                                    "Êtes-vous sûr de vouloir supprimer ce produit?",
+                                  icon: "warning",
+                                  showCancelButton: true,
+                                  confirmButtonColor: "#8bc34a",
+                                  cancelButtonColor: "#999DA0",
+                                  confirmButtonText: "Oui, supprimer!",
+                                  cancelButtonText: "Annuler",
+                                }).then((result) => {
+                                  if (result.isConfirmed) {
+                                    supprimerProduit(panier.id, panier.nom);
+                                  }
+                                });
+                              }}
+                            >
+                              <i className="fa fa-trash"></i>
+                            </a>
+                          </MDBCol>
                         </MDBRow>
-          </MDBCol>
-            
-            <MDBCol md="3" lg="3" xl="4">
-              <p>Prix total par produit: MGA {panier.total}</p>
-            </MDBCol>
-            <MDBCol
-              md="1"
-              lg="1"
-              xl="1"
-              className="text-end"
-              key={produit.id}
-            >
-              <a
-                style={{ cursor: "pointer" }}
-                className="text-danger"
-                onClick={() => {
-                  Swal.fire({
-                    title:
-                      "Êtes-vous sûr de vouloir supprimer ce produit?",
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#8bc34a",
-                    cancelButtonColor: "#999DA0",
-                    confirmButtonText: "Oui, supprimer!",
-                    cancelButtonText: "Annuler",
-                  }).then((result) => {
-                    if (result.isConfirmed) {
-                      supprimerProduit(panier.id, panier.nom);
-                    }
-                  });
-                }}
-              >
-                <i className="fa fa-trash"></i>
-              </a>
-            </MDBCol>
-          </MDBRow>
-        </MDBCardBody>
-      </MDBCard>
-    </MDBCol>
-  </MDBRow>
-</MDBContainer>
+                      </MDBCardBody>
+                    </MDBCard>
+                  </MDBCol>
+                </MDBRow>
+              </MDBContainer>
 
             
             );
