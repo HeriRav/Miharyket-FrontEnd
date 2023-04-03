@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Table, Form, Button, Modal } from "react-bootstrap";
 import SoldeUtilisateur from "../SoldeUtilisateur";
+import Swal from 'sweetalert2';
+
 
 
 function ApprovisionnementHistorique({ approvisionnements }) {
@@ -27,10 +29,16 @@ function ApprovisionnementHistorique({ approvisionnements }) {
     setSoldeCooperative(cooperative.soldeUtilisateur);
   }, [approvisionnements]);
   
+  //ok
 
-  const handlePayer = (index) => {
-    // Récupération de l'approvisionnement sélectionné
-    const appro = filteredAppros[index];
+  // const handlePayer = (index) => {
+  //   // Récupération de l'approvisionnement sélectionné
+  //   const appro = filteredAppros[index];
+  //   setSelectedAppro(appro);
+  //   setShowModal(true);
+  // };
+
+  const handlePayer = (appro) => {
     setSelectedAppro(appro);
     setShowModal(true);
   };
@@ -46,16 +54,17 @@ function ApprovisionnementHistorique({ approvisionnements }) {
   event.preventDefault();
   const cooperative = JSON.parse(sessionStorage.getItem("user"));
   const prixTotal = selectedAppro[0] * selectedAppro[2];
-  
+  //const idApprovisionnement = selectedAppro[0];
+  const idAgriculteur = selectedAppro[5];
 
   if (soldeCooperative >= prixTotal) {
     const newSolde = soldeCooperative - prixTotal;
     const newSoldebase = newSolde - soldeCooperative;
     
-    const updatedAppro = { ...selectedAppro, paye: true }; // Mettre à jour l'objet de l'approvisionnement sélectionné avec la propriété 'paye'
+    const updatedAppro = { ...selectedAppro, 6: "payé" }; // Mettre à jour l'objet de l'approvisionnement sélectionné avec le statut de paiement
     const updatedAppros = filteredAppros.map((appro, index) =>
       index === filteredAppros.indexOf(selectedAppro) ? updatedAppro : appro
-      );
+    );
 
     // Mettre à jour l'état de filteredAppros avec le nouveau tableau d'approvisionnements
 setFilteredAppros(updatedAppros);
@@ -68,7 +77,7 @@ localStorage.setItem("approvisionnements", JSON.stringify(updatedAppros));
 
    
     // Mettre à jour le solde de la coopérative dans la base de données
-    fetch(`http://localhost:8085/api/utilisateurs/${cooperative.id}/${newSoldebase}`, {
+    fetch(`http://localhost:8085/api/utilisateurs/${idAgriculteur}/${prixTotal}`, {
       method: "PUT",
     })
       .then((res) => res.json())
@@ -76,24 +85,35 @@ localStorage.setItem("approvisionnements", JSON.stringify(updatedAppros));
         console.log(data);
         setSoldeCooperative(newSolde); // Mettre à jour l'état du solde de la coopérative avec le nouveau solde
         setPaiementReussi(true); // Mettre à jour la variable d'état paiementReussi
-        setToastMessage("Paiement réussi");
+        Swal.fire({
+      title: 'Paiement réussi',
+      icon: 'success',
+      showConfirmButton: false,
+      timer: 1500
+    });
         localStorage.setItem("approvisionnements", JSON.stringify(updatedAppros));
 
 
       })
       .catch((err) => console.log(err));
   } else {
-    setToastMessage("Paiement impossible, solde insuffisant"); // Afficher le message d'erreur
+    Swal.fire({
+      title: 'Paiement impossible',
+      text: 'Solde insuffisant',
+      icon: 'error',
+      confirmButtonColor: '#d33',
+      confirmButtonText: 'OK'
+    });
+    
   }
   console.log(prixTotal)
 };
 
+
   return (
     <div>
       <div>
-      <h4>Solde de la coopérative: <SoldeUtilisateur/> Ar </h4>
-        <br />     
-        {/* Autres éléments JSX pour le paiement */}
+      <h4>Solde de la coopérative: <b> <SoldeUtilisateur id={sessionStorage.getItem("idCoop")} /> MGA </b> </h4>
       </div>
       <br />
       <br />
@@ -105,11 +125,12 @@ localStorage.setItem("approvisionnements", JSON.stringify(updatedAppros));
             <th>Quantité</th>
             <th>Prix unitaire (MGA)</th>
             <th>Date</th>
-            <th>Payer</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>
-          {filteredAppros.map((appro, index) => (
+        {filteredAppros.filter((appro) => appro[6].toLowerCase().trim() === "non payé")
+    .map((appro, index) => (
             <tr key={index}>
               <td>{appro[3]}</td>
               <td>{appro[4]}</td>
@@ -120,7 +141,7 @@ localStorage.setItem("approvisionnements", JSON.stringify(updatedAppros));
                 {appro.paye ? (
                   <p>Payé</p>
                 ) : (
-                  <Button onClick={() => handlePayer(index)}>Paiement</Button>
+                  <Button onClick={() => handlePayer(appro)}>Payer</Button>
                 )}
               </td>
             </tr>
@@ -136,7 +157,7 @@ localStorage.setItem("approvisionnements", JSON.stringify(updatedAppros));
         <Form>
         <Form.Group>
               
-              <h4>Solde de la coopérative: {soldeCooperative} Ar </h4>
+              <h4>Solde de la coopérative<b> <SoldeUtilisateur id={sessionStorage.getItem("idCoop")} /> MGA </b> </h4>
             </Form.Group>
             <Form.Group>
               <Form.Label>Nom de l'agriculteur :</Form.Label>

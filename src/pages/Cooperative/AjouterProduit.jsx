@@ -12,6 +12,7 @@ import {
   MDBTableHead,
   MDBTableBody,
 } from "mdb-react-ui-kit";
+import AgriculteurNom from "./AgriculteurNom";
 
 function AjouterProduit() {
   const [photoUrl, setPhotoUrl] = useState("");
@@ -223,7 +224,7 @@ function AjouterProduit() {
 
   return (
     <div className="mt-5 mb-5 text-black">
-      <h1 className="text-center mt-5">Detail produits</h1>
+      <h1 className="text-center mt-5">Détails produits</h1>
       <h2 className="text-center">
         <div className="sidebar-brand-icon">
           <img src={iconProduct} alt="Mihary" className="img-fluid" />
@@ -267,6 +268,7 @@ function AjouterProduit() {
                 <th>Prix actuel (MGA) </th>
                 <th>Stock</th>
                 <th>Unité</th>
+                <th>Agriculteur</th>
                 <th className="w-25">Photo</th>
                 <th className="w-5">Actions</th>
               </tr>
@@ -281,7 +283,8 @@ function AjouterProduit() {
                     <td className="align-middle">{resultat.prixProduit}</td>
                     <td className="align-middle">{resultat.stockProduit}</td>
                     <td className="align-middle">{resultat.uniteProduit}</td>
-                    <td className="align-middle">
+                    <td className="align-middle"><AgriculteurNom id={resultat.referenceProduit}/></td>
+                    <td className="align-middle w-25">
                       {resultat.photoProduit && (
                         <img
                           width={"100px"}

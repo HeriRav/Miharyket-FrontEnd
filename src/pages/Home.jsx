@@ -13,6 +13,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import React, { useContext } from 'react';
 import { NotificationProduit } from "../App";
+import NomAgriculteur from "./NomAgriculteur";
 
 function Home() {
   //créaction d'une variable pour compter le nombre d'arcticle
@@ -255,23 +256,27 @@ function Home() {
                               alt={product.nomProduit}
                           />
                           )}
-                          <Card.Body className="p-3">
+                          <Card.Body className="p-3" style={{maxHeight : "200px", textOverflow : "ellipsis"}}>
                             <Card.Title className="text-black initialism mb-4">
                               {product.nomProduit}
                             </Card.Title>
-                            <Card.Text>{product.descriptionProduit}</Card.Text>
+                            <Card.Text className="ellipsis">{product.descriptionProduit}</Card.Text>
                           </Card.Body>
                           <Card.Footer>
                             <Card.Text className="text-info mb-0">
                               <span className="text-primary">Catégorie :</span>{" "}
                               {product.categorieProduit}
                             </Card.Text>
-                            <Card.Text className="text-primary">
+                            <Card.Text className="text-primary mb-0">
                               Quantité disponible :{" "}
                               <span className="text-info">
                                 {product.stockProduit}
                                 {product.uniteProduit}
                               </span>
+                            </Card.Text>
+                            <Card.Text className="text-info">
+                              <span className="text-primary">Vendu par :</span>{" "}
+                              <NomAgriculteur id={product.referenceProduit} />
                             </Card.Text>
                           </Card.Footer>
                           <Card.Footer className="text-center">

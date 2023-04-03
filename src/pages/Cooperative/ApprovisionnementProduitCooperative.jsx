@@ -110,12 +110,12 @@ function ApprovisionnementProduitCooperative() {
                 
       
       
-                {selectedAgriculteurId && 
+               
       
       
       <ProduitList className="mt-3" agriculteurId={selectedAgriculteurId} onSelect={setSelectedProduitId}/>
     
-     }
+     
     
      
               </Col>
@@ -145,6 +145,7 @@ function ApprovisionnementProduitCooperative() {
                     <option value="">Sélectionnez une unité</option>
                     <option value="l">Litre</option>
                     <option value="kg">Kilogramme</option>
+                    <option value="pc">Pièce</option>
                   </Form.Control>
                 </Form.Group>
               </Col>
