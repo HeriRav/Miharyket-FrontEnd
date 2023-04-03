@@ -11,15 +11,18 @@ import { Link, useNavigate } from "react-router-dom";
 // import { Modal, Form } from "react-bootstrap";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import React, { useContext } from 'react';
+import { NotificationProduit } from "../App";
 
 function Home() {
   //créaction d'une variable pour compter le nombre d'arcticle
   let [count, setCount] = useState(
     localStorage.getItem("nb_article") == null
-      ? 1
+      ? 0
       : localStorage.getItem("nb_article")
   );
 
+  const {counter, setCounter} = useContext(NotificationProduit);
   const [produit, setProd] = useState([]);
   const [panier, setPanier] = useState([]);
 
@@ -113,7 +116,7 @@ function Home() {
     }
   };
 
-  const redirect = (id, nom, price, stock, unit, category) => {
+  const redirect = (id, nom, price, stock, unit, category, photo) => {
     /*
             1. créer une variable dans le localstorage
             2. envoyer l'id du produit, le prix unitaire et la quantité par défaut (1) dans localstorage
@@ -131,6 +134,7 @@ function Home() {
           quantity: 1,
           unit: unit,
           category: category,
+          photo: photo
         })
       );
     } else {
@@ -278,15 +282,18 @@ function Home() {
                           <Card.Footer className="text-center">
                             <Button
                               className="primary w-100 d-flex align-items-center flex-column"
-                              onClick={() =>
-                                redirect(
-                                  product.idProduit,
-                                  product.nomProduit,
-                                  product.prixProduit,
-                                  product.stockProduit,
-                                  product.uniteProduit,
-                                  product.categorieProduit
-                                )
+                              onClick={() => {
+                                  setCounter(counter + 1)
+                                  redirect(
+                                    product.idProduit,
+                                    product.nomProduit,
+                                    product.prixProduit,
+                                    product.stockProduit,
+                                    product.uniteProduit,
+                                    product.categorieProduit,
+                                    product.photoProduit
+                                  )
+                                }
                               }
                             >
                               + Ajouter au panier

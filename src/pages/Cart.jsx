@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { createContext, useContext, useEffect, useState } from "react";
 import visa from "../images/visa.png";
-
+import { NotificationProduit } from "../App";
 import {
   MDBBtn,
   MDBCard,
@@ -58,6 +58,8 @@ function Cart() {
   const [categorie, setCategorie] = useState("");
   const [prixProduit, setPrix] = useState("");
   const [quantite, setQuantite] = useState("");
+
+  const {counter, setCounter} = useContext(NotificationProduit)
 
   // date
   const options = { year: "numeric", month: "2-digit", day: "2-digit" };
@@ -125,7 +127,7 @@ function Cart() {
           /*productsToCheck : {
             {nomProduit: "Ananas", prix: 5000, quantite: 5}, {nomProduit: "Lait", prix: 3200, quantite: 1}, 
           }*/
-          item.quantité = 1; // initialiser la quantité à 1
+          item.quantité = 0; // initialiser la quantité à 1
           item.total = item.price;
           total += item.total;
           a.push(item);
@@ -188,8 +190,9 @@ function Cart() {
     localStorage.removeItem(nom);
     const nouveauPanier = produit.filter((panier) => panier.id !== id);
     setProd(nouveauPanier);
-    window.location.reload(true);
+    setCounter(counter - 1)
   };
+
   return (
     <>
       <title>Mihary'ket - Panier</title>
@@ -223,15 +226,19 @@ function Cart() {
                         <MDBRow className="justify-content-between align-items-center">
                           <MDBCol md="3" lg="3" xl="3">
                             <MDBCardImage
-                              className="rounded-3"
-                              fluid
-                              src={
-                                images.find(
-                                  (image) =>
-                                    image.categorieProduit === panier.category
-                                )?.src
-                              }
-                              alt="Cotton T-shirt"
+                              // className="rounded-3"
+                              // fluid
+                              // src={
+                              //   images.find(
+                              //     (image) =>
+                              //       image.categorieProduit === panier.category
+                              //   )?.src
+                              // }
+                              // alt="Cotton T-shirt"
+                              className="image-box undragable"
+                              width={"100px"} style={{maxWidth:"500px", maxHeight:"200px"}}
+                              src={`data:image/jpeg;base64,${panier.photoProduit}`}
+                              alt={panier.nomProduit}
                             />
                           </MDBCol>
                           <MDBCol md="4" lg="4" xl="4">
@@ -335,6 +342,7 @@ function Cart() {
                 >
                   Paiement
                 </button>
+                <Link to='/facture'>Voir</Link>
               </MDBCard>
             </MDBCol>
           </MDBRow>

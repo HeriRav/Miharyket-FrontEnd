@@ -23,6 +23,7 @@ import Cart from './pages/Cart'
 import Portefeuille from './pages/Agriculteur/Portefeuille'
 import Aggro from './pages/Client/Aggro'
 import Mapping from './pages/Mapping'
+import Facture from './pages/Facture'
 
 
 // Fonction de vérification de l'authentification de l'utilisateur
@@ -61,6 +62,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
      
       <Route path='/dashboard-coop' element={isAuthenticated() ? <DashboardCooperative /> : <Navigate to='/authentification/login' />} />
       <Route path='/dashboard-aggro' element={isAuthenticated() ? <DashboardAgriculteur /> : <Navigate to='/authentification/login' />} />
+
+      <Route path='/facture/*' element={isAuthenticated() ? <Facture /> : <Navigate to='/authentification/login' />}/>
       {/* <Route path='*' element={<Error404/>}/> */}
     </Routes>
   </BrowserRouter>,
