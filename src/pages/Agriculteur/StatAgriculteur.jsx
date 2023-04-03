@@ -135,7 +135,7 @@ function StatAgriculteur() {
           </div>
         </div>
         {/* Donut Chart */}
-        <div className="col-xl- col-lg">
+        <div className="col-xl col-lg">
           <div className="card shadow mb-4">
             {/* Card Header - Dropdown */}
             <div className="card-header py-3">

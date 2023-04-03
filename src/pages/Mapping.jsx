@@ -1,5 +1,5 @@
 import Map from "../components/Map";
-// import '../css/map.css';
+import '../css/map.css';
 
 const Mapping = () => {
 
@@ -10,7 +10,7 @@ const Mapping = () => {
     } 
 
   return ( 
-      <Map location={location} zoomLevel={15} />
+      <Map location={location} zoomLevel={17} />
   );
 }
  

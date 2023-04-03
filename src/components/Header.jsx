@@ -10,6 +10,7 @@ import Contact from '../pages/Contact'
 import { MDBIcon } from 'mdb-react-ui-kit'
 import Cart from '../pages/Cart'
 import Aggro from '../pages/Client/Aggro'
+import { NotificationProduit } from '../App'
 
 const Header = () => {
 
@@ -25,7 +26,8 @@ const Header = () => {
   // const util = userEmail.nomUtilisateur
 
   const [email, setEmail] = useState("")
-  const [counter, setCounter] = useState(localStorage.getItem("nb_article"))
+  // const [counter, setCounter] = useState(localStorage.getItem("nb_article"))
+  const {counter, setCounter} = useContext(NotificationProduit)
   const EndSession = () => {
     sessionStorage.clear()
     localStorage.clear()

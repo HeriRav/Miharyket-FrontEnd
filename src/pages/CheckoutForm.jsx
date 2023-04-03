@@ -3,7 +3,8 @@ import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 // import axios from "axios";
 import visa from '../images/visa.png';
 import { ToastContainer, toast } from "react-toastify";
-
+import Facture from "./Facture";
+import { Link } from "react-router-dom";
 
 
 const CheckoutForm = () => {
@@ -75,7 +76,7 @@ const CheckoutForm = () => {
                 </div>
               </fieldset>
               <br/>
-              <br/>
+              <br/>              
               <button
                 disabled={isLoading}
                 id="submit"
