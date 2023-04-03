@@ -8,6 +8,7 @@ import SoldeUtilisateur from "../SoldeUtilisateur";
 function StatCooperative() {
   const [count, setCount] = useState([]);
   const [produits, setProduits] = useState([]);
+  const [ventes, setVentes] = useState([]);
   let [counter, setCounter] = useState(0);
   const today = new Date();
   const formattedDate = today.toISOString().substring(0, 10);
@@ -21,10 +22,16 @@ function StatCooperative() {
       .then(data => setProduits(data))
       .catch(err => console.log(err))
   }, [])
+  useEffect(() => {
+    fetch(`http://localhost:8085/commandes/`)
+      .then(response => response.json())
+      .then(data => setVentes(data))
+      .catch(err => console.log(err))
+  }, [])
   const [startDate, setStartDate] = useState(formattedDate);
   const [endDate, setEndDate] = useState(formattedDate);
   const [users, setUsers] = useState([]);
-  const [selectedUser, setSelectedUser] = useState(7);
+  const [selectedUser, setSelectedUser] = useState();
   
 
   useEffect(() => {
@@ -71,8 +78,8 @@ function StatCooperative() {
           <div className="col-md-3">
             <div className="card-counter info">
               <i className="fa fa-receipt"></i>
-              <span className="count-numbers">0</span>
-              <span className="count-name">Recette</span>
+              <span className="count-numbers">{ventes.length}</span>
+              <span className="count-name">Ventes</span>
             </div>
           </div>
         </div>

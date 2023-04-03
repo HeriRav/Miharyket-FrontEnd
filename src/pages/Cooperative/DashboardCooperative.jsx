@@ -118,13 +118,13 @@ function Dashboard() {
             <li className="nav-item">
                 <Link className="nav-link" to="/dashboard-coop" onClick={handleMenu4Click}
                     aria-expanded="true" aria-controls="collapsePages">
-                    <i className="fas fa-fw fa-shopping-bag"></i>
+                    <i className="fas fa-fw fa-list"></i>
                     <span>Produits</span>
                 </Link>
                 <Link className="nav-link" to="/dashboard-coop" onClick={handleMenu3Click}
                     aria-expanded="true" aria-controls="collapsePages">
-                    <i className="fas fa-fw fa-shopping-bag"></i>
-                    <span>Approvisionnement</span>
+                    <i className="fas fa-fw fa-plus"></i>
+                    <span>Approvisionnements</span>
                 </Link>
             </li>
            
