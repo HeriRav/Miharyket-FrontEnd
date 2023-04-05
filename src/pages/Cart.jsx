@@ -9,9 +9,14 @@ import {
   MDBCardImage,
   MDBCol,
   MDBContainer,
+  MDBCardHeader,
   MDBIcon,
   MDBInput,
+  MDBListGroup,
+  MDBListGroupItem,
+  MDBRipple,
   MDBRow,
+  MDBTooltip,
   MDBTypography,
 } from "mdb-react-ui-kit";
 import { loadStripe } from "@stripe/stripe-js";
@@ -20,6 +25,7 @@ import { Elements } from "@stripe/react-stripe-js";
 import CheckoutForm from "./CheckoutForm";
 import Swal from "sweetalert2";
 import Modal from "react-modal";
+import { Button } from "react-bootstrap";
 
 const public_key =
   "pk_test_51MqBM9AD78j1yqjLvHmPakZ9UxZpLY4n6QBID2WuUc6sojf67NW3Laoleg4BY26UP6KczNOsBjphJ3TTpOG0Sl6000xE6dgNzI";
@@ -60,6 +66,8 @@ function Cart() {
   const [quantite, setQuantite] = useState("");
 
   const {counter, setCounter} = useContext(NotificationProduit)
+
+  const productNumber = localStorage.getItem("nb_article")
 
   // date
   const options = { year: "numeric", month: "2-digit", day: "2-digit" };
@@ -191,6 +199,7 @@ function Cart() {
     const nouveauPanier = produit.filter((panier) => panier.id !== id);
     setProd(nouveauPanier);
     setCounter(counter - 1)
+    localStorage.setItem("nb_article", counter - 1);
   };
 
   return (
@@ -215,7 +224,7 @@ function Cart() {
       </div>
 
       <section className="h-100" style={{ backgroundColor: "#eee" }}>
-        {produit &&
+        {/* {produit &&
           produit.map((panier) => {
             return (
               <MDBContainer className="py-1 h-100" key={panier.idProduit}>
@@ -226,54 +235,50 @@ function Cart() {
                         <MDBRow className="justify-content-between align-items-center">
                           <MDBCol md="3" lg="3" xl="3">
                             <MDBCardImage
-                              // className="rounded-3"
-                              // fluid
-                              // src={
-                              //   images.find(
-                              //     (image) =>
-                              //       image.categorieProduit === panier.category
-                              //   )?.src
-                              // }
-                              // alt="Cotton T-shirt"
-                              className="image-box undragable"
-                              width={"100px"} style={{maxWidth:"500px", maxHeight:"200px"}}
-                              src={`data:image/jpeg;base64,${panier.photoProduit}`}
-                              alt={panier.nomProduit}
+                              className="rounded-3"
+                              fluid
+                              src={
+                                images.find(
+                                  (image) =>
+                                    image.categorieProduit === panier.category
+                                )?.src
+                              }
+                              alt="Cotton T-shirt"
                             />
                           </MDBCol>
                           <MDBCol md="4" lg="4" xl="4">
-                            <p className="lead fw-bold mb-2">{panier.nom}</p>
+                            <p className="lead fw-bold mb-2 text-black">{panier.nom}</p>
                             <p>
-                              <span className="text-muted">
+                              <span className=" text-black">
                                 Prix par unité :{" "}
                               </span>
-                              MGA {panier.price}
+                              <span className="text-success">MGA {panier.price}</span>
                               <br />
                             
-                              <span className="text-muted">
+                              <span className=" text-black">
                                 Quantité disponible:{" "}
                               </span>
-                              {panier.stock} {panier.unit}
+                              <span className="text-success">{panier.stock} {panier.unit}</span>
                             </p>
                             <MDBRow className ="md-1">
                             <MDBCol >
-                            <span className="text-muted">Quantité à acheter: </span> 
+                            <span className="text-black">Quantité à acheter: </span> 
                             </MDBCol >
                             <MDBCol  xl="4" >
                             <MDBInput
-                                  min={1}
-                                  type="number"
-                                  size="sm"
-                                  onChange={(e) =>
-                                    handlePriceUpdate(panier, e.target.value)
-                                  }
-                                />
+                              min={1}
+                              type="number"
+                              size="sm"
+                              onChange={(e) =>
+                                handlePriceUpdate(panier, e.target.value)
+                              }
+                            />
                             </MDBCol>
                             </MDBRow>
                           </MDBCol>
                           
                           <MDBCol md="3" lg="3" xl="4">
-                            <p>Prix total par produit: MGA {panier.total}</p>
+                            <p className="text-black">Prix total par produit: MGA <span className="text-success">{panier.total}</span></p>
                           </MDBCol>
                           <MDBCol
                             md="1"
@@ -311,42 +316,199 @@ function Cart() {
                   </MDBCol>
                 </MDBRow>
               </MDBContainer>
-
-            
             );
-          })}
+        })} */}
 
-        <MDBContainer className="py-1 h-100">
-          <MDBRow className="justify-content-center align-items-center h-100">
-            <MDBCol md="10">
-              <MDBCard className="rounded-3 mb-1">
-                <div className="justify-content-center align-items-center h-100">
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                      width: "95%",
-                    }}
-                  >
-                    <h5 style={{ margin: "0" }}>Prix total à payer :</h5>
-                    <h5 style={{ margin: "0" }}>MGA {total}</h5>
-                  </div>
-                </div>
+        <MDBContainer className="py-5 h-100">
+          <MDBRow className="justify-content-center my-4">
+            <MDBCol md="8">
+              <MDBCard className="mb-4">
+                <MDBCardHeader className="py-3">
+                  <MDBTypography tag="h5" className="mb-0 text-black">
+                    Panier - {productNumber} article(s)
+                  </MDBTypography>
+                </MDBCardHeader>
+                {localStorage.getItem("nb_article") > 0 ? (
+                  <MDBCardBody>
+                    {produit &&
+                      produit.map((panier) => {
+                        return (
+                          <>
+                            <MDBRow>
+                              <MDBCol lg="3" md="12" className="mb-4 mb-lg-0">
+                                <MDBRipple rippleTag="div" rippleColor="light"
+                                  className="bg-image rounded hover-zoom hover-overlay">
+                                  <img
+                                    src={
+                                      images.find(
+                                        (image) =>
+                                          image.categorieProduit === panier.category
+                                      )?.src
+                                    }
+                                    className="w-100" />
+                                  <a href="#!">
+                                    <div className="mask" style={{ backgroundColor: "rgba(251, 251, 251, 0.2)" , }}>
+                                    </div>
+                                  </a>
+                                </MDBRipple>
+                              </MDBCol>
 
-                <br />
-                <button
-                  onClick={ajoutPanier}
-                  variant="primary"
-                  className="btn btn-success btn-lg gradient-custom-4 px-5 text-white"
-                >
-                  Paiement
-                </button>
-                <Link to='/facture'>Voir</Link>
+                              <MDBCol lg="5" md="6" className=" mb-4 mb-lg-0">
+                                <p className="text-warning">
+                                  <strong>{panier.nom}</strong>
+                                </p>
+                                <p>
+                                  <span className=" text-black">
+                                    Prix par unité :{" "}
+                                  </span>
+                                  <span className="text-success">MGA {panier.price}</span>
+                                  <br />
+                                </p>
+                                <p>
+                                  <span className=" text-black">
+                                    Quantité disponible:{" "}
+                                  </span>
+                                  <span className="text-success">{panier.stock} {panier.unit}</span>
+                                </p>
+
+                                <a
+                                  style={{ cursor: "pointer" }}
+                                  className="text-danger"
+                                  onClick={() => {
+                                    Swal.fire({
+                                      title:
+                                        "Êtes-vous sûr de vouloir supprimer ce produit?",
+                                      icon: "warning",
+                                      showCancelButton: true,
+                                      confirmButtonColor: "#8bc34a",
+                                      cancelButtonColor: "#999DA0",
+                                      confirmButtonText: "Oui, supprimer!",
+                                      cancelButtonText: "Annuler",
+                                    }).then((result) => {
+                                      if (result.isConfirmed) {
+                                        supprimerProduit(panier.id, panier.nom);
+                                      }
+                                    });
+                                  }}
+                                >
+                                  <i className="fa fa-trash"></i>
+                                </a>
+
+                              </MDBCol>
+                              <MDBCol lg="4" md="6" className="mb-4 mb-lg-0">
+                                <div className="d-flex mb-4" style={{ maxWidth: "300px" }}>
+                                  <MDBInput
+                                    defaultValue={1}
+                                    min={1}
+                                    type="number"
+                                    label="Quantité à acheter"
+                                    className="text-black"
+                                    onChange={(e) =>
+                                      handlePriceUpdate(panier, e.target.value)
+                                    }
+                                  />
+                                </div>
+
+                                <p className="text-start text-md-center">
+                                  <p className="text-black">Prix total par produit: <span className="text-success">MGA {panier.total}</span></p>
+                                </p>
+                              </MDBCol>
+                            </MDBRow>
+                            <hr className="my-4" />
+                          </>
+                        );
+                    })}
+                    <hr
+                      className="mb-4"
+                      style={{
+                        height: "2px",
+                        backgroundColor: "#116530",
+                        opacity: 1,
+                      }}
+                    />
+                    <div className="d-flex justify-content-between px-x mb-3">
+                      <p className="fw-bold text-black h5">Réduction :</p>
+                      <p className="fw-bold text-success h5">MGA 0</p>
+                    </div>
+                    <div
+                      className="d-flex justify-content-between p-2 mb-3"
+                      style={{ backgroundColor: "#e1f5fe" }}
+                    >
+                      <MDBTypography tag="h5" className="fw-bold mb-0 text-black">
+                        Prix total à payer:
+                      </MDBTypography>
+                      <MDBTypography tag="h5" className="fw-bold mb-0 text-success">
+                        MGA {total}
+                      </MDBTypography>
+                    </div>
+                    <div className="d-flex justify-content-center p-2 mb-2">
+                      <button
+                        onClick={ajoutPanier}
+                        variant="primary"
+                        className="btn btn-success btn-lg gradient-custom-4 px-5 text-white"
+                      >
+                        Paiement
+                      </button>
+                    </div>
+                    {localStorage.getItem("idCommande") !== null ? (
+                      <Link to='/facture' className="text-primary">Consulter la facture</Link>
+                    ) : (
+                      <></>
+                    )}
+                  </MDBCardBody>
+                ) : (
+                  <MDBCardBody>
+                    <>
+                      <MDBRow>
+                        <span className="text-black ml-3">
+                          Votre panier est vide
+                        </span>
+                      </MDBRow>
+                    </>
+                  </MDBCardBody>
+                )}
+                
               </MDBCard>
             </MDBCol>
           </MDBRow>
         </MDBContainer>
+
+        {/* {localStorage.getItem("nb_article") > 0 ? (
+          <MDBContainer className="py-1 h-100">
+            <MDBRow className="justify-content-center align-items-center h-100">
+              <MDBCol md="10">
+                <MDBCard className="rounded-3 mb-1">
+                  <div className="justify-content-center align-items-center h-100">
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        width: "95%",
+                      }}
+                    >
+                      <h5 style={{ margin: "0" }}>Prix total à payer :</h5>
+                      <h5 style={{ margin: "0" }}>MGA {total}</h5>
+                    </div>
+                  </div>
+
+                  <br />
+                  <button
+                    onClick={ajoutPanier}
+                    variant="primary"
+                    className="btn btn-success btn-lg gradient-custom-4 px-5 text-white"
+                  >
+                    Paiement
+                  </button>
+                  <Link to='/facture'>Consulter la facture</Link>
+                </MDBCard>
+              </MDBCol>
+            </MDBRow>
+          </MDBContainer>
+        ) : (
+          <></>
+        )} */}
+        
 
         <Modal
           isOpen={showModal}

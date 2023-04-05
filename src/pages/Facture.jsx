@@ -14,21 +14,70 @@ import {
 } from "mdb-react-ui-kit";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { Button } from "react-bootstrap";
+import jsPDF from "jspdf";
 // const [produit, setProd] = useState([]);
 
 
 const Facture = () => {
-    const [idCommande, setIdCommande]= useState(localStorage.getItem("idCommande"))
-    const [panier, setPanier]= useState(localStorage.getItem("panier"));
-    const price = localStorage.getItem('paie')
-    const user = sessionStorage.getItem('idUser')
-    // console.log(JSON.parse(panier));
+  const [idCommande, setIdCommande]= useState(localStorage.getItem("idCommande"))
+  const [panier, setPanier]= useState(localStorage.getItem("panier"));
+  const price = localStorage.getItem('paie')
+  const user = sessionStorage.getItem('idUser')
+  // console.log(JSON.parse(panier));
 
-    const [liste, setListe] =  useState(JSON.parse(panier));
-    const personne = JSON.parse(sessionStorage.getItem("user"));
-   
-// export default function App() {
+  const [liste, setListe] =  useState(JSON.parse(panier));
+  const personne = JSON.parse(sessionStorage.getItem("user"));
+
+  const options = { day: "2-digit", month: "2-digit", year: "numeric" };
+  const date = new Date()
+    .toLocaleDateString("fr-FR", options)
+    .split("/")
+    // .reverse()
+    .join("-");
+  
+  const exportPDF = () => {
+
+    // const doc = new jsPDF("portrait", "px", [841.89, 595.28]);
+  
+    const doc = new jsPDF("landscape", "px", [window.screen.width, window.screen.height]);
+  
+    doc.setPage(0,0);
+  
+    const page = document.getElementById('facture');
+  
+    if (!page) {
+      console.error("L'élément HTML avec l'ID 'facture' n'a pas été trouvé dans le DOM.");
+      return;
+    }
+  
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
+    let y = -5;
+      
+    doc.html(page, {
+       callback: function () {
+          if (doc.lastAutoTable) {
+            y = doc.lastAutoTable.finalY;
+          }
+          if (y > pageHeight - 5) { // Si le contenu dépasse la limite de taille
+            doc.addPage([800, 500]); // Ajouter une nouvelle page avec la taille spécifiée
+            y = 5; // Réinitialiser la position Y
+          }
+          doc.setFontSize(5); // taille de la police en points (par défaut = 16)
+          doc.html(page, { // Ajouter le contenu HTML à la page actuelle
+            y: y,
+            callback: function () {
+              doc.save('facture.pdf');
+            }
+          });
+       }
+    });
+  }
+
   return (
+    <>
+    <title>Mihary'ket - Facture</title>
     <MDBContainer className="py-5">
       <MDBCard className="p-4">
         <MDBCardBody>
@@ -39,19 +88,12 @@ const Facture = () => {
                   Facture &gt; &gt; <strong>{idCommande}</strong>
                 </p>
               </MDBCol>
-              <MDBCol xl="3" className="float-end">
-                <MDBBtn
+              <MDBCol xl="2" className="float-end text-center">
+                <button
                   color="light"
                   ripple="dark"
-                  className="text-capitalize border-0"
-                >
-                  <MDBIcon fas icon="print" color="primary" className="me-1" />
-                  Print
-                </MDBBtn>
-                <MDBBtn
-                  color="light"
-                  ripple="dark"
-                  className="text-capitalize border-0 ms-2"
+                  className="text-capitalize border-0 ms-2 btn btn-dark"
+                  onClick={exportPDF}
                 >
                   <MDBIcon
                     far
@@ -59,12 +101,13 @@ const Facture = () => {
                     color="danger"
                     className="me-1"
                   />
-                  Export
-                </MDBBtn>
+                  &nbsp;Exporter
+                </button>
                 <hr />
               </MDBCol>
             </MDBRow>
           </MDBContainer>
+          <div id="facture">
           <MDBContainer>
             <MDBCol md="12" className="text-center">
               {/* <MDBIcon
@@ -74,7 +117,7 @@ const Facture = () => {
                 className="ms-0 "
                 style={{ color: "#5d9fc5" }}
               /> */}
-              <p className="pt-0 h1">Facture</p>
+              <p className="pt-0 h1 text-primary">Facture</p>
             </MDBCol>
           </MDBContainer>
           <MDBRow>
@@ -90,22 +133,21 @@ const Facture = () => {
               </MDBTypography>
             </MDBCol>
             <MDBCol xl="4">
-              <p className="text-muted">Facturation</p>
+              <p className="text-muted">Facture</p>
               <MDBTypography listUnStyled>
                 <li className="text-muted">
                   <MDBIcon fas icon="circle" style={{ color: "#84B0CA" }} />
-                  <span className="fw-bold ms-1">ID:</span>#123-456
+                  <span className="fw-bold ms-1">Référence de la commande:</span> C-0{idCommande}
                 </li>
                 <li className="text-muted">
                   <MDBIcon fas icon="circle" style={{ color: "#84B0CA" }} />
-                  <span className="fw-bold ms-1">Creation Date: </span>Jun
-                  23,2021
+                  <span className="fw-bold ms-1">Date: </span> {date}
                 </li>
                 <li className="text-muted">
                   <MDBIcon fas icon="circle" style={{ color: "#84B0CA" }} />
-                  <span className="fw-bold ms-1">Status:</span>
-                  <span className="badge bg-warning text-black fw-bold ms-1">
-                    Unpaid
+                  <span className="fw-bold ms-1">Statut:</span>&nbsp;
+                  <span className="badge bg-success text-light fw-bold ms-1">
+                    Payé
                   </span>
                 </li>
               </MDBTypography>
@@ -115,14 +157,14 @@ const Facture = () => {
             <MDBTable striped borderless>
               <MDBTableHead
                 className="text-white"
-                style={{ backgroundColor: "#84B0CA" }}
+                style={{ backgroundColor: "#116530" }}
               >
                 <tr>
                   <th scope="col">#</th>
                   <th scope="col">Description</th>
                   <th scope="col">Qté</th>
                   <th scope="col">Prix unitaire</th>
-                  <th scope="col">Montant (Ar)</th>
+                  <th scope="col">Montant (MGA)</th>
                 </tr>
               </MDBTableHead>
               <MDBTableBody>                                
@@ -152,29 +194,30 @@ const Facture = () => {
             <MDBCol xl="3">             
               <p className="text-black float-start">
                 <span className="text-black me-3"> Total: </span>
-                <span style={{ fontSize: "25px" }}>{localStorage.getItem("paie")} Ariary</span>
+                <p style={{ fontSize: "18px" }} className="text-black me-3">Montant total : MGA {localStorage.getItem("paie")}</p>
               </p>
             </MDBCol>
           </MDBRow>
+          </div>
           <hr />
           <MDBRow>
             <MDBCol xl="10">
-              <p>Merci pour votre confiance!</p>
+              <p>Merci pour votre confiance! Nous vous contatcerons de suite pour la livraison</p>
             </MDBCol>
             <MDBCol xl="2">
             <Link to='/panier'> 
-                <MDBBtn
-                    className="text-capitalize"
-                    style={{ backgroundColor: "#60bdf3" }}
+                <Button
+                    className="text-capitalize btn-primary w-100 d-flex align-items-center flex-column"
                 >                
                 Revenir
-              </MDBBtn>
+              </Button>
             </Link>             
             </MDBCol>
           </MDBRow>
         </MDBCardBody>
       </MDBCard>
     </MDBContainer>
+    </>
   );
 }
 

@@ -15,6 +15,7 @@ const CheckoutForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [idCommande, setIdCommande]= useState(localStorage.getItem("idCommande"))
   const [panier, setPanier]= useState(localStorage.getItem("panier"));
+  const [showModal, setShowModal] = useState(false);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -45,7 +46,9 @@ const CheckoutForm = () => {
             idStripe: id,
             panier: localStorage.getItem("panier")
           })
-        }).then(() => toast.success("Paiement effectué, merci!"));
+        }).then(() => {
+          toast.success("Paiement effectué, merci!")
+        });
         } catch (error) {
           console.log("Erreur : ", error.message);
         }

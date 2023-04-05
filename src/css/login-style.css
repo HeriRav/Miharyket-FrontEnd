@@ -256,9 +256,13 @@ Link {
 .ellipsis {
   white-space: nowrap; 
   width: auto; 
-  overflow: hidden; 
+  overflow: hidden;
 }
 
 .ellipsis:hover {
   overflow: visible;
+}
+
+.stretch {
+  align-content: stretch;
 }

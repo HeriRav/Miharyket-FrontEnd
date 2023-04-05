@@ -188,7 +188,7 @@ function Product() {
                               src={`data:image/jpeg;base64,${product.photoProduit}`}
                               alt={product.nomProduit}
                           />
-                          <Card.Body className="p-3">
+                          <Card.Body className="p-3 vh-100" style={{maxHeight : "130px"}}>
                             <Card.Title className="text-black initialism mb-4">
                               {product.nomProduit}
                             </Card.Title>
@@ -244,7 +244,7 @@ function Product() {
                               src={`data:image/jpeg;base64,${product.photoProduit}`}
                               alt={product.nomProduit}
                           />
-                          <Card.Body className="p-3">
+                          <Card.Body className="p-3 vh-100" style={{maxHeight : "130px"}}>
                             <Card.Title className="text-black initialism mb-4">
                               {product.nomProduit}
                             </Card.Title>
@@ -281,7 +281,7 @@ function Product() {
                               src={`data:image/jpeg;base64,${product.photoProduit}`}
                               alt={product.nomProduit}
                           />
-                          <Card.Body className="p-3">
+                          <Card.Body className="p-3 vh-100" style={{maxHeight : "130px"}}>
                             <Card.Title className="text-black initialism mb-4">
                               {product.nomProduit}
                             </Card.Title>
@@ -317,7 +317,7 @@ function Product() {
                               src={`data:image/jpeg;base64,${product.photoProduit}`}
                               alt={product.nomProduit}
                           />
-                          <Card.Body className="p-3">
+                          <Card.Body className="p-3 vh-100" style={{maxHeight : "130px"}}>
                             <Card.Title className="text-black initialism mb-4">
                               {product.nomProduit}
                             </Card.Title>
@@ -386,7 +386,7 @@ function Product() {
                               src={`data:image/jpeg;base64,${product.photoProduit}`}
                               alt={product.nomProduit}
                           />
-                          <Card.Body className="p-3">
+                          <Card.Body className="p-3 vh-100" style={{maxHeight : "130px"}}>
                             <Card.Title className="text-black initialism mb-4">
                               {product.nomProduit}
                             </Card.Title>
@@ -440,7 +440,7 @@ function Product() {
                               src={`data:image/jpeg;base64,${product.photoProduit}`}
                               alt={product.nomProduit}
                           />
-                          <Card.Body className="p-3">
+                          <Card.Body className="p-3 vh-100" style={{maxHeight : "130px"}}>
                             <Card.Title className="text-black initialism mb-4">
                               {product.nomProduit}
                             </Card.Title>
@@ -477,7 +477,7 @@ function Product() {
                               src={`data:image/jpeg;base64,${product.photoProduit}`}
                               alt={product.nomProduit}
                           />
-                          <Card.Body className="p-3">
+                          <Card.Body className="p-3 vh-100" style={{maxHeight : "130px"}}>
                             <Card.Title className="text-black initialism mb-4">
                               {product.nomProduit}
                             </Card.Title>
@@ -513,7 +513,7 @@ function Product() {
                               src={`data:image/jpeg;base64,${product.photoProduit}`}
                               alt={product.nomProduit}
                           />
-                          <Card.Body className="p-3">
+                          <Card.Body className="p-3 vh-100" style={{maxHeight : "130px"}}>
                             <Card.Title className="text-black initialism mb-4">
                               {product.nomProduit}
                             </Card.Title>
@@ -582,7 +582,7 @@ function Product() {
                               src={`data:image/jpeg;base64,${product.photoProduit}`}
                               alt={product.nomProduit}
                           />
-                          <Card.Body className="p-3">
+                          <Card.Body className="p-3 vh-100" style={{maxHeight : "130px"}}>
                             <Card.Title className="text-black initialism mb-4">
                               {product.nomProduit}
                             </Card.Title>
@@ -633,7 +633,7 @@ function Product() {
                               src={`data:image/jpeg;base64,${product.photoProduit}`}
                               alt={product.nomProduit}
                           />
-                          <Card.Body className="p-3">
+                          <Card.Body className="p-3 vh-100" style={{maxHeight : "130px"}}>
                             <Card.Title className="text-black initialism mb-4">
                               {product.nomProduit}
                             </Card.Title>
@@ -670,7 +670,7 @@ function Product() {
                               src={`data:image/jpeg;base64,${product.photoProduit}`}
                               alt={product.nomProduit}
                           />
-                          <Card.Body className="p-3">
+                          <Card.Body className="p-3 vh-100" style={{maxHeight : "130px"}}>
                             <Card.Title className="text-black initialism mb-4">
                               {product.nomProduit}
                             </Card.Title>
@@ -706,7 +706,7 @@ function Product() {
                               src={`data:image/jpeg;base64,${product.photoProduit}`}
                               alt={product.nomProduit}
                           />
-                          <Card.Body className="p-3">
+                          <Card.Body className="p-3 vh-100" style={{maxHeight : "130px"}}>
                             <Card.Title className="text-black initialism mb-4">
                               {product.nomProduit}
                             </Card.Title>
@@ -775,7 +775,7 @@ function Product() {
                               src={`data:image/jpeg;base64,${product.photoProduit}`}
                               alt={product.nomProduit}
                           />
-                          <Card.Body className="p-3">
+                          <Card.Body className="p-3 vh-100" style={{maxHeight : "130px"}}>
                             <Card.Title className="text-black initialism mb-4">
                               {product.nomProduit}
                             </Card.Title>
@@ -826,7 +826,7 @@ function Product() {
                               src={`data:image/jpeg;base64,${product.photoProduit}`}
                               alt={product.nomProduit}
                           />
-                          <Card.Body className="p-3">
+                          <Card.Body className="p-3 vh-100" style={{maxHeight : "130px"}}>
                             <Card.Title className="text-black initialism mb-4">
                               {product.nomProduit}
                             </Card.Title>
@@ -863,7 +863,7 @@ function Product() {
                               src={`data:image/jpeg;base64,${product.photoProduit}`}
                               alt={product.nomProduit}
                           />
-                          <Card.Body className="p-3">
+                          <Card.Body className="p-3 vh-100" style={{maxHeight : "130px"}}>
                             <Card.Title className="text-black initialism mb-4">
                               {product.nomProduit}
                             </Card.Title>
@@ -899,7 +899,7 @@ function Product() {
                               src={`data:image/jpeg;base64,${product.photoProduit}`}
                               alt={product.nomProduit}
                           />
-                          <Card.Body className="p-3">
+                          <Card.Body className="p-3 vh-100" style={{maxHeight : "130px"}}>
                             <Card.Title className="text-black initialism mb-4">
                               {product.nomProduit}
                             </Card.Title>
@@ -968,7 +968,7 @@ function Product() {
                               src={`data:image/jpeg;base64,${product.photoProduit}`}
                               alt={product.nomProduit}
                           />
-                          <Card.Body className="p-3">
+                          <Card.Body className="p-3 vh-100" style={{maxHeight : "130px"}}>
                             <Card.Title className="text-black initialism mb-4">
                               {product.nomProduit}
                             </Card.Title>
@@ -1019,7 +1019,7 @@ function Product() {
                               src={`data:image/jpeg;base64,${product.photoProduit}`}
                               alt={product.nomProduit}
                           />
-                          <Card.Body className="p-3">
+                          <Card.Body className="p-3 vh-100" style={{maxHeight : "130px"}}>
                             <Card.Title className="text-black initialism mb-4">
                               {product.nomProduit}
                             </Card.Title>
@@ -1056,7 +1056,7 @@ function Product() {
                               src={`data:image/jpeg;base64,${product.photoProduit}`}
                               alt={product.nomProduit}
                           />
-                          <Card.Body className="p-3">
+                          <Card.Body className="p-3 vh-100" style={{maxHeight : "130px"}}>
                             <Card.Title className="text-black initialism mb-4">
                               {product.nomProduit}
                             </Card.Title>
@@ -1092,7 +1092,7 @@ function Product() {
                               src={`data:image/jpeg;base64,${product.photoProduit}`}
                               alt={product.nomProduit}
                           />
-                          <Card.Body className="p-3">
+                          <Card.Body className="p-3 vh-100" style={{maxHeight : "130px"}}>
                             <Card.Title className="text-black initialism mb-4">
                               {product.nomProduit}
                             </Card.Title>
@@ -1161,7 +1161,7 @@ function Product() {
                               src={`data:image/jpeg;base64,${product.photoProduit}`}
                               alt={product.nomProduit}
                           />
-                          <Card.Body className="p-3">
+                          <Card.Body className="p-3 vh-100" style={{maxHeight : "130px"}}>
                             <Card.Title className="text-black initialism mb-4">
                               {product.nomProduit}
                             </Card.Title>
@@ -1212,7 +1212,7 @@ function Product() {
                               src={`data:image/jpeg;base64,${product.photoProduit}`}
                               alt={product.nomProduit}
                           />
-                          <Card.Body className="p-3">
+                          <Card.Body className="p-3 vh-100" style={{maxHeight : "130px"}}>
                             <Card.Title className="text-black initialism mb-4">
                               {product.nomProduit}
                             </Card.Title>
@@ -1249,7 +1249,7 @@ function Product() {
                               src={`data:image/jpeg;base64,${product.photoProduit}`}
                               alt={product.nomProduit}
                           />
-                          <Card.Body className="p-3">
+                          <Card.Body className="p-3 vh-100" style={{maxHeight : "130px"}}>
                             <Card.Title className="text-black initialism mb-4">
                               {product.nomProduit}
                             </Card.Title>
@@ -1285,7 +1285,7 @@ function Product() {
                               src={`data:image/jpeg;base64,${product.photoProduit}`}
                               alt={product.nomProduit}
                           />
-                          <Card.Body className="p-3">
+                          <Card.Body className="p-3 vh-100" style={{maxHeight : "130px"}}>
                             <Card.Title className="text-black initialism mb-4">
                               {product.nomProduit}
                             </Card.Title>

@@ -5,7 +5,7 @@ function MemberTable(props) {
   const { members } = props;
 
   return (
-    <Table striped bordered hover>
+    <Table striped bordered hover className='text-center text-black'>
       <thead>
         <tr>
           <th>Nom</th>

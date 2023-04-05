@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Table, Form, Button, Modal } from "react-bootstrap";
+import { Table, Form, Button, Modal, Alert } from "react-bootstrap";
 import SoldeUtilisateur from "../SoldeUtilisateur";
 import Swal from 'sweetalert2';
-
-
 
 function ApprovisionnementHistorique({ approvisionnements }) {
   const [filteredAppros, setFilteredAppros] = useState(approvisionnements);
@@ -13,10 +11,6 @@ function ApprovisionnementHistorique({ approvisionnements }) {
   const [paiementReussi, setPaiementReussi] = useState(false);
 
   const [toastMessage, setToastMessage] = useState("");
-  
-  
-
-  // Récupération du solde Utilisateur depuis le sessionStorage
   
   useEffect(() => {
     const storedAppros = localStorage.getItem("approvisionnements");
@@ -28,15 +22,6 @@ function ApprovisionnementHistorique({ approvisionnements }) {
     const cooperative = JSON.parse(sessionStorage.getItem("user"));
     setSoldeCooperative(cooperative.soldeUtilisateur);
   }, [approvisionnements]);
-  
-  //ok
-
-  // const handlePayer = (index) => {
-  //   // Récupération de l'approvisionnement sélectionné
-  //   const appro = filteredAppros[index];
-  //   setSelectedAppro(appro);
-  //   setShowModal(true);
-  // };
 
   const handlePayer = (appro) => {
     setSelectedAppro(appro);
@@ -49,7 +34,6 @@ function ApprovisionnementHistorique({ approvisionnements }) {
     setToastMessage(""); // Réinitialiser le message du toast
   };
   
-
  const handlePaiement = (event) => {
   event.preventDefault();
   const cooperative = JSON.parse(sessionStorage.getItem("user"));
@@ -60,64 +44,59 @@ function ApprovisionnementHistorique({ approvisionnements }) {
   if (soldeCooperative >= prixTotal) {
     const newSolde = soldeCooperative - prixTotal;
     const newSoldebase = newSolde - soldeCooperative;
-    
-    const updatedAppro = { ...selectedAppro, 6: "payé" }; // Mettre à jour l'objet de l'approvisionnement sélectionné avec le statut de paiement
-    const updatedAppros = filteredAppros.map((appro, index) =>
-      index === filteredAppros.indexOf(selectedAppro) ? updatedAppro : appro
-    );
 
-    // Mettre à jour l'état de filteredAppros avec le nouveau tableau d'approvisionnements
-setFilteredAppros(updatedAppros);
-// Enregistrer la liste des approvisionnements dans le localStorage
-localStorage.setItem("approvisionnements", JSON.stringify(updatedAppros));
+    const deal = {
+      utilisateur: cooperative,
+      dateDeal: new Date().toISOString().slice(0, 10), // Date du jour au format ISO
+      montantDeal: prixTotal,
+      typeDeal: "débit",
+      libelleDeal: idAgriculteur,
+    };
 
-    // Mettre à jour le solde de la coopérative dans le sessionStorage
-    cooperative.soldeUtilisateur = newSolde;
-    sessionStorage.setItem("user", JSON.stringify(cooperative));
-
-   
-    // Mettre à jour le solde de la coopérative dans la base de données
-    fetch(`http://localhost:8085/api/utilisateurs/${idAgriculteur}/${prixTotal}`, {
-      method: "PUT",
+    // Envoyer la requête POST pour insérer le nouvel enregistrement dans la table deal
+    fetch("http://localhost:8085/deals/add/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(deal),
     })
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
-        setSoldeCooperative(newSolde); // Mettre à jour l'état du solde de la coopérative avec le nouveau solde
-        setPaiementReussi(true); // Mettre à jour la variable d'état paiementReussi
-        Swal.fire({
-      title: 'Paiement réussi',
-      icon: 'success',
-      showConfirmButton: false,
-      timer: 1500
-    });
+        const updatedAppro = { ...selectedAppro, 6: "payé" }; // Mettre à jour l'objet de l'approvisionnement sélectionné avec le statut de paiement
+        const updatedAppros = filteredAppros.map((appro, index) =>
+          index === filteredAppros.indexOf(selectedAppro) ? updatedAppro : appro
+        );
+
+        // Mettre à jour l'état de filteredAppros avec le nouveau tableau d'approvisionnements
+        setFilteredAppros(updatedAppros);
+        // Enregistrer la liste des approvisionnements dans le localStorage
         localStorage.setItem("approvisionnements", JSON.stringify(updatedAppros));
 
+        // Mettre à jour le solde de la coopérative dans le sessionStorage
+        cooperative.soldeUtilisateur = newSolde;
+        sessionStorage.setItem("user", JSON.stringify(cooperative));
 
+        setSoldeCooperative(newSolde); // Mettre à jour l'état du solde de la coopérative avec le nouveau solde
+        setPaiementReussi(true); // Mettre à jour la variable d'état paiementReussi
+        setToastMessage("Paiement réussi");
+        localStorage.setItem("approvisionnements", JSON.stringify(updatedAppros));
       })
       .catch((err) => console.log(err));
   } else {
-    Swal.fire({
-      title: 'Paiement impossible',
-      text: 'Solde insuffisant',
-      icon: 'error',
-      confirmButtonColor: '#d33',
-      confirmButtonText: 'OK'
-    });
-    
+    setToastMessage("Paiement impossible, solde insuffisant"); // Afficher le message d'erreur
   }
-  console.log(prixTotal)
 };
-
 
   return (
     <div>
       <div>
-      <h4>Solde de la coopérative: <b> <SoldeUtilisateur id={sessionStorage.getItem("idCoop")} /> MGA </b> </h4>
+      <h4 className="text-black">Solde de la coopérative: <b> <SoldeUtilisateur id={sessionStorage.getItem("idCoop")} /> MGA </b> </h4>
       </div>
       <br />
       <br />
-      <Table striped bordered hover>
+      <Table striped bordered hover className="text-center text-black">
         <thead>
           <tr>
             <th>Agriculteur</th>
@@ -141,7 +120,7 @@ localStorage.setItem("approvisionnements", JSON.stringify(updatedAppros));
                 {appro.paye ? (
                   <p>Payé</p>
                 ) : (
-                  <Button onClick={() => handlePayer(appro)}>Payer</Button>
+                  <Button className="btn-dark" onClick={() => handlePayer(appro)}>Payer</Button>
                 )}
               </td>
             </tr>
@@ -157,7 +136,7 @@ localStorage.setItem("approvisionnements", JSON.stringify(updatedAppros));
         <Form>
         <Form.Group>
               
-              <h4>Solde de la coopérative<b> <SoldeUtilisateur id={sessionStorage.getItem("idCoop")} /> MGA </b> </h4>
+              <h4 className="text-black">Solde de la coopérative<b> <SoldeUtilisateur id={sessionStorage.getItem("idCoop")} /> MGA </b> </h4>
             </Form.Group>
             <Form.Group>
               <Form.Label>Nom de l'agriculteur :</Form.Label>
@@ -195,9 +174,12 @@ localStorage.setItem("approvisionnements", JSON.stringify(updatedAppros));
               <Form.Label>Prix total à payer en Ar:</Form.Label>
               <Form.Control
                 type="text"
-                value={selectedAppro ? selectedAppro[0] * selectedAppro[2] : ""}
+                value={selectedAppro ? selectedAppro[0] * selectedAppro[2] - 0.05 * (selectedAppro[0] * selectedAppro[2]) : ""}
                 disabled
               />
+              <Alert variant="danger" className="mt-2">
+                5% du montant total vous a été déversé
+              </Alert>
             </Form.Group>
             <br />
             {toastMessage && <p>{toastMessage}</p>}{" "}

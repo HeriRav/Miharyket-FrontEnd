@@ -51,18 +51,21 @@ function Dashboard() {
         window.location.reload(true)
     let path = '/'
     navigate(path)
-  }
+    }
+
     return (
-      <div id="wrapper">
-        <ProduitsList/>
-        <ul className="navbar-nav bg-gradient-dark sidebar sidebar-dark accordion" id="accordionSidebar">
-        <div className="sidebar-brand d-flex align-items-center justify-content-center">
-        <Link onClick={refresh}>
-          <div className="sidebar-brand-icon">
-            <img src={miharyImage} alt="Mihary" className="img-fluid" />
-          </div>
-        </Link>
-      </div>
+        <>
+        <title>Mihary'ket - Dashboard Agriculteur</title>
+        <div id="wrapper">
+            <ProduitsList/>
+            <ul className="navbar-nav bg-gradient-dark sidebar sidebar-dark accordion" id="accordionSidebar">
+            <div className="sidebar-brand d-flex align-items-center justify-content-center">
+            <Link onClick={refresh}>
+            <div className="sidebar-brand-icon">
+                <img src={miharyImage} alt="Mihary" className="img-fluid" />
+            </div>
+            </Link>
+        </div>
             <hr className="sidebar-divider my-0"/>
             <li className="nav-item">
                 <Link className="nav-link" to="/dashboard-aggro" onClick={handleMenu0Click}>
@@ -319,6 +322,7 @@ function Dashboard() {
 
         </div>
       </div>
+      </>
     )
   }
   

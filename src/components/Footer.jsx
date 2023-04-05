@@ -6,7 +6,7 @@ const Footer = () => {
                     <div className="row mb-4">
                     <div className="col-lg-3">
                         <p className="mb-4"><img src="mihary_logo_dark.png" alt="Image" width="50%" className="img-fluid"/></p>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Beatae nemo minima qui dolor, iusto iure.</p>  
+                        <p>Plateforme de coopératives agricoles pour un commerce équitable afin de soutenir nos agriculteurs.</p>  
                         <p><a href="#">Plus</a></p>
                     </div>
                     <div className="col-lg-3">
