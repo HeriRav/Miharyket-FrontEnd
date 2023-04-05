@@ -3,6 +3,7 @@ import { Button, Modal, Form,Col } from 'react-bootstrap';
 import ApprovisionnementHistorique from './ApprovisionnementHistorique';
 import axios from 'axios';
 import { User } from '@auth0/auth0-react';
+import ProduitPrix from '../Cooperative/ProduitPrix';
 
 function ApprovisionnementProduitAgriculteur() {
   const [appros, setAppros] = useState([]);
@@ -15,7 +16,7 @@ function ApprovisionnementProduitAgriculteur() {
   const [produit, setProduit] = useState('');
   const [quantiteApprovisionnement, setQuantiteApprovisionnement] = useState(0);
   const [prixUnitaire, setPrixUnitaire] = useState(0);
-
+  const [selectedProduitPrix, setSelectedProduitPrix] = useState(null);
   useEffect(() => {
     const fetchAppros = async () => {
       const res = await axios.get('http://localhost:8085/approvisionnements/agriculteur/' + idAgriculteur);
@@ -49,7 +50,7 @@ function ApprovisionnementProduitAgriculteur() {
       produit: { idProduit: produit },
       quantiteApprovisionnement,
       utilisateur : JSON.parse(user),
-      prixUnitaire,
+      prixUnitaire : selectedProduitPrix,
       dateApprovisionnement: new Date().toISOString()
     };
     
@@ -84,7 +85,9 @@ function ApprovisionnementProduitAgriculteur() {
             </Form.Group>
             <Form.Group controlId="formPrixUnitaire">
               <Form.Label>Prix unitaire (MGA)</Form.Label>
-              <Form.Control type="number" step="0.01" value={prixUnitaire} onChange={e => setPrixUnitaire(e.target.value)} />
+              <Form.Label className="mt-4 d-none" > <ProduitPrix produitId={produit} setSelectedProduitPrix={setSelectedProduitPrix} />MGA </Form.Label>
+
+        <Form.Control type="number" step="0.01" value={selectedProduitPrix || ''} readOnly />
             </Form.Group>
 
             

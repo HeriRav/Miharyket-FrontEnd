@@ -92,14 +92,14 @@ useEffect(() => {
 
 return (
   <Container className="mt-5 mb-5">
-    <h1 className="text-center">Paiement Agriculteur</h1>
+    <h1 className="text-center text-black">Paiement Agriculteur</h1>
     <h2 className="text-center">
       <div className="sidebar-brand-icon">
         <img src={iconProduct} alt="Mihary" className="img-fluid" />
       </div>
     </h2>
     <br />
-    <h3 className="mt-1">Historique des activités des agriculteurs</h3>
+    <h3 className="mt-1 text-black">Historique des approvisionnements des agriculteurs</h3>
 
 
     <ApprovisionnementHistorique approvisionnements={appros} />

@@ -19,7 +19,7 @@ function Home() {
   //créaction d'une variable pour compter le nombre d'arcticle
   let [count, setCount] = useState(
     localStorage.getItem("nb_article") == null
-      ? 0
+      ? 1
       : localStorage.getItem("nb_article")
   );
 
@@ -237,7 +237,7 @@ function Home() {
         >
           {produit &&
             produit
-              .filter((product) => product.stockProduit !== 0)
+              .filter((product) => product.stockProduit > 0)
               .slice(0, 12)
               .map((product) => {
                 return (
@@ -256,11 +256,11 @@ function Home() {
                               alt={product.nomProduit}
                           />
                           )}
-                          <Card.Body className="p-3" style={{maxHeight : "200px", textOverflow : "ellipsis"}}>
+                          <Card.Body className="p-3 vh-100" style={{maxHeight : "130px"}}>
                             <Card.Title className="text-black initialism mb-4">
                               {product.nomProduit}
                             </Card.Title>
-                            <Card.Text className="ellipsis">{product.descriptionProduit}</Card.Text>
+                            <Card.Text className="">{product.descriptionProduit}</Card.Text>
                           </Card.Body>
                           <Card.Footer>
                             <Card.Text className="text-info mb-0">
@@ -317,7 +317,7 @@ function Home() {
                               src={`data:image/jpeg;base64,${product.photoProduit}`}
                               alt={product.nomProduit}
                           />
-                          <Card.Body className="p-3">
+                          <Card.Body className="p-3 vh-100" style={{maxHeight : "130px"}}>
                             <Card.Title className="text-black initialism mb-4">
                               {product.nomProduit}
                             </Card.Title>
@@ -328,12 +328,16 @@ function Home() {
                               <span className="text-primary">Catégorie :</span>{" "}
                               {product.categorieProduit}
                             </Card.Text>
-                            <Card.Text className="text-primary">
+                            <Card.Text className="text-primary mb-0">
                               Quantité disponible :{" "}
                               <span className="text-info">
                                 {product.stockProduit}
                                 {product.uniteProduit}
                               </span>
+                            </Card.Text>
+                            <Card.Text className="text-info">
+                              <span className="text-primary">Vendu par :</span>{" "}
+                              <NomAgriculteur id={product.referenceProduit} />
                             </Card.Text>
                           </Card.Footer>
                           <Card.Footer className="text-center">
@@ -354,7 +358,7 @@ function Home() {
                               src={`data:image/jpeg;base64,${product.photoProduit}`}
                               alt={product.nomProduit}
                           />
-                          <Card.Body className="p-3">
+                          <Card.Body className="p-3 vh-100" style={{maxHeight : "130px"}}>
                             <Card.Title className="text-black initialism mb-4">
                               {product.nomProduit}
                             </Card.Title>
@@ -365,12 +369,16 @@ function Home() {
                               <span className="text-primary">Catégorie :</span>{" "}
                               {product.categorieProduit}
                             </Card.Text>
-                            <Card.Text className="text-primary">
+                            <Card.Text className="text-primary mb-0">
                               Quantité disponible :{" "}
                               <span className="text-info">
                                 {product.stockProduit}
                                 {product.uniteProduit}
                               </span>
+                            </Card.Text>
+                            <Card.Text className="text-info">
+                              <span className="text-primary">Vendu par :</span>{" "}
+                              <NomAgriculteur id={product.referenceProduit} />
                             </Card.Text>
                           </Card.Footer>
                           <Card.Footer className="text-center">
@@ -390,7 +398,7 @@ function Home() {
                               src={`data:image/jpeg;base64,${product.photoProduit}`}
                               alt={product.nomProduit}
                           />
-                          <Card.Body className="p-3">
+                          <Card.Body className="p-3 vh-100" style={{maxHeight : "130px"}}>
                             <Card.Title className="text-black initialism mb-4">
                               {product.nomProduit}
                             </Card.Title>
@@ -401,12 +409,16 @@ function Home() {
                               <span className="text-primary">Catégorie :</span>{" "}
                               {product.categorieProduit}
                             </Card.Text>
-                            <Card.Text className="text-primary">
+                            <Card.Text className="text-primary mb-0">
                               Quantité disponible :{" "}
                               <span className="text-info">
                                 {product.stockProduit}
                                 {product.uniteProduit}
                               </span>
+                            </Card.Text>
+                            <Card.Text className="text-info">
+                              <span className="text-primary">Vendu par :</span>{" "}
+                              <NomAgriculteur id={product.referenceProduit} />
                             </Card.Text>
                           </Card.Footer>
                           <Card.Footer className="text-center">

@@ -244,7 +244,7 @@ function AjouterProduit() {
       <Row>
         <Col md={12} className="mb-4">
           <h1 className="mt-4">
-            Liste des produits
+            Liste de tous les produits
             <button
               className="btn btn-success float-right"
               onClick={() => setCreateModal(true)}

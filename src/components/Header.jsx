@@ -93,7 +93,7 @@ const Header = () => {
                   <span className="icon-envelope text-primary"></span>
                 </div>
                 <div className="text">
-                  <span className="h4 d-block">contact@mihary.com</span>
+                  <span className="h4 d-block">contact@mihary.mg</span>
                   <span className="caption-text">Email</span>
                 </div>
               </div>

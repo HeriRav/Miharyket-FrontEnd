@@ -8,7 +8,11 @@ import axios from 'axios';
 import ApprovisionnementHistorique from '../Agriculteur/ApprovisionnementHistorique';
 import AgriculteurList from './AgriculteurList';
 import ProduitList from './ProduitList';
+import ProduitPrix from './ProduitPrix';
+import UniteProduit from './UniteProduit';
 function ApprovisionnementProduitCooperative() {
+  const [selectedProduitPrix, setSelectedProduitPrix] = useState(null);
+  const [selectedProduitUnite, setSelectedProduitUnite] = useState(null);
   const [appros, setAppros] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const id = sessionStorage.getItem("idCoop");
@@ -34,7 +38,8 @@ function ApprovisionnementProduitCooperative() {
     const updatedApprovisionnement = {
       ...approvisionnement,
       utilisateur: {id : selectedAgriculteurId},
-      produit: {idProduit : selectedProduitId}
+      produit: {idProduit : selectedProduitId},
+      prixUnitaire : selectedProduitPrix
     };
     
     axios.post('http://localhost:8085/approvisionnements/add', updatedApprovisionnement)
@@ -135,30 +140,15 @@ function ApprovisionnementProduitCooperative() {
               <Col xs={12} sm={6} md={6}>
                 <Form.Group controlId="unite">
                   <Form.Label className="mt-4">Unité</Form.Label>
-                  <Form.Control
-                    as="select"
-                    type="text"
-                    name="uniteApprovisionnement"
-                    value={approvisionnement.uniteApprovisionnement}
-                    onChange={handleInputChange}
-                  >
-                    <option value="">Sélectionnez une unité</option>
-                    <option value="l">Litre</option>
-                    <option value="kg">Kilogramme</option>
-                    <option value="pc">Pièce</option>
-                  </Form.Control>
+                  <UniteProduit produitId={selectedProduitId} readOnly/>
                 </Form.Group>
               </Col>
 
               <Form.Group as={Col} md={6} controlId="prix">
                 <Form.Label className="mt-4">Prix en Ar/Unité</Form.Label>
-                <Form.Control
-                  type="number"
-                  step="0.01"
-                  name="prixUnitaire"
-                  value={approvisionnement.prixUnitaire}
-                  onChange={handleInputChange}
-                />
+                <Form.Label className="mt-4 d-none" > <ProduitPrix produitId={selectedProduitId} setSelectedProduitPrix={setSelectedProduitPrix} />MGA </Form.Label>
+
+        <Form.Control type="number" step="0.01" value={selectedProduitPrix || ''} readOnly />
               </Form.Group>
 
               <Col xs={12} sm={15} md={6}>
